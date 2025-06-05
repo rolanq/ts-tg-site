@@ -9,6 +9,12 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
+      - DB_HOST=db
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - BOT_TOKEN=${BOT_TOKEN}
+      - DATABASE_URL=${DATABASE_URL}
     depends_on:
       - db
     volumes:
@@ -17,9 +23,13 @@ services:
       - /app/.next
 
   db:
-    image: postgres:15-alpine
+    image: postgres:14-alpine
     ports:
       - "5432:5432"
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
