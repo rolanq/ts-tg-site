@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { Advertisement, initDatabase } from "./db/db";
 import AdCard from "./components/AdCard";
 // import WebAppInit from "./components/WebAppInit";
@@ -6,8 +6,10 @@ import AdCard from "./components/AdCard";
 export default async function Home() {
   try {
     await initDatabase();
+    console.log("База данных инициализирована");
 
     const advertisements = await Advertisement.findAll();
+    console.log("Найдено объявлений:", advertisements.length);
 
     const serializedAds = advertisements.map((ad) => {
       const json = ad.toJSON();
@@ -22,18 +24,16 @@ export default async function Home() {
       <>
         {/* <WebAppInit /> */}
         <Flex flexDirection="column" gap={5} padding={10}>
-          {serializedAds.map((ad) => (
-            <AdCard key={ad.id} ad={ad} />
-          ))}
+          {serializedAds.length === 0 ? (
+            <Text>Объявлений пока нет</Text>
+          ) : (
+            serializedAds.map((ad) => <AdCard key={ad.id} ad={ad} />)
+          )}
         </Flex>
       </>
     );
   } catch (error) {
     console.error("Ошибка при загрузке данных:", error);
-    return (
-      <Flex flexDirection="column" gap={5} padding={10}>
-        <p>Произошла ошибка при загрузке данных</p>
-      </Flex>
-    );
+    throw error; // Пробрасываем ошибку в error.tsx
   }
 }
