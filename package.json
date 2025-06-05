@@ -9,17 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "dotenv": "^16.5.0",
+    "next": "15.3.3",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.3.3"
+    "sequelize": "^6.37.1",
+    "sequelize-cli": "^6.6.2"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
     "@types/node": "^20",
+    "@types/pg": "^8.15.4",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
-    "@eslint/eslintrc": "^3"
+    "typescript": "^5"
   }
 }
