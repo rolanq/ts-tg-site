@@ -28,39 +28,39 @@ export async function initDatabase() {
     console.log("База данных успешно подключена.");
 
     // Инициализация моделей
-    const Advertisement = dbAdvertisement(sequelize, Sequelize);
-    const Brand = dbBrand(sequelize, Sequelize);
-    const CarModel = dbCarModel(sequelize, Sequelize);
-    const Region = dbRegion(sequelize, Sequelize);
-    const SavedSearch = dbSavedSearch(sequelize, Sequelize);
-    const AdvertisementDraft = dbAdvertisementDraft(sequelize, Sequelize);
-    const User = dbUser(sequelize, Sequelize);
-    const Notification = dbNotification(sequelize, Sequelize);
+    // const Advertisement = dbAdvertisement(sequelize, Sequelize);
+    // const Brand = dbBrand(sequelize, Sequelize);
+    // const CarModel = dbCarModel(sequelize, Sequelize);
+    // const Region = dbRegion(sequelize, Sequelize);
+    // const SavedSearch = dbSavedSearch(sequelize, Sequelize);
+    // const AdvertisementDraft = dbAdvertisementDraft(sequelize, Sequelize);
+    // const User = dbUser(sequelize, Sequelize);
+    // const Notification = dbNotification(sequelize, Sequelize);
 
-    // Инициализация связей между моделями
-    const models = {
-      Advertisement,
-      Brand,
-      CarModel,
-      Region,
-      SavedSearch,
-      AdvertisementDraft,
-      User,
-      Notification,
-    };
+    // // Инициализация связей между моделями
+    // const models = {
+    //   Advertisement,
+    //   Brand,
+    //   CarModel,
+    //   Region,
+    //   SavedSearch,
+    //   AdvertisementDraft,
+    //   User,
+    //   Notification,
+    // };
 
-    // Вызываем метод associate для каждой модели
-    Object.values(models).forEach((model) => {
-      if (model.associate) {
-        model.associate(models);
-      }
-    });
+    // // Вызываем метод associate для каждой модели
+    // Object.values(models).forEach((model) => {
+    //   if (model.associate) {
+    //     model.associate(models);
+    //   }
+    // });
 
-    // Синхронизация моделей с базой данных
-    await sequelize.sync({ alter: true });
-    console.log("Модели синхронизированы с базой данных.");
+    // // Синхронизация моделей с базой данных
+    // await sequelize.sync({ alter: true });
+    // console.log("Модели синхронизированы с базой данных.");
 
-    return models;
+    // return models;
   } catch (error) {
     console.error("Ошибка при инициализации базы данных:", error);
     throw error;
