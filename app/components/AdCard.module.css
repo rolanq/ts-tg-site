@@ -1,0 +1,14 @@
+.card {
+  width: 100%;
+  background-color: aquamarine;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.imageContainer {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  overflow: hidden;
+  border-radius: 12px;
+}

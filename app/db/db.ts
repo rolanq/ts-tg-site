@@ -23,6 +23,26 @@ export async function initDatabase() {
     await sequelize.authenticate();
     console.log("База данных успешно подключена.");
 
+    // Инициализация связей между моделями
+    const models = {
+      Advertisement,
+      Brand,
+      CarModel,
+      Region,
+      SavedSearch,
+      AdvertisementDraft,
+      User,
+      Notification,
+      BotSettings,
+    };
+
+    // Вызываем метод associate для каждой модели
+    Object.values(models).forEach((model) => {
+      if (model.associate) {
+        model.associate(models);
+      }
+    });
+
     // Синхронизация моделей с базой данных
     await sequelize.sync({ alter: true });
     console.log("Модели синхронизированы с базой данных.");
@@ -93,6 +113,9 @@ export interface IAdvertisement {
   channelStatus: string;
   createdAt?: Date;
   updatedAt?: Date;
+  Brand?: IBrand;
+  Region?: IRegion;
+  CarModel?: ICarModel;
 }
 
 export interface IAdvertisementDraft {
