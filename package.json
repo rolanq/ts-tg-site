@@ -9,26 +9,29 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@chakra-ui/react": "^3.19.2",
-    "@emotion/react": "^11.14.0",
+    "@chakra-ui/next-js": "^2.2.0",
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
     "@twa-dev/sdk": "^8.0.2",
     "dotenv": "^16.5.0",
-    "next": "15.3.3",
+    "framer-motion": "^11.0.3",
+    "next": "14.1.0",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "sequelize": "^6.37.1",
     "sequelize-cli": "^6.6.2"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
     "@types/node": "^20",
     "@types/pg": "^8.15.4",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.3.3",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "14.1.0",
+    "ignore-loader": "^0.1.2",
     "typescript": "^5"
   }
 }

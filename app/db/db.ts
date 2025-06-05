@@ -1,27 +1,41 @@
-// @ts-nocheck
 import { STEPS_ENUM, USER_STATE_ENUM, HIDE_REASONS } from "../types/config";
 import { Model, ModelStatic, Sequelize } from "sequelize";
-import dbAdvertisement from "./models/advertisement.cjs";
-import dbBrand from "./models/brand.cjs";
-import dbCarModel from "./models/carModel.cjs";
-import dbRegion from "./models/region.cjs";
-import dbSavedSearch from "./models/savedSearch.cjs";
-import dbAdvertisementDraft from "./models/advertisementDraft.cjs";
-import dbUser from "./models/user.cjs";
-import dbNotification from "./models/notification.cjs";
-import dbBotSettings from "./models/botSettings.cjs";
 import pg from "pg";
 
-export const sequelize = new Sequelize(process.env.DATABASE_URL!, {
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL environment variable is not set");
+}
+
+export const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
   dialectModule: pg,
   logging: false,
 });
 
+// Динамический импорт моделей
+const dbAdvertisement = require("./models/advertisement.cjs");
+const dbBrand = require("./models/brand.cjs");
+const dbCarModel = require("./models/carModel.cjs");
+const dbRegion = require("./models/region.cjs");
+const dbSavedSearch = require("./models/savedSearch.cjs");
+const dbAdvertisementDraft = require("./models/advertisementDraft.cjs");
+const dbUser = require("./models/user.cjs");
+const dbNotification = require("./models/notification.cjs");
+
 export async function initDatabase() {
   try {
     await sequelize.authenticate();
     console.log("База данных успешно подключена.");
+
+    // Инициализация моделей
+    const Advertisement = dbAdvertisement(sequelize, Sequelize);
+    const Brand = dbBrand(sequelize, Sequelize);
+    const CarModel = dbCarModel(sequelize, Sequelize);
+    const Region = dbRegion(sequelize, Sequelize);
+    const SavedSearch = dbSavedSearch(sequelize, Sequelize);
+    const AdvertisementDraft = dbAdvertisementDraft(sequelize, Sequelize);
+    const User = dbUser(sequelize, Sequelize);
+    const Notification = dbNotification(sequelize, Sequelize);
 
     // Инициализация связей между моделями
     const models = {
@@ -33,7 +47,6 @@ export async function initDatabase() {
       AdvertisementDraft,
       User,
       Notification,
-      BotSettings,
     };
 
     // Вызываем метод associate для каждой модели
@@ -46,6 +59,8 @@ export async function initDatabase() {
     // Синхронизация моделей с базой данных
     await sequelize.sync({ alter: true });
     console.log("Модели синхронизированы с базой данных.");
+
+    return models;
   } catch (error) {
     console.error("Ошибка при инициализации базы данных:", error);
     throw error;
@@ -111,8 +126,8 @@ export interface IAdvertisement {
   channelMessageId: number | null;
   channelText: string | null;
   channelStatus: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
   Brand?: IBrand;
   Region?: IRegion;
   CarModel?: ICarModel;
@@ -181,6 +196,7 @@ export interface IBotSettings {
   updatedAt?: Date;
 }
 
+// Экспортируем модели после инициализации
 export const Advertisement: ModelStatic<Model<IAdvertisement>> =
   dbAdvertisement(sequelize, Sequelize);
 export const Brand: ModelStatic<Model<IBrand>> = dbBrand(sequelize, Sequelize);
@@ -200,10 +216,6 @@ export const AdvertisementDraft: ModelStatic<Model<IAdvertisementDraft>> =
   dbAdvertisementDraft(sequelize, Sequelize);
 export const User: ModelStatic<Model<IUser>> = dbUser(sequelize, Sequelize);
 export const Notification: ModelStatic<Model<INotification>> = dbNotification(
-  sequelize,
-  Sequelize
-);
-export const BotSettings: ModelStatic<Model<IBotSettings>> = dbBotSettings(
   sequelize,
   Sequelize
 );
