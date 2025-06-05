@@ -12,24 +12,10 @@ services:
       - HOST=0.0.0.0
       - PORT=3000
       - BOT_TOKEN=${BOT_TOKEN}
-      - DATABASE_URL=${DATABASE_URL}
-    depends_on:
-      - db
+      - DATABASE_URL=postgres://${DB_USERNAME}:${DB_PASSWORD}@host.docker.internal:5432/${DB_NAME}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - .:/app
       - /app/node_modules
       - /app/.next
-
-  db:
-    image: postgres:14-alpine
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-volumes:
-  postgres_data:
