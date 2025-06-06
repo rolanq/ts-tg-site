@@ -1,4 +1,5 @@
 "use client";
+import { COLORS } from "@/app/shared/constants/colors";
 import { Card, Text } from "@chakra-ui/react";
 import Image from "next/image";
 
@@ -30,7 +31,7 @@ export const ImageContainer = ({ image }: { image?: string }) => {
           priority
         />
       ) : (
-        <Text>Без фото</Text>
+        <Text color={COLORS.gray}>Без фото</Text>
       )}
     </Card>
   );
