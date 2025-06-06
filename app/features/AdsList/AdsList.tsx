@@ -18,8 +18,8 @@ export default async function AdsList() {
   return (
     <List spacing={3} padding={3}>
       {serializedAds.map((ad) => (
-        <ListItem>
-          <AdCard key={ad.id} ad={ad} />
+        <ListItem key={ad.id}>
+          <AdCard ad={ad} />
         </ListItem>
       ))}
     </List>

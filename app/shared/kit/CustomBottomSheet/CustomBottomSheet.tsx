@@ -14,6 +14,7 @@ interface IProps {
   snap?: number;
   footerWithoutBoxShadow?: boolean;
   closeIcon?: boolean;
+  disableDragClose?: boolean;
 }
 
 export const CustomBottomSheet: FC<IProps> = ({
@@ -24,6 +25,7 @@ export const CustomBottomSheet: FC<IProps> = ({
   snap = 30,
   footerWithoutBoxShadow,
   closeIcon = true,
+  disableDragClose = false,
 }) => {
   const [viewportHeight, setViewportHeight] = useState(0);
 
@@ -49,7 +51,7 @@ export const CustomBottomSheet: FC<IProps> = ({
       )}
       footer={footer}
       scrollLocking
-      expandOnContentDrag
+      expandOnContentDrag={!disableDragClose}
       defaultSnap={(viewportHeight / 100) * snap}
       snapPoints={() => [(viewportHeight / 100) * snap]}
       maxHeight={(viewportHeight / 100) * snap}
