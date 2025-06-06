@@ -1,4 +1,4 @@
-import { STEPS_ENUM, USER_STATE_ENUM, HIDE_REASONS } from "../types/config";
+import { STEPS_ENUM, USER_STATE_ENUM, HIDE_REASONS } from "../shared/types/config";
 import { Model, ModelStatic, Sequelize } from "sequelize";
 import pg from "pg";
 

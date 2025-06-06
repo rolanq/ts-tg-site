@@ -7,7 +7,7 @@
   right: 0;
   border-radius: 12px 12px 0 0;
   box-shadow: 0 -1px 5px -1px rgba(0, 0, 0, 0.1);
-  height: 60px;
+  height: 80px;
   width: 100vw;
 }
 
@@ -17,21 +17,22 @@
   justify-content: center;
   flex: 1;
   text-align: center;
-  padding: 12px;
+  padding: 8px 12px 12px;
 }
 
-.footerItemText {
-  text-decoration: none;
+.footerItem:hover {
+  background-color: var(--color-white);
 }
 
-.selectedPage {
+.activeIconButton {
   background-color: var(--color-background);
+  box-sizing: border-box;
 }
 
-.left {
-  border-top-left-radius: 12px;
+.activeIconButton svg {
+  color: var(--color-accent);
 }
 
-.right {
-  border-top-right-radius: 12px;
+.notActiveIconButton {
+  background-color: var(--color-gray);
 }

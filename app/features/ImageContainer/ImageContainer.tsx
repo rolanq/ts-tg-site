@@ -1,5 +1,4 @@
 "use client";
-import { COLORS } from "@/app/constants/colors";
 import { Card, Text } from "@chakra-ui/react";
 import Image from "next/image";
 
@@ -8,8 +7,8 @@ export const ImageContainer = ({ image }: { image?: string }) => {
     <Card
       variant={"elevated"}
       borderRadius={"12px"}
-      width={"80px"}
-      height={"80px"}
+      width={"100px"}
+      height={"100px"}
       justifyContent={"center"}
       alignItems={"center"}
       padding={"0"}
@@ -18,14 +17,14 @@ export const ImageContainer = ({ image }: { image?: string }) => {
         <Image
           src={image}
           alt="Image"
-          width={80}
-          height={80}
+          width={100}
+          height={100}
           style={{
             borderRadius: "12px",
             objectFit: "cover",
             overflow: "hidden",
-            height: "80px",
-            width: "80px",
+            height: "100px",
+            width: "100px",
           }}
           unoptimized
           priority

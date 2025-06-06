@@ -1,4 +1,4 @@
-import Layout from "@/app/components/Layout/Layout";
+import Layout from "@/app/features/Layout/Layout";
 import { Text } from "@chakra-ui/react";
 import React from "react";
 

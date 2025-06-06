@@ -1,9 +1,6 @@
-import { Flex, Text } from "@chakra-ui/react";
-import { Advertisement, Brand, CarModel, initDatabase, Region } from "./db/db";
-import WebAppInit from "./components/WebAppInit";
-import AdCard from "./components/AdCard/AdCard";
-import AdsList from "./components/AdsList/AdsList";
-import Layout from "./components/Layout/Layout";
+import { initDatabase } from "./db/db";
+import AdsList from "./features/AdsList/AdsList";
+import Layout from "./features/Layout/Layout";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
