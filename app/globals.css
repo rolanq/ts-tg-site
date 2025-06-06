@@ -7,4 +7,13 @@
   --color-light: #f3ecd7;
   --color-extra-light: #f9f6ee;
   --color-dark: #6b4c36;
+  --font-family: "Noto Sans", sans-serif;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  font-family: var(--font-family);
 }

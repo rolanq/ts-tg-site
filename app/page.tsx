@@ -1,7 +1,9 @@
 import { Flex, Text } from "@chakra-ui/react";
-import { Advertisement, initDatabase } from "./db/db";
-import AdCard from "./components/AdCard";
-// import WebAppInit from "./components/WebAppInit";
+import { Advertisement, Brand, CarModel, initDatabase, Region } from "./db/db";
+import WebAppInit from "./components/WebAppInit";
+import AdCard from "./components/AdCard/AdCard";
+import AdsList from "./components/AdsList/AdsList";
+import Layout from "./components/Layout/Layout";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -9,34 +11,15 @@ export const revalidate = 0;
 export default async function Home() {
   try {
     await initDatabase();
-    console.log("База данных инициализирована");
-
-    const advertisements = await Advertisement.findAll();
-    console.log("Найдено объявлений:", advertisements.length);
-
-    const serializedAds = advertisements.map((ad) => {
-      const json = ad.toJSON();
-      return {
-        ...json,
-        createdAt: json.createdAt,
-        updatedAt: json.updatedAt,
-      };
-    });
 
     return (
-      <>
+      <Layout>
         {/* <WebAppInit /> */}
-        <Flex flexDirection="column" gap={5} padding={10}>
-          {serializedAds.length === 0 ? (
-            <Text>Объявлений пока нет</Text>
-          ) : (
-            serializedAds.map((ad) => <AdCard key={ad.id} ad={ad} />)
-          )}
-        </Flex>
-      </>
+        <AdsList />
+      </Layout>
     );
   } catch (error) {
     console.error("Ошибка при загрузке данных:", error);
-    throw error; // Пробрасываем ошибку в error.tsx
+    throw error;
   }
 }

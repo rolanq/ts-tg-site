@@ -1,7 +1,15 @@
+import "./globals.css";
+import { Noto_Sans } from "next/font/google";
+
 export const metadata = {
-  title: "Telegram Bot Site",
-  description: "Telegram Bot Site",
+  title: "В Касание",
+  description: "Продай машину в касание",
 };
+
+const notoSans = Noto_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export default function RootLayout({
   children,
@@ -11,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body>{children}</body>
+      <body className={notoSans.className}>{children}</body>
     </html>
   );
 }
