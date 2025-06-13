@@ -1,11 +1,19 @@
 import Layout from "@/app/features/Layout/Layout";
-import { Text } from "@chakra-ui/react";
 import React from "react";
+import { initDatabase } from "../db/db";
+import AdsList from "../features/AdsList/AdsList";
 
-export default function Development() {
-  return (
-    <Layout>
-      <Text>В разработке...</Text>
-    </Layout>
-  );
+export default async function Development() {
+  try {
+    await initDatabase();
+
+    return (
+      <Layout>
+        <AdsList />
+      </Layout>
+    );
+  } catch (error) {
+    console.error("Ошибка при загрузке данных:", error);
+    throw error;
+  }
 }

@@ -1,7 +1,7 @@
 import { Advertisement, Brand, CarModel, Region } from "@/app/db/db";
-import { List, ListItem } from "@chakra-ui/react";
 import React from "react";
 import AdCard from "../AdCard/AdCard";
+import styles from "./AdsList.module.css";
 
 export default async function AdsList() {
   const advertisements = await Advertisement.findAll({
@@ -16,12 +16,10 @@ export default async function AdsList() {
     };
   });
   return (
-    <List spacing={3} padding={3}>
+    <div className={styles.list}>
       {serializedAds.map((ad) => (
-        <ListItem key={ad.id}>
-          <AdCard ad={ad} />
-        </ListItem>
+        <AdCard key={ad.id} ad={ad} />
       ))}
-    </List>
+    </div>
   );
 }

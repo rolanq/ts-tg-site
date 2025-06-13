@@ -1,0 +1,19 @@
+.input {
+  display: none;
+}
+
+.photosWrapper {
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 10px;
+  height: 100px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.addButton {
+  width: 100%;
+}
+.addedImage {
+  border-radius: 12px;
+}

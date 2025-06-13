@@ -1,19 +1,12 @@
 "use client";
 import { COLORS } from "@/app/shared/constants/colors";
-import { Card, Text } from "@chakra-ui/react";
 import Image from "next/image";
+import styles from "./ImageContainer.module.css";
+import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
 
 export const ImageContainer = ({ image }: { image?: string }) => {
   return (
-    <Card
-      variant={"elevated"}
-      borderRadius={"12px"}
-      width={"100px"}
-      height={"100px"}
-      justifyContent={"center"}
-      alignItems={"center"}
-      padding={"0"}
-    >
+    <div className={styles.imageContainer}>
       {image ? (
         <Image
           src={image}
@@ -31,8 +24,8 @@ export const ImageContainer = ({ image }: { image?: string }) => {
           priority
         />
       ) : (
-        <Text color={COLORS.gray}>Без фото</Text>
+        <CustomTyphography color="gray">Без фото</CustomTyphography>
       )}
-    </Card>
+    </div>
   );
 };

@@ -1,3 +1,10 @@
 .layout {
+  height: calc(100% - 85px);
   margin-bottom: 85px;
+  overflow-y: auto;
+}
+
+.main {
+  height: 100%;
+  width: 100%;
 }

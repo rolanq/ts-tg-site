@@ -1,6 +1,5 @@
 "use client";
-
-import { Box, Heading, Text } from "@chakra-ui/react";
+import styles from "./page.module.css";
 
 export default function Error({
   error,
@@ -10,13 +9,9 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <Box p={5} borderWidth="1px" borderRadius="lg">
-      <Heading as="h2" size="lg" mb={4}>
-        Произошла ошибка
-      </Heading>
-      <Text color="red.500" mb={4}>
-        {error.message}
-      </Text>
+    <div className={styles.error}>
+      <h2>Произошла ошибка</h2>
+      <h3>{error.message}</h3>
       <button
         onClick={() => reset()}
         style={{
@@ -30,6 +25,6 @@ export default function Error({
       >
         Попробовать снова
       </button>
-    </Box>
+    </div>
   );
 }

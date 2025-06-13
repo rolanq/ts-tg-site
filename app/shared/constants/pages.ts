@@ -1,8 +1,8 @@
-import { AdsIcon } from "@/app/features/Icons/AdsIcon";
-import { GavelIcon } from "@/app/features/Icons/GavelIcon";
-import { HomeIcon } from "@/app/features/Icons/HomeIcon";
-import { PlusIcon } from "@/app/features/Icons/PlusIcon";
-import { UserIcon } from "@/app/features/Icons/UserIcon";
+import { AdsIcon } from "@/app/shared/Icons/AdsIcon";
+import { GavelIcon } from "@/app/shared/Icons/GavelIcon";
+import { HomeIcon } from "@/app/shared/Icons/HomeIcon";
+import { PlusIcon } from "@/app/shared/Icons/PlusIcon";
+import { UserIcon } from "@/app/shared/Icons/UserIcon";
 
 export const PAGES = [
   {

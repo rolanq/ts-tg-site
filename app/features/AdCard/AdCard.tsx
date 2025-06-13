@@ -1,9 +1,11 @@
 "use server";
 
-import { Badge, Card, CardBody, Flex, Text } from "@chakra-ui/react";
 import { IAdvertisement } from "@/app/db/db";
 import { ImageContainer } from "../ImageContainer/ImageContainer";
 import { COLORS } from "@/app/shared/constants/colors";
+import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
+import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
+import styles from "./AdCard.module.css";
 
 export default async function AdCard({ ad }: { ad: IAdvertisement }) {
   async function fetchImageUrl() {
@@ -33,46 +35,43 @@ export default async function AdCard({ ad }: { ad: IAdvertisement }) {
     if (!ad.createdAt) return null;
     return (
       ad.createdAt > new Date(Date.now() - 1000 * 60 * 60 * 24) && (
-        <Flex flexDirection="column" width={"fit-content"}>
-          <Badge colorScheme="green" borderRadius={"4px"}>
+        <CustomFlex direction="column" align="center">
+          <CustomTyphography fontSize="14px" fontWeight="bold">
             Новое
-          </Badge>
-        </Flex>
+          </CustomTyphography>
+        </CustomFlex>
       )
     );
   };
 
   return (
-    <Card variant="elevated" borderRadius={"12px"} height={"125px"}>
-      <CardBody display="flex" padding={"2.5"} justifyContent="space-between">
-        <Flex gap={5}>
-          <Flex height={"100%"} alignItems={"center"}>
-            <ImageContainer image={imageUrl} />
-          </Flex>
-
-          <Flex flexDirection="column" justifyContent={"space-between"}>
-            <Flex flexDirection={"column"}>
-              <Text fontSize="md" fontWeight="bold">
-                {ad.price} ₽
-              </Text>
-              <Text fontSize="sm" fontWeight="medium">
-                {ad.Brand?.name} {ad.CarModel?.name}, {ad.year}
-              </Text>
-              <Text fontSize="xs" color={COLORS.gray}>
+    <div className={styles.card}>
+      <CustomFlex gap="10px">
+        <ImageContainer image={imageUrl} />
+        <CustomFlex justify="space-between" className={styles.cardBody}>
+          <CustomFlex direction="column" justify="space-between">
+            <CustomFlex direction="column">
+              <CustomFlex direction="column" justify="space-between">
+                <CustomTyphography fontWeight="bold" fontSize="18px">
+                  {ad.price} ₽
+                </CustomTyphography>
+                <CustomTyphography fontSize="16px">
+                  {ad.Brand?.name} {ad.CarModel?.name}, {ad.year}
+                </CustomTyphography>
+              </CustomFlex>
+              <CustomTyphography color="gray" fontSize="14px">
                 {ad.Region?.name}
-              </Text>
-            </Flex>
+              </CustomTyphography>
+            </CustomFlex>
             {badges()}
-          </Flex>
-        </Flex>
-        {ad.updatedAt && (
-          <Flex flexDirection="column">
-            <Text fontSize="xs" color={COLORS.gray}>
+          </CustomFlex>
+          {ad.updatedAt && (
+            <CustomTyphography color="gray" fontSize="14px">
               {new Date(ad.updatedAt).toLocaleDateString()}
-            </Text>
-          </Flex>
-        )}
-      </CardBody>
-    </Card>
+            </CustomTyphography>
+          )}
+        </CustomFlex>
+      </CustomFlex>
+    </div>
   );
 }

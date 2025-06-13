@@ -1,7 +1,6 @@
 import { initDatabase } from "./db/db";
 import AdsList from "./features/AdsList/AdsList";
 import Layout from "./features/Layout/Layout";
-import WebAppInit from "./features/WebAppInit";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -12,7 +11,6 @@ export default async function Home() {
 
     return (
       <Layout>
-        <WebAppInit />
         <AdsList />
       </Layout>
     );

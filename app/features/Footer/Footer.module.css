@@ -1,5 +1,6 @@
 .footer {
   background-color: var(--color-white);
+  display: flex;
   text-align: center;
   position: fixed;
   bottom: 0;

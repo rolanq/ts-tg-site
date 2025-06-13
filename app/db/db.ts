@@ -26,7 +26,7 @@ const dbAdvertisementDraft = require("./models/advertisementDraft.cjs");
 const dbUser = require("./models/user.cjs");
 const dbNotification = require("./models/notification.cjs");
 
-interface ModelWithAssociate extends ModelStatic<Model<any>> {
+export interface ModelWithAssociate extends ModelStatic<Model<any>> {
   associate?: (models: any) => void;
 }
 

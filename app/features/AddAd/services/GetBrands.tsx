@@ -1,7 +1,14 @@
 "use server";
-import { Brand, CarModel, IBrand, ICarModel, IRegion, Region } from "@/app/db/db";
+import {
+  Brand,
+  CarModel,
+  IBrand,
+  ICarModel,
+  IRegion,
+  Region,
+} from "@/app/db/db";
 
-export async function getBrandsAndRegions() {
+async function getBrandsAndRegions() {
   const brands = await Brand.findAll();
   const regions = await Region.findAll();
   const serializedBrands: IBrand[] = brands.map((brand) => {
@@ -35,3 +42,8 @@ export async function getModels(brandId: number) {
   });
   return serializedModels;
 }
+
+export const loadBrandsAndRegions = async () => {
+  const { serializedBrands, serializedRegions } = await getBrandsAndRegions();
+  return { serializedBrands, serializedRegions };
+};

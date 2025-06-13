@@ -1,0 +1,57 @@
+.nextStepButton {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.backStepButton {
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-dark);
+  color: var(--color-white);
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.stepsWrapper {
+  display: flex;
+  width: 400%; /* 4 шага по 100% */
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.step {
+  width: 25%; /* каждый шаг занимает четверть контейнера */
+  flex-shrink: 0;
+}
+
+/* Смещения для каждого шага */
+.slide1 {
+  transform: translateX(0%);
+}
+.slide2 {
+  transform: translateX(-25%);
+}
+.slide3 {
+  transform: translateX(-50%);
+}
+.slide4 {
+  transform: translateX(-75%);
+}
+
+.stepCommon {
+  width: 100vw;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.stepCommonBody {
+  height: min-content;
+}

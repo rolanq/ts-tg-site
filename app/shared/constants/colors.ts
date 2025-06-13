@@ -7,6 +7,8 @@ export const COLORS = {
   extraLight: "#f9f6ee", // почти белый
   dark: "#6b4c36", // тёмно-коричневый
   gray: "#808080", // серый
+  white: "#ffffff",
+  black: "#000000",
 };
 
 export const COLORS_CSS_VARS = `
