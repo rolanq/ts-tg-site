@@ -8,6 +8,7 @@ import { AddedImage } from "./AddedImage";
 
 export const FourthStep = () => {
   const photoInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
   const [photos, setPhotos] = useState<File[]>([]);
   const [video, setVideo] = useState<File | null>(null);
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
@@ -15,6 +16,12 @@ export const FourthStep = () => {
   const handleAddPhoto = () => {
     if (photoInputRef.current) {
       photoInputRef.current.click();
+    }
+  };
+
+  const handleAddVideo = () => {
+    if (videoInputRef.current) {
+      videoInputRef.current.click();
     }
   };
 
@@ -90,7 +97,7 @@ export const FourthStep = () => {
             ref={photoInputRef}
             onChange={handleChangePhoto}
             multiple
-            accept="image/*"
+            accept={".jpg, .jpeg, .png, .mp4"}
           />
         </div>
 
@@ -126,12 +133,22 @@ export const FourthStep = () => {
           )}
         </CustomFlex>
 
-        <CustomButton onClick={handleAddPhoto} className={styles.addButton}>
-          Добавить фото
-        </CustomButton>
+        <CustomFlex gap="10px">
+          <CustomButton onClick={handleAddVideo} className={styles.addButton}>
+            Добавить видео
+          </CustomButton>
+          <CustomButton onClick={handleAddPhoto} className={styles.addButton}>
+            Добавить фото
+          </CustomButton>
+        </CustomFlex>
 
         <div className={styles.input}>
-          <input type="file" accept="video/*" onChange={handleChangeVideo} />
+          <input
+            type="file"
+            ref={videoInputRef}
+            accept="video/*"
+            onChange={handleChangeVideo}
+          />
         </div>
       </CustomFlex>
     </CustomFlex>
