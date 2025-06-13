@@ -1,29 +1,38 @@
 "use client";
 import { useEffect, useState } from "react";
-import WebApp from "@twa-dev/sdk";
 import { TelegramUser } from "../types/telegram";
+
+const isTelegramWebAppInitialized = () => {
+  return typeof window !== "undefined" && window.Telegram?.WebApp;
+};
 
 export const useTelegram = () => {
   const [user, setUser] = useState<TelegramUser | null>(null);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    WebApp.ready();
-    WebApp.bottomBarColor = "#ffffff";
-    WebApp.headerColor = "#ffffff";
-    setIsReady(true);
-  }, []);
+    if (!isTelegramWebAppInitialized()) {
+      return;
+    }
 
-  useEffect(() => {
-    if (WebApp.initDataUnsafe.user) {
-      setUser(WebApp.initDataUnsafe.user);
+    try {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.bottomBarColor = "#ffffff";
+      window.Telegram.WebApp.headerColor = "#ffffff";
+
+      if (window.Telegram.WebApp.initDataUnsafe?.user) {
+        setUser(window.Telegram.WebApp.initDataUnsafe.user);
+      }
+
       setIsReady(true);
+    } catch (error) {
+      console.error("Error initializing Telegram WebApp:", error);
     }
   }, []);
 
   return {
     user,
     isReady,
-    webApp: WebApp,
+    webApp: isTelegramWebAppInitialized() && window.Telegram.WebApp,
   };
 };

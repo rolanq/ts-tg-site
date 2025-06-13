@@ -1,7 +1,8 @@
+"use client";
 import Layout from "@/app/features/Layout/Layout";
 import React from "react";
 
-export default function Development() {
+export default function Auction() {
   return (
     <Layout>
       <div>
