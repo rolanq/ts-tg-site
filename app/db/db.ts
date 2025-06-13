@@ -17,14 +17,14 @@ export const sequelize = new Sequelize(process.env.DATABASE_URL, {
 });
 
 // Динамический импорт моделей
-const dbAdvertisement = require("./models/advertisement.cjs");
-const dbBrand = require("./models/brand.cjs");
-const dbCarModel = require("./models/carModel.cjs");
-const dbRegion = require("./models/region.cjs");
-const dbSavedSearch = require("./models/savedSearch.cjs");
-const dbAdvertisementDraft = require("./models/advertisementDraft.cjs");
-const dbUser = require("./models/user.cjs");
-const dbNotification = require("./models/notification.cjs");
+const dbAdvertisement = require("../../db/models/advertisement.cjs");
+const dbBrand = require("../../dbmodels/brand.cjs");
+const dbCarModel = require("../../dbmodels/carModel.cjs");
+const dbRegion = require("../../dbmodels/region.cjs");
+const dbSavedSearch = require("../../dbmodels/savedSearch.cjs");
+const dbAdvertisementDraft = require("../../dbmodels/advertisementDraft.cjs");
+const dbUser = require("../../dbmodels/user.cjs");
+const dbNotification = require("../../dbmodels/notification.cjs");
 
 export interface ModelWithAssociate extends ModelStatic<Model<any>> {
   associate?: (models: any) => void;
