@@ -3,6 +3,7 @@ import "./globals.css";
 import { Noto_Sans } from "next/font/google";
 import { Telegram } from "@twa-dev/types";
 import { TelegramProvider } from "./providers/TelegramProvider";
+import ServerProvider from "./providers/ServerProvider";
 
 export const metadata = {
   title: "В Касание",
@@ -20,7 +21,7 @@ declare global {
   }
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;

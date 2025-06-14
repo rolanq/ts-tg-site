@@ -37,3 +37,7 @@
 .notActiveIconButton {
   background-color: var(--color-gray);
 }
+
+.notActiveIconButton svg {
+  color: black;
+}

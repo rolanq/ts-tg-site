@@ -1,5 +1,6 @@
 "use server";
-import { AdvertisementDraft, IAdvertisementDraft } from "@/app/db/db";
+
+import { AdvertisementDraft, IAdvertisementDraft } from "../db/db";
 
 export const getDraft = async (userId: number) => {
   const draft = await AdvertisementDraft.findOne({

@@ -1,30 +1,28 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import AdCard from "../AdCard/AdCard";
-import styles from "./AdsList.module.css";
-import { getAllAds } from "@/app/services/Ads";
 import { IAdvertisement } from "@/app/db/db";
-import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
-import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
+import { getAds } from "@/app/services/Ads";
+import { useTelegram } from "@/app/shared/hooks/useTelegram";
+import { useEffect, useState } from "react";
+import AdCard from "../AdCard/AdCard";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
-import { CustomInput } from "@/app/shared/kit/CustomInput/CustomInput";
+import styles from "./UsersAdsList.module.css";
+import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
+import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 
-interface AdsListProps {
-  title?: string;
-  withSearch?: boolean;
-}
-
-export default function AdsList({ title, withSearch = false }: AdsListProps) {
+export default function UsersAdsList() {
+  const { user } = useTelegram();
   const [ads, setAds] = useState<IAdvertisement[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    if (!user?.id) return;
+
     setIsLoading(true);
-    getAllAds().then((ads) => {
+    getAds(user.id).then((ads) => {
       setAds(ads);
       setIsLoading(false);
     });
-  }, []);
+  }, [user?.id]);
 
   if (isLoading) {
     return (
@@ -39,12 +37,9 @@ export default function AdsList({ title, withSearch = false }: AdsListProps) {
   }
 
   return (
-    <div className={styles.list}>
-      {withSearch && (
-        <CustomInput placeholder="Поиск" value="" onChange={() => {}} />
-      )}
+    <div className={styles.usersAdsList}>
       <CustomTyphography fontSize="20px" fontWeight="bold">
-        {title}
+        Ваши объявления
       </CustomTyphography>
       {ads.map((ad) => (
         <AdCard key={ad.id} ad={ad} />

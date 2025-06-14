@@ -1,4 +1,3 @@
-import { initDatabase } from "./db/db";
 import AdsList from "./features/AdsList/AdsList";
 import Layout from "./features/Layout/Layout";
 
@@ -7,11 +6,9 @@ export const revalidate = 0;
 
 export default async function Home() {
   try {
-    await initDatabase();
-
     return (
       <Layout>
-        <AdsList />
+        <AdsList title="Все объявления" />
       </Layout>
     );
   } catch (error) {

@@ -1,35 +1,40 @@
-"use server";
-
+"use client";
 import { IAdvertisement } from "@/app/db/db";
 import { ImageContainer } from "../ImageContainer/ImageContainer";
-import { COLORS } from "@/app/shared/constants/colors";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import styles from "./AdCard.module.css";
+import { useEffect, useState } from "react";
 
-export default async function AdCard({ ad }: { ad: IAdvertisement }) {
-  async function fetchImageUrl() {
-    try {
-      if (!ad.photos[0]) return;
+export default function AdCard({ ad }: { ad: IAdvertisement }) {
+  const [imageUrl, setImageUrl] = useState<string | undefined>();
 
-      const fileInfo = await fetch(
-        `https://api.telegram.org/bot${process.env.BOT_TOKEN}/getFile?file_id=${ad.photos[0]}`
-      );
-      const fileData = await fileInfo.json();
+  useEffect(() => {
+    async function fetchImageUrl() {
+      try {
+        if (!ad.photos[0]) return;
 
-      if (!fileData.ok) {
-        console.error("Ошибка получения информации о файле:", fileData);
-        return;
+        const fileInfo = await fetch(
+          `https://api.telegram.org/bot${process.env.NEXT_PUBLIC_BOT_TOKEN}/getFile?file_id=${ad.photos[0]}`
+        );
+        const fileData = await fileInfo.json();
+
+        if (!fileData.ok) {
+          console.error("Ошибка получения информации о файле:", fileData);
+          return;
+        }
+
+        const filePath = fileData.result.file_path;
+        setImageUrl(
+          `https://api.telegram.org/file/bot${process.env.NEXT_PUBLIC_BOT_TOKEN}/${filePath}`
+        );
+      } catch (error) {
+        console.error("Ошибка при загрузке изображения:", error);
       }
-
-      const filePath = fileData.result.file_path;
-      return `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}/${filePath}`;
-    } catch (error) {
-      console.error("Ошибка при загрузке изображения:", error);
     }
-  }
 
-  const imageUrl = await fetchImageUrl();
+    fetchImageUrl();
+  }, [ad]);
 
   const badges = () => {
     if (!ad.createdAt) return null;

@@ -1,12 +1,11 @@
 import Layout from "@/app/features/Layout/Layout";
 import React from "react";
+import AdsList from "../features/AdsList/AdsList";
 
 export default function Ads() {
   return (
     <Layout>
-      <div>
-        <h3>В разработке...</h3>
-      </div>
+      <AdsList title="Объявления" />
     </Layout>
   );
 }

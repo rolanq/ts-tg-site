@@ -2,8 +2,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { IContextCreateAd } from "./types";
 import { STEPS_ENUM } from "@/app/shared/types/config";
 import { IBrand, IRegion, ICarModel, IAdvertisementDraft } from "@/app/db/db";
-import { getDraft } from "../services/Draft";
-import { loadBrandsAndRegions, getModels } from "../services/GetBrands";
+import { getDraft } from "../../../services/Draft";
+import { loadBrandsAndRegions, getModels } from "../../../services/GetBrands";
 import { telegramContext } from "@/app/providers/TelegramProvider";
 
 const initialState: IContextCreateAd = {
