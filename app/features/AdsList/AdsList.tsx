@@ -30,6 +30,12 @@ export default function AdsList({ title, withSearch = false }: AdsListProps) {
   }, []);
 
   const handleAdClick = (ad: IAdvertisement) => {
+    if (isAdOpen) {
+      setIsAdOpen(false);
+      setAd(undefined);
+      return;
+    }
+
     setAd(ad);
     setIsAdOpen(true);
   };

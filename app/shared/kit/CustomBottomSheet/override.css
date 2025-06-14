@@ -1,6 +1,7 @@
 [data-rsbs-overlay] {
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
+  transition: opacity 0.2s ease-in-out;
 }
 
 [data-rsbs-header="true"] {

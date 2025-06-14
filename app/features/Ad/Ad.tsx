@@ -86,7 +86,7 @@ export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
     <CustomBottomSheet
       open={isOpen}
       onDismiss={onDismiss}
-      snap={90}
+      snap={95}
       disableDragClose
       footer={
         <CustomFlex direction="row" gap="10px">

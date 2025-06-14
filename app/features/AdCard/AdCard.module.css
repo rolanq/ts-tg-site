@@ -10,7 +10,6 @@
 
 .card:hover,
 .card:focus {
-  box-shadow: none;
   background-color: white;
 }
 
