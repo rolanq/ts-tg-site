@@ -15,6 +15,7 @@ export default function UsersAdsList() {
   const [ads, setAds] = useState<IAdvertisement[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [ad, setAd] = useState<IAdvertisement | undefined>(undefined);
+  const [isAdOpen, setIsAdOpen] = useState(false);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -28,6 +29,7 @@ export default function UsersAdsList() {
 
   const handleAdClick = (ad: IAdvertisement) => {
     setAd(ad);
+    setIsAdOpen(true);
   };
 
   if (isLoading) {
@@ -53,7 +55,7 @@ export default function UsersAdsList() {
         ))}
       </div>
 
-      <Ad ad={ad} setAd={setAd} />
+      <Ad ad={ad} setAd={setAd} isOpen={isAdOpen} setIsOpen={setIsAdOpen} />
     </>
   );
 }

@@ -19,6 +19,7 @@ export default function AdsList({ title, withSearch = false }: AdsListProps) {
   const [ads, setAds] = useState<IAdvertisement[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [ad, setAd] = useState<IAdvertisement | undefined>(undefined);
+  const [isAdOpen, setIsAdOpen] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -30,6 +31,7 @@ export default function AdsList({ title, withSearch = false }: AdsListProps) {
 
   const handleAdClick = (ad: IAdvertisement) => {
     setAd(ad);
+    setIsAdOpen(true);
   };
 
   if (isLoading) {
@@ -58,7 +60,7 @@ export default function AdsList({ title, withSearch = false }: AdsListProps) {
         ))}
       </div>
 
-      <Ad ad={ad} setAd={setAd} />
+      <Ad ad={ad} setAd={setAd} isOpen={isAdOpen} setIsOpen={setIsAdOpen} />
     </>
   );
 }

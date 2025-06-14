@@ -18,11 +18,12 @@ interface Image {
 interface AdProps {
   ad?: IAdvertisement;
   setAd: (ad: IAdvertisement | undefined) => void;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
-export const Ad = ({ ad, setAd }: AdProps) => {
+export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
   const [images, setImages] = useState<Image[]>([]);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     if (!ad) return;
@@ -48,11 +49,17 @@ export const Ad = ({ ad, setAd }: AdProps) => {
           ]);
         });
     });
-
-    return () => {
-      setImages([]);
-    };
   }, [ad]);
+
+  const onDismiss = () => {
+    setIsOpen(false);
+
+    const timeout = setTimeout(() => {
+      setAd(undefined);
+      setImages([]);
+      clearTimeout(timeout);
+    }, 500);
+  };
 
   const renderImages = useMemo(() => {
     return images.map((image) => (
@@ -77,8 +84,8 @@ export const Ad = ({ ad, setAd }: AdProps) => {
 
   return (
     <CustomBottomSheet
-      open={!!ad}
-      onDismiss={() => setAd(undefined)}
+      open={isOpen}
+      onDismiss={onDismiss}
       snap={90}
       disableDragClose
       footer={

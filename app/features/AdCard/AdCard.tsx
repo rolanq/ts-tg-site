@@ -53,9 +53,13 @@ export default function AdCard({ ad, onClick }: AdCardProps) {
       )
     );
   };
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    onClick();
+  };
 
   return (
-    <button className={styles.card} onClick={onClick}>
+    <button className={styles.card} onClick={handleClick}>
       <CustomFlex gap="10px">
         <ImageContainer image={imageUrl} />
         <CustomFlex justify="space-between" className={styles.cardBody}>
