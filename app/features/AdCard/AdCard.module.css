@@ -8,8 +8,10 @@
   transition: box-shadow 0.3s ease-in-out;
 }
 
-.card:hover {
+.card:hover,
+.card:focus {
   box-shadow: none;
+  background-color: white;
 }
 
 .cardBody {
