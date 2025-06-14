@@ -53,12 +53,8 @@ export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
 
   const onDismiss = () => {
     setIsOpen(false);
-
-    const timeout = setTimeout(() => {
-      setAd(undefined);
-      setImages([]);
-      clearTimeout(timeout);
-    }, 500);
+    setAd(undefined);
+    setImages([]);
   };
 
   const renderImages = useMemo(() => {
@@ -81,8 +77,6 @@ export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
       </div>
     ));
   }, [images]);
-
-  if (!ad) return null;
 
   return (
     <CustomBottomSheet
