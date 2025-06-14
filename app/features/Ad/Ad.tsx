@@ -82,6 +82,8 @@ export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
     ));
   }, [images]);
 
+  if (!ad) return null;
+
   return (
     <CustomBottomSheet
       open={isOpen}

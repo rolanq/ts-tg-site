@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import AdCard from "../AdCard/AdCard";
 import styles from "./AdsList.module.css";
 import { getAllAds } from "@/app/services/Ads";
@@ -8,7 +8,9 @@ import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
 import { CustomInput } from "@/app/shared/kit/CustomInput/CustomInput";
-import { Ad } from "../Ad/Ad";
+
+
+const Ad = lazy(() => import("../Ad/Ad").then((mod) => ({ default: mod.Ad })));
 
 interface AdsListProps {
   title?: string;
@@ -65,6 +67,7 @@ export default function AdsList({ title, withSearch = false }: AdsListProps) {
           <AdCard key={ad.id} ad={ad} onClick={() => handleAdClick(ad)} />
         ))}
       </div>
+
 
       <Ad ad={ad} setAd={setAd} isOpen={isAdOpen} setIsOpen={setIsAdOpen} />
     </>
