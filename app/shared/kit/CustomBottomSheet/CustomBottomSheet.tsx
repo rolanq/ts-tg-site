@@ -43,12 +43,11 @@ export const CustomBottomSheet: FC<IProps> = ({
   }, []);
 
   useEffect(() => {
-    const overlay = document.querySelector("[data-rsbs-overlay]");
+    const overlay = document.querySelector("[data-rsbs-backdrop]");
 
     const handleClick = (event: Event) => {
       event.stopPropagation();
       event.preventDefault();
-      onDismiss();
     };
 
     if (overlay) {
