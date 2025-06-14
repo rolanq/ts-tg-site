@@ -8,11 +8,13 @@ import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyph
 import styles from "./UsersAdsList.module.css";
 import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
+import { Ad } from "../Ad/Ad";
 
 export default function UsersAdsList() {
   const { user } = useTelegram();
   const [ads, setAds] = useState<IAdvertisement[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [ad, setAd] = useState<IAdvertisement | undefined>(undefined);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -23,6 +25,10 @@ export default function UsersAdsList() {
       setIsLoading(false);
     });
   }, [user?.id]);
+
+  const handleAdClick = (ad: IAdvertisement) => {
+    setAd(ad);
+  };
 
   if (isLoading) {
     return (
@@ -37,13 +43,17 @@ export default function UsersAdsList() {
   }
 
   return (
-    <div className={styles.usersAdsList}>
-      <CustomTyphography fontSize="20px" fontWeight="bold">
-        Ваши объявления
-      </CustomTyphography>
-      {ads.map((ad) => (
-        <AdCard key={ad.id} ad={ad} />
-      ))}
-    </div>
+    <>
+      <div className={styles.usersAdsList}>
+        <CustomTyphography fontSize="20px" fontWeight="bold">
+          Ваши объявления
+        </CustomTyphography>
+        {ads.map((ad) => (
+          <AdCard key={ad.id} ad={ad} onClick={() => handleAdClick(ad)} />
+        ))}
+      </div>
+
+      <Ad ad={ad} setAd={setAd} />
+    </>
   );
 }
