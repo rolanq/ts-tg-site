@@ -4,24 +4,45 @@ import Image from "next/image";
 import styles from "./ImageContainer.module.css";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
 
-export const ImageContainer = ({ image }: { image?: string }) => {
+interface ImageContainerProps {
+  image?: string;
+  className?: string;
+  width?: number;
+  height?: number;
+  borderRadius?: number;
+}
+
+export const ImageContainer = ({
+  image,
+  className,
+  width = 100,
+  height = 100,
+  borderRadius = 12,
+}: ImageContainerProps) => {
   return (
-    <div className={styles.imageContainer}>
+    <div
+      className={styles.imageContainer}
+      style={{
+        height: `${height}px`,
+        width: `${width}px`,
+      }}
+    >
       {image ? (
         <Image
           src={image}
           alt="Image"
-          width={100}
-          height={100}
+          width={width}
+          height={height}
           style={{
-            borderRadius: "12px",
+            borderRadius: `${borderRadius}px`,
             objectFit: "cover",
             overflow: "hidden",
-            height: "100px",
-            width: "100px",
+            height: `${height}px`,
+            width: `${width}px`,
           }}
           unoptimized
           priority
+          className={className}
         />
       ) : (
         <CustomTyphography color="gray">Без фото</CustomTyphography>

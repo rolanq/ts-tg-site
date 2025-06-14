@@ -8,6 +8,7 @@ import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
 import { CustomInput } from "@/app/shared/kit/CustomInput/CustomInput";
+import { Ad } from "../Ad/Ad";
 
 interface AdsListProps {
   title?: string;
@@ -17,6 +18,7 @@ interface AdsListProps {
 export default function AdsList({ title, withSearch = false }: AdsListProps) {
   const [ads, setAds] = useState<IAdvertisement[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [ad, setAd] = useState<IAdvertisement | undefined>(undefined);
 
   useEffect(() => {
     setIsLoading(true);
@@ -25,6 +27,10 @@ export default function AdsList({ title, withSearch = false }: AdsListProps) {
       setIsLoading(false);
     });
   }, []);
+
+  const handleAdClick = (ad: IAdvertisement) => {
+    setAd(ad);
+  };
 
   if (isLoading) {
     return (
@@ -39,16 +45,20 @@ export default function AdsList({ title, withSearch = false }: AdsListProps) {
   }
 
   return (
-    <div className={styles.list}>
-      {withSearch && (
-        <CustomInput placeholder="Поиск" value="" onChange={() => {}} />
-      )}
-      <CustomTyphography fontSize="20px" fontWeight="bold">
-        {title}
-      </CustomTyphography>
-      {ads.map((ad) => (
-        <AdCard key={ad.id} ad={ad} />
-      ))}
-    </div>
+    <>
+      <div className={styles.list}>
+        {withSearch && (
+          <CustomInput placeholder="Поиск" value="" onChange={() => {}} />
+        )}
+        <CustomTyphography fontSize="20px" fontWeight="bold">
+          {title}
+        </CustomTyphography>
+        {ads.map((ad) => (
+          <AdCard key={ad.id} ad={ad} onClick={() => handleAdClick(ad)} />
+        ))}
+      </div>
+
+      <Ad ad={ad} setAd={setAd} />
+    </>
   );
 }

@@ -9,6 +9,7 @@
 
 [data-rsbs-footer="true"] {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  height: 80px;
 }
 
 [data-rsbs-scroll="true"] {

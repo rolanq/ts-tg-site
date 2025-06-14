@@ -2,8 +2,20 @@
   border-radius: 12px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   padding: 8px;
+  outline: none;
+  border: none;
+  background-color: white;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: none;
 }
 
 .cardBody {
   flex: 3;
+}
+
+.textAd {
+  text-align: left;
 }
