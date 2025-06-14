@@ -8,12 +8,17 @@
   padding: 8px 16px;
 }
 .image {
-  width: 100px;
-  height: 100px;
   object-fit: cover;
-  position: relative;
   z-index: 10;
+  position: relative;
+}
+
+.imageContainer {
+  position: relative;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .backgroundImage {

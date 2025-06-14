@@ -22,6 +22,7 @@ interface AdProps {
 
 export const Ad = ({ ad, setAd }: AdProps) => {
   const [images, setImages] = useState<Image[]>([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     if (!ad) return;
@@ -55,14 +56,22 @@ export const Ad = ({ ad, setAd }: AdProps) => {
 
   const renderImages = useMemo(() => {
     return images.map((image) => (
-      <ImageContainer
-        key={image.file_id}
-        image={image.url}
-        className={styles.image}
-        width={300}
-        height={300}
-        borderRadius={0}
-      />
+      <div className={styles.imageContainer}>
+        <ImageContainer
+          key={image.file_id}
+          image={image.url}
+          className={styles.image}
+          width={300}
+          height={300}
+          borderRadius={0}
+        />
+        <div
+          className={styles.backgroundImage}
+          style={{
+            backgroundImage: `url(${image.url})`,
+          }}
+        />
+      </div>
     ));
   }, [images]);
 
@@ -94,12 +103,6 @@ export const Ad = ({ ad, setAd }: AdProps) => {
       <div className={styles.adContainer}>
         <div className={styles.imagesContainer}>
           <CustomSlider items={renderImages} />
-          <div
-            className={styles.backgroundImage}
-            style={{
-              backgroundImage: `url(${images[0]?.url})`,
-            }}
-          />
         </div>
         <div className={styles.adInfoContainer}>
           <CustomFlex direction="column" gap="10px">
