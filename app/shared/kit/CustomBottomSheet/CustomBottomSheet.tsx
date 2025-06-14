@@ -5,6 +5,8 @@ import styles from "./styles.module.css";
 import "react-spring-bottom-sheet/dist/style.css";
 import "./override.css";
 import classNames from "classnames";
+import { CustomButton } from "../CustomButton/CustomButton";
+import CloseIcon from "../../Icons/CloseIcon";
 
 interface IProps {
   open: boolean;
@@ -40,6 +42,26 @@ export const CustomBottomSheet: FC<IProps> = ({
     }
   }, []);
 
+  useEffect(() => {
+    const overlay = document.querySelector("[data-rsbs-overlay]");
+
+    const handleClick = (event: Event) => {
+      event.stopPropagation();
+      event.preventDefault();
+      onDismiss();
+    };
+
+    if (overlay) {
+      overlay.addEventListener("click", handleClick);
+    }
+
+    return () => {
+      if (overlay) {
+        overlay.removeEventListener("click", handleClick);
+      }
+    };
+  }, []);
+
   if (viewportHeight === 0) {
     return null;
   }
@@ -58,6 +80,11 @@ export const CustomBottomSheet: FC<IProps> = ({
       open={open}
       onDismiss={onDismiss}
     >
+      {closeIcon && (
+        <CustomButton className={styles.closeButton} onClick={onDismiss}>
+          <CloseIcon />
+        </CustomButton>
+      )}
       {children}
     </BottomSheet>
   );

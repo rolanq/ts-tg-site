@@ -12,8 +12,13 @@ export const CustomButton = ({
   onClick,
   className,
 }: CustomButtonProps) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    onClick?.();
+  };
+
   return (
-    <button className={`${styles.button} ${className}`} onClick={onClick}>
+    <button className={`${styles.button} ${className}`} onClick={handleClick}>
       {children}
     </button>
   );

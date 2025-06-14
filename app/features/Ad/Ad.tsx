@@ -103,52 +103,74 @@ export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
         </CustomFlex>
       }
     >
-      <div className={styles.adContainer}>
-        <div className={styles.imagesContainer}>
-          <CustomSlider items={renderImages} />
-        </div>
-        <div className={styles.adInfoContainer}>
-          <CustomFlex direction="column" gap="10px">
-            <CustomTyphography fontSize="20px" fontWeight="bold">
-              {ad?.Brand?.name} {ad?.CarModel?.name} {ad?.year} г.
-            </CustomTyphography>
-          </CustomFlex>
-          <div className={styles.adInfoGrid}>
-            <CustomTyphography fontSize="16px" fontWeight="medium" color="gray">
-              Регион
-            </CustomTyphography>
-            <CustomTyphography fontSize="16px" fontWeight="medium">
-              {ad?.Region?.name}
-            </CustomTyphography>
+      {ad && (
+        <div className={styles.adContainer}>
+          <div className={styles.imagesContainer}>
+            <CustomSlider items={renderImages} />
+          </div>
+          <div className={styles.adInfoContainer}>
+            <CustomFlex direction="column" gap="10px">
+              <CustomTyphography fontSize="20px" fontWeight="bold">
+                {ad?.Brand?.name} {ad?.CarModel?.name} {ad?.year} г.
+              </CustomTyphography>
+            </CustomFlex>
+            <div className={styles.adInfoGrid}>
+              <CustomTyphography
+                fontSize="16px"
+                fontWeight="medium"
+                color="gray"
+              >
+                Регион
+              </CustomTyphography>
+              <CustomTyphography fontSize="16px" fontWeight="medium">
+                {ad?.Region?.name}
+              </CustomTyphography>
 
-            <CustomTyphography fontSize="16px" fontWeight="medium" color="gray">
-              Двигатель
-            </CustomTyphography>
-            <CustomTyphography fontSize="16px" fontWeight="medium">
-              {ad?.engineType}, {ad?.horsePower} л.с.
-            </CustomTyphography>
-            <CustomTyphography fontSize="16px" fontWeight="medium" color="gray">
-              Привод
-            </CustomTyphography>
-            <CustomTyphography fontSize="16px" fontWeight="medium">
-              {ad?.transmission}
-            </CustomTyphography>
+              <CustomTyphography
+                fontSize="16px"
+                fontWeight="medium"
+                color="gray"
+              >
+                Двигатель
+              </CustomTyphography>
+              <CustomTyphography fontSize="16px" fontWeight="medium">
+                {ad?.engineType}, {ad?.horsePower} л.с.
+              </CustomTyphography>
+              <CustomTyphography
+                fontSize="16px"
+                fontWeight="medium"
+                color="gray"
+              >
+                Привод
+              </CustomTyphography>
+              <CustomTyphography fontSize="16px" fontWeight="medium">
+                {ad?.transmission}
+              </CustomTyphography>
 
-            <CustomTyphography fontSize="16px" fontWeight="medium" color="gray">
-              Пробег
-            </CustomTyphography>
-            <CustomTyphography fontSize="16px" fontWeight="medium">
-              {ad?.mileage} км
-            </CustomTyphography>
-            <CustomTyphography fontSize="16px" fontWeight="medium" color="gray">
-              Описание
-            </CustomTyphography>
-            <CustomTyphography fontSize="16px" fontWeight="medium">
-              {ad?.description}
-            </CustomTyphography>
+              <CustomTyphography
+                fontSize="16px"
+                fontWeight="medium"
+                color="gray"
+              >
+                Пробег
+              </CustomTyphography>
+              <CustomTyphography fontSize="16px" fontWeight="medium">
+                {ad?.mileage} км
+              </CustomTyphography>
+              <CustomTyphography
+                fontSize="16px"
+                fontWeight="medium"
+                color="gray"
+              >
+                Описание
+              </CustomTyphography>
+              <CustomTyphography fontSize="16px" fontWeight="medium">
+                {ad?.description}
+              </CustomTyphography>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </CustomBottomSheet>
   );
 };
