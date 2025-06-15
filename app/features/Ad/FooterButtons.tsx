@@ -4,14 +4,20 @@ import { IAdvertisement } from "@/app/db/db";
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import classNames from "classnames";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styles from "./Ad.module.css";
 import { useTelegram } from "@/app/shared/hooks/useTelegram";
 import { updateAd } from "@/app/services/Ads";
 import { AllAdsContext } from "@/app/context/AllAdsContext";
 import { UsersAdsContext } from "@/app/context/UsersAdsContext";
 
-export default function FooterButtons({ isUsersAds }: { isUsersAds: boolean }) {
+export default function FooterButtons({
+  isUsersAds,
+  setHideAdOpen,
+}: {
+  isUsersAds: boolean;
+  setHideAdOpen: (open: boolean) => void;
+}) {
   const { user } = useTelegram();
   const { openedAd, setAds, setOpenedAd, openedAdLoading, setOpenedAdLoading } =
     useContext(isUsersAds ? UsersAdsContext : AllAdsContext);
@@ -35,11 +41,7 @@ export default function FooterButtons({ isUsersAds }: { isUsersAds: boolean }) {
   };
 
   const handleHide = () => {
-    console.log("hide");
-  };
-
-  const handleEdit = () => {
-    console.log("edit");
+    setHideAdOpen(true);
   };
 
   const handleCall = () => {
@@ -56,40 +58,41 @@ export default function FooterButtons({ isUsersAds }: { isUsersAds: boolean }) {
 
   if (isOwner) {
     return (
-      <CustomFlex direction="column" gap="10px">
-        <CustomButton onClick={handleEdit} stretched>
-          Редактировать
-        </CustomButton>
+      <>
         <CustomFlex gap="10px">
-          <CustomButton onClick={handleOnHold} stretched>
+          <CustomButton onClick={handleOnHold} stretched padding="medium">
             {openedAd.isOnHold ? "Убрать задаток" : "Под задатком"}
           </CustomButton>
-          <CustomButton onClick={handleHide} stretched>
+          <CustomButton onClick={handleHide} stretched padding="medium">
             Скрыть
           </CustomButton>
         </CustomFlex>
-      </CustomFlex>
+      </>
     );
   }
 
   return openedAd ? (
-    <CustomFlex direction="row" gap="10px">
-      <CustomButton
-        onClick={handleMessage}
-        className={classNames(styles.footerButtons, styles.messageButton)}
-        stretched
-      >
-        Написать
-      </CustomButton>
-      {openedAd?.phoneNumber && (
+    <>
+      <CustomFlex direction="row" gap="10px">
         <CustomButton
-          onClick={handleCall}
-          className={classNames(styles.footerButtons, styles.callButton)}
+          onClick={handleMessage}
+          className={classNames(styles.footerButtons, styles.messageButton)}
           stretched
+          padding="medium"
         >
-          Позвонить
+          Написать
         </CustomButton>
-      )}
-    </CustomFlex>
+        {openedAd?.phoneNumber && (
+          <CustomButton
+            onClick={handleCall}
+            className={classNames(styles.footerButtons, styles.callButton)}
+            stretched
+            padding="medium"
+          >
+            Позвонить
+          </CustomButton>
+        )}
+      </CustomFlex>
+    </>
   ) : undefined;
 }

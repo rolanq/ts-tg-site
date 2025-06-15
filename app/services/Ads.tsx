@@ -24,6 +24,9 @@ export const getAllAds = async () => {
   await initDatabase();
   const advertisements = await Advertisement.findAll({
     include: [Brand, CarModel, Region],
+    where: {
+      isActive: true,
+    }
   });
   return advertisements.map((ad) => ad.toJSON());
 };

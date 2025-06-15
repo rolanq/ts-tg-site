@@ -20,6 +20,7 @@ import FooterButtons from "./FooterButtons";
 import { UsersAdsContext } from "@/app/context/UsersAdsContext";
 import { AllAdsContext } from "@/app/context/AllAdsContext";
 import { useTelegram } from "@/app/shared/hooks/useTelegram";
+import HideAd from "../HideAd/HideAd";
 
 interface Image {
   url: string;
@@ -37,6 +38,7 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
     useContext(isUsersAds ? UsersAdsContext : AllAdsContext);
   const [images, setImages] = useState<Image[]>([]);
   const [video, setVideo] = useState<Video | null>(null);
+  const [hideAdOpen, setHideAdOpen] = useState(false);
 
   const isOwner = openedAd?.userId === String(user?.id);
 
@@ -140,122 +142,129 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
   }, [openedAd, renderImages, renderVideo]);
 
   return (
-    <CustomBottomSheet
-      open={!!openedAd}
-      onDismiss={onDismiss}
-      snap={95}
-      disableDragClose
-      footer={
-        isOwner && !openedAd?.isActive ? (
-          <FooterButtons isUsersAds={isUsersAds} />
-        ) : undefined
-      }
-    >
-      {openedAd && !openedAdLoading ? (
-        <div className={styles.adContainer}>
-          <div className={styles.imagesContainer}>
-            <CustomSlider items={renderItems} />
-          </div>
-          <div className={styles.adInfoContainer}>
-            <div className={styles.badgesContainer}>
-              <Badges ad={openedAd} />
+    <>
+      <CustomBottomSheet
+        open={!!openedAd}
+        onDismiss={onDismiss}
+        snap={95}
+        disableDragClose
+        footer={
+          isOwner && openedAd?.isActive ? (
+            <FooterButtons isUsersAds={isUsersAds} setHideAdOpen={setHideAdOpen} />
+          ) : undefined
+        }
+      >
+        {openedAd && !openedAdLoading ? (
+          <div className={styles.adContainer}>
+            <div className={styles.imagesContainer}>
+              <CustomSlider items={renderItems} />
             </div>
-            <CustomFlex direction="column" gap="10px">
-              <CustomTyphography fontSize="20px" fontWeight="bold">
-                {openedAd?.Brand?.name} {openedAd?.CarModel?.name},&nbsp;
-                {openedAd?.year} г.
-              </CustomTyphography>
-            </CustomFlex>
-            <div className={styles.adInfoGrid}>
-              <CustomTyphography
-                fontSize="16px"
-                fontWeight="medium"
-                color="gray"
-              >
-                Регион
-              </CustomTyphography>
-              <CustomTyphography fontSize="16px" fontWeight="medium">
-                {openedAd?.Region?.name}
-              </CustomTyphography>
+            <div className={styles.adInfoContainer}>
+              <div className={styles.badgesContainer}>
+                <Badges ad={openedAd} />
+              </div>
+              <CustomFlex direction="column" gap="10px">
+                <CustomTyphography fontSize="20px" fontWeight="bold">
+                  {openedAd?.Brand?.name} {openedAd?.CarModel?.name},&nbsp;
+                  {openedAd?.year} г.
+                </CustomTyphography>
+              </CustomFlex>
+              <div className={styles.adInfoGrid}>
+                <CustomTyphography
+                  fontSize="16px"
+                  fontWeight="medium"
+                  color="gray"
+                >
+                  Регион
+                </CustomTyphography>
+                <CustomTyphography fontSize="16px" fontWeight="medium">
+                  {openedAd?.Region?.name}
+                </CustomTyphography>
 
-              <CustomTyphography
-                fontSize="16px"
-                fontWeight="medium"
-                color="gray"
-              >
-                Двигатель
-              </CustomTyphography>
-              <CustomTyphography fontSize="16px" fontWeight="medium">
-                {openedAd?.engineType}, {openedAd?.horsePower} л.с.
-              </CustomTyphography>
-              <CustomTyphography
-                fontSize="16px"
-                fontWeight="medium"
-                color="gray"
-              >
-                Привод
-              </CustomTyphography>
-              <CustomTyphography fontSize="16px" fontWeight="medium">
-                {openedAd?.driveType}
-              </CustomTyphography>
-              <CustomTyphography
-                fontSize="16px"
-                fontWeight="medium"
-                color="gray"
-              >
-                КПП
-              </CustomTyphography>
-              <CustomTyphography fontSize="16px" fontWeight="medium">
-                {openedAd?.transmission}
-              </CustomTyphography>
+                <CustomTyphography
+                  fontSize="16px"
+                  fontWeight="medium"
+                  color="gray"
+                >
+                  Двигатель
+                </CustomTyphography>
+                <CustomTyphography fontSize="16px" fontWeight="medium">
+                  {openedAd?.engineType}, {openedAd?.horsePower} л.с.
+                </CustomTyphography>
+                <CustomTyphography
+                  fontSize="16px"
+                  fontWeight="medium"
+                  color="gray"
+                >
+                  Привод
+                </CustomTyphography>
+                <CustomTyphography fontSize="16px" fontWeight="medium">
+                  {openedAd?.driveType}
+                </CustomTyphography>
+                <CustomTyphography
+                  fontSize="16px"
+                  fontWeight="medium"
+                  color="gray"
+                >
+                  КПП
+                </CustomTyphography>
+                <CustomTyphography fontSize="16px" fontWeight="medium">
+                  {openedAd?.transmission}
+                </CustomTyphography>
 
-              <CustomTyphography
-                fontSize="16px"
-                fontWeight="medium"
-                color="gray"
-              >
-                Пробег
-              </CustomTyphography>
+                <CustomTyphography
+                  fontSize="16px"
+                  fontWeight="medium"
+                  color="gray"
+                >
+                  Пробег
+                </CustomTyphography>
 
-              <CustomTyphography fontSize="16px" fontWeight="medium">
-                {openedAd?.mileage} км
-              </CustomTyphography>
+                <CustomTyphography fontSize="16px" fontWeight="medium">
+                  {openedAd?.mileage} км
+                </CustomTyphography>
 
-              {openedAd?.autotekaLink && (
-                <>
-                  <CustomTyphography
-                    fontSize="16px"
-                    fontWeight="medium"
-                    color="gray"
-                  >
-                    Автотека
-                  </CustomTyphography>
-                  <CustomTyphography fontSize="16px" fontWeight="medium">
-                    <Link href={openedAd?.autotekaLink} target="_blank">
-                      Открыть
-                    </Link>
-                  </CustomTyphography>
-                </>
-              )}
+                {openedAd?.autotekaLink && (
+                  <>
+                    <CustomTyphography
+                      fontSize="16px"
+                      fontWeight="medium"
+                      color="gray"
+                    >
+                      Автотека
+                    </CustomTyphography>
+                    <CustomTyphography fontSize="16px" fontWeight="medium">
+                      <Link href={openedAd?.autotekaLink} target="_blank">
+                        Открыть
+                      </Link>
+                    </CustomTyphography>
+                  </>
+                )}
 
-              <CustomTyphography
-                fontSize="16px"
-                fontWeight="medium"
-                color="gray"
-              >
-                Описание
-              </CustomTyphography>
-              <CustomTyphography fontSize="16px" fontWeight="medium">
-                {openedAd?.description}
-              </CustomTyphography>
+                <CustomTyphography
+                  fontSize="16px"
+                  fontWeight="medium"
+                  color="gray"
+                >
+                  Описание
+                </CustomTyphography>
+                <CustomTyphography fontSize="16px" fontWeight="medium">
+                  {openedAd?.description}
+                </CustomTyphography>
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        <div className={styles.loaderWrapper}>
-          <CustomLoader size={36} label="Обновляем информацию" />
-        </div>
-      )}
-    </CustomBottomSheet>
+        ) : (
+          <div className={styles.loaderWrapper}>
+            <CustomLoader size={36} label="Обновляем информацию" />
+          </div>
+        )}
+      </CustomBottomSheet>
+      <HideAd
+        open={hideAdOpen}
+        onDismiss={() => setHideAdOpen(false)}
+        isUsersAds={isUsersAds}
+      />
+    </>
   );
 };
