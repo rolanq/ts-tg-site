@@ -12,13 +12,36 @@ import {
   checkIsThirdStepValid,
   isAvailableToPublish,
 } from "./components/utils";
+import { getDraft } from "@/app/services/Draft";
+import { telegramContext } from "@/app/providers/TelegramProvider";
 
 export const AddAd = () => {
-  const { setOpenedStep, preparedData, isDraftLoading, openedStep } =
-    useContext(AddAdContext);
+  const { user } = useContext(telegramContext);
+  const {
+    setOpenedStep,
+    preparedData,
+    isDraftLoading,
+    openedStep,
+    setPreparedData,
+    setIsDraftLoading,
+  } = useContext(AddAdContext);
   const [mounted, setMounted] = useState(false);
 
   const handleOpenAddAd = useCallback(() => {
+    setIsDraftLoading(true);
+    if (user?.id) {
+      getDraft(user.id)
+        .then((draft) => {
+          setPreparedData(draft);
+        })
+        .finally(() => {
+          const timeout = setTimeout(() => {
+            setIsDraftLoading(false);
+            clearTimeout(timeout);
+          }, 500);
+        });
+    }
+
     if (isAvailableToPublish(preparedData)) {
       setOpenedStep(4);
       return;

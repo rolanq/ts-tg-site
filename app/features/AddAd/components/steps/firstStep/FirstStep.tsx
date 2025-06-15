@@ -93,6 +93,7 @@ export const FirstStep = () => {
           className={styles.stepCommonBody}
         >
           <CustomSelect
+            value={preparedData.regionId?.toString() || ""}
             options={preparedOptions.regions}
             onChange={handleRegionChange}
             placeholder="Введите регион продажи"
@@ -100,6 +101,7 @@ export const FirstStep = () => {
           />
           <CustomFlex gap="10px" className={styles.stepCommonBody}>
             <CustomSelect
+              value={preparedData.brandId?.toString() || ""}
               options={preparedOptions.brands}
               onChange={handleBrandChange}
               placeholder="Выберите марку машины"
@@ -107,6 +109,7 @@ export const FirstStep = () => {
               className={styles.flexStepSelector}
             />
             <CustomSelect
+              value={preparedData.modelId?.toString() || ""}
               options={preparedOptions.models}
               onChange={handleModelChange}
               placeholder={

@@ -5,27 +5,14 @@ import { IBrand, IRegion, ICarModel, IAdvertisementDraft } from "@/app/db/db";
 import { getDraft } from "../../../services/Draft";
 import { loadBrandsAndRegions, getModels } from "../../../services/GetBrands";
 import { telegramContext } from "@/app/providers/TelegramProvider";
+import {
+  DEFAULT_AD_DRAFT,
+  TELEGRAM_API_URL,
+  TELEGRAM_FILE_API_URL,
+} from "@/app/shared/constants/telegram";
 
 const initialState: IContextCreateAd = {
-  preparedData: {
-    regionId: null,
-    brandId: null,
-    modelId: null,
-    engineType: null,
-    horsePower: null,
-    driveType: null,
-    transmission: null,
-    year: null,
-    price: null,
-    mileage: null,
-    description: null,
-    phoneNumber: null,
-    photos: [],
-    currentStep: STEPS_ENUM.REGION,
-    autotekaLink: null,
-    video: null,
-    userId: "0",
-  },
+  preparedData: DEFAULT_AD_DRAFT,
   setPreparedData: () => {},
   openedStep: 0,
   setOpenedStep: () => {},
@@ -46,6 +33,9 @@ const initialState: IContextCreateAd = {
   setPreparedVideo: () => {},
   preparedPhotos: [],
   setPreparedPhotos: () => {},
+
+  isPublishing: false,
+  setIsPublishing: () => {},
 };
 
 export const AddAdContext = createContext<IContextCreateAd>(initialState);
@@ -66,6 +56,7 @@ export const AddAdProvider = ({ children }: { children: React.ReactNode }) => {
   const [isNextStepDisabled, setIsNextStepDisabled] = useState(false);
   const [onClickNextStep, setOnClickNextStep] = useState<() => void>(() => {});
   const [isDraftLoading, setIsDraftLoading] = useState(true);
+  const [isPublishing, setIsPublishing] = useState(false);
 
   useEffect(() => {
     loadBrandsAndRegions().then(({ serializedBrands, serializedRegions }) => {
@@ -85,20 +76,40 @@ export const AddAdProvider = ({ children }: { children: React.ReactNode }) => {
   }, [preparedData?.brandId]);
 
   useEffect(() => {
-    setIsDraftLoading(true);
-    if (user?.id) {
-      getDraft(user.id)
-        .then((draft) => {
-          setPreparedData(draft);
-        })
-        .finally(() => {
-          const timeout = setTimeout(() => {
-            setIsDraftLoading(false);
-            clearTimeout(timeout);
-          }, 500);
+    preparedData.photos.forEach((photo) => {
+      fetch(`${TELEGRAM_API_URL}/getFile?file_id=${photo}`)
+        .then((res) => res.json())
+        .then((fileData) => {
+          if (!fileData.ok) {
+            console.error("Ошибка получения информации о файле:", fileData);
+            return;
+          }
+
+          const filePath = fileData.result.file_path;
+
+          setPreparedPhotos((prev) => [
+            ...prev,
+            new File([], `${TELEGRAM_FILE_API_URL}/${filePath}`),
+          ]);
+        });
+    });
+
+    if (preparedData.video) {
+      fetch(`${TELEGRAM_API_URL}/getFile?file_id=${preparedData.video}`)
+        .then((res) => res.json())
+        .then((fileData) => {
+          if (!fileData.ok) {
+            console.error("Ошибка получения информации о файле:", fileData);
+            return;
+          }
+
+          const filePath = fileData.result.file_path;
+          setPreparedVideo(
+            new File([], `${TELEGRAM_FILE_API_URL}/${filePath}`)
+          );
         });
     }
-  }, [user?.id]);
+  }, [preparedData.photos, preparedData.video]);
 
   return (
     <AddAdContext.Provider
@@ -127,6 +138,9 @@ export const AddAdProvider = ({ children }: { children: React.ReactNode }) => {
         setPreparedVideo,
         preparedPhotos,
         setPreparedPhotos,
+
+        isPublishing,
+        setIsPublishing,
       }}
     >
       {children}

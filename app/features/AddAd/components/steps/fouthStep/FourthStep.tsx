@@ -47,8 +47,6 @@ export const FourthStep = () => {
   useEffect(() => {
     setPreparedData((prev) => ({
       ...prev,
-      photos: preparedPhotos.map((photo) => photo.name),
-      video: preparedVideo?.name || null,
     }));
   }, [preparedPhotos, preparedVideo]);
 

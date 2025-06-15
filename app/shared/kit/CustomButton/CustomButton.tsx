@@ -15,6 +15,8 @@ interface CustomButtonProps {
   afterIcon?: React.ReactNode;
   padding?: "small" | "medium" | "large" | "none";
   boxShadow?: boolean;
+  align?: "center" | "start" | "end";
+  isText?: boolean;
 }
 
 export const CustomButton = ({
@@ -28,6 +30,8 @@ export const CustomButton = ({
   afterIcon,
   padding = "small",
   boxShadow = false,
+  align = "start",
+  isText = true,
 }: CustomButtonProps) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     onClick?.();
@@ -46,6 +50,9 @@ export const CustomButton = ({
         [styles.large]: padding === "large",
         [styles.none]: padding === "none",
         [styles.boxShadow]: boxShadow,
+        [styles.alignCenter]: align === "center",
+        [styles.alignStart]: align === "start",
+        [styles.alignEnd]: align === "end",
       })}
       onClick={handleClick}
       disabled={disabled}
@@ -57,14 +64,18 @@ export const CustomButton = ({
         className={styles.wrapper}
       >
         {beforeIcon && <div className={styles.beforeIcon}>{beforeIcon}</div>}
-        <CustomTyphography
-          fontSize="16px"
-          fontWeight="bold"
-          color={variant === "tertiary" ? "black" : "white"}
-          className={styles.text}
-        >
-          {children}
-        </CustomTyphography>
+        {isText ? (
+          <CustomTyphography
+            fontSize="16px"
+            fontWeight="bold"
+            color={variant === "tertiary" ? "black" : "white"}
+            className={styles.text}
+          >
+            {children}
+          </CustomTyphography>
+        ) : (
+          children
+        )}
         {afterIcon && <div className={styles.afterIcon}>{afterIcon}</div>}
       </CustomFlex>
     </button>

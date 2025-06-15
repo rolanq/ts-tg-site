@@ -15,10 +15,12 @@ export const AddedImage = ({ photo, index, setPhotos }: AddedImageProps) => {
     setPhotos((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const isFromTelegram = photo.name.startsWith("https");
+
   return (
     <div className={styles.addedImageWrapper}>
       <Image
-        src={URL.createObjectURL(photo)}
+        src={isFromTelegram ? photo.name : URL.createObjectURL(photo)}
         alt="photo"
         key={index}
         className={styles.addedImage}

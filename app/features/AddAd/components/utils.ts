@@ -20,8 +20,8 @@ export const checkIsSecondStepValid = (preparedData: IAdvertisementDraft) => {
     preparedData.mileage &&
     preparedData.horsePower > 0 &&
     preparedData.mileage > 0 &&
-    preparedData.horsePower < 5000 &&
-    preparedData.mileage < 1000000
+    preparedData.horsePower <= 5000 &&
+    preparedData.mileage <= 1000000
   );
 };
 

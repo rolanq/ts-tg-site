@@ -1,9 +1,14 @@
+"use client";
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AddAdContext } from "../context/AddAdContext";
 import styles from "./commonSteps.module.css";
 import { isAvailableToPublish } from "./utils";
+import { sendPhotos, sendVideo } from "@/app/services/ClientTelegram";
+import { updateDraft } from "@/app/services/Draft";
+import { publishAd } from "@/app/services/Ads";
+import toast from "react-hot-toast";
 
 export const FooterButtons = () => {
   const {
@@ -13,6 +18,10 @@ export const FooterButtons = () => {
     onClickNextStep,
     preparedData,
     isDraftLoading,
+    isPublishing,
+    preparedVideo,
+    preparedPhotos,
+    setIsPublishing,
   } = useContext(AddAdContext);
 
   const [isPublishDisabled, setIsPublishDisabled] = useState(true);
@@ -21,9 +30,32 @@ export const FooterButtons = () => {
     setOpenedStep((prev) => prev - 1);
   };
 
-  const handlePublish = () => {
-    console.log("publish");
-  };
+  const handlePublish = useCallback(async () => {
+    setIsPublishing(true);
+    const filteredPhotos = preparedPhotos.filter(
+      (photo) => !photo.name.startsWith("https")
+    );
+    const photosIds = await sendPhotos(filteredPhotos);
+
+    const isVideoAlreadyUploaded = preparedVideo?.name.startsWith("https");
+    const videoId =
+      !isVideoAlreadyUploaded && preparedVideo
+        ? await sendVideo(preparedVideo)
+        : preparedData.video;
+
+    updateDraft(Number(preparedData.userId), {
+      ...preparedData,
+      photos: photosIds,
+      video: videoId,
+    }).then(async () => {
+      const newAd = await publishAd(Number(preparedData.userId));
+      if (newAd.id) {
+        setIsPublishing(false);
+        setOpenedStep(0);
+        toast.success("Объявление успешно создано", { duration: 3000 });
+      }
+    });
+  }, [preparedPhotos, preparedVideo, preparedData]);
 
   useEffect(() => {
     if (isAvailableToPublish(preparedData)) {
@@ -33,7 +65,7 @@ export const FooterButtons = () => {
     }
   }, [preparedData]);
 
-  if (isDraftLoading) {
+  if (isDraftLoading || isPublishing) {
     return null;
   }
 

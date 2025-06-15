@@ -76,3 +76,8 @@
   height: 90vh;
   width: 100vw;
 }
+
+.badgesContainer {
+  margin-bottom: 10px;
+  margin-top: 5px;
+}

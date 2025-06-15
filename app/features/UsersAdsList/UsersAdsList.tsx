@@ -2,34 +2,20 @@
 import { IAdvertisement } from "@/app/db/db";
 import { getAds } from "@/app/services/Ads";
 import { useTelegram } from "@/app/shared/hooks/useTelegram";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AdCard from "../AdCard/AdCard";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
 import styles from "./UsersAdsList.module.css";
 import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import { Ad } from "../Ad/Ad";
+import { UsersAdsContext } from "@/app/context/UsersAdsContext";
 
 export default function UsersAdsList() {
-  const { user } = useTelegram();
-  const [ads, setAds] = useState<IAdvertisement[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [ad, setAd] = useState<IAdvertisement | undefined>(undefined);
-  const [isAdOpen, setIsAdOpen] = useState(false);
-
-  useEffect(() => {
-    if (!user?.id) return;
-
-    setIsLoading(true);
-    getAds(user.id).then((ads) => {
-      setAds(ads);
-      setIsLoading(false);
-    });
-  }, [user?.id]);
+  const { ads, isLoading, setOpenedAd } = useContext(UsersAdsContext);
 
   const handleAdClick = (ad: IAdvertisement) => {
-    setAd(ad);
-    setIsAdOpen(true);
+    setOpenedAd(ad);
   };
 
   if (isLoading) {
@@ -55,7 +41,7 @@ export default function UsersAdsList() {
         ))}
       </div>
 
-      <Ad ad={ad} setAd={setAd} isOpen={isAdOpen} setIsOpen={setIsAdOpen} />
+      <Ad isUsersAds />
     </>
   );
 }

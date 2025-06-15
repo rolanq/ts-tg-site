@@ -4,6 +4,7 @@ import { Noto_Sans } from "next/font/google";
 import { Telegram } from "@twa-dev/types";
 import { TelegramProvider } from "./providers/TelegramProvider";
 import ServerProvider from "./providers/ServerProvider";
+import ToastProvider from "./providers/ToastProvider";
 
 export const metadata = {
   title: "В Касание",
@@ -40,7 +41,9 @@ export default async function RootLayout({
         />
       </head>
       <body className={notoSans.className}>
-        <TelegramProvider>{children}</TelegramProvider>
+        <TelegramProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </TelegramProvider>
       </body>
     </html>
   );

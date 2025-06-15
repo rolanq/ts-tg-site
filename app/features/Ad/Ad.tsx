@@ -2,7 +2,7 @@
 import { IAdvertisement } from "@/app/db/db";
 import { CustomBottomSheet } from "@/app/shared/kit/CustomBottomSheet/CustomBottomSheet";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { ImageContainer } from "../ImageContainer/ImageContainer";
 import CustomSlider from "@/app/shared/kit/CustomSlider/CustomSlider";
 import styles from "./Ad.module.css";
@@ -10,31 +10,33 @@ import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyph
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
 import classNames from "classnames";
 import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
+import {
+  TELEGRAM_API_URL,
+  TELEGRAM_FILE_API_URL,
+} from "@/app/shared/constants/telegram";
+import Link from "next/link";
+import CustomBadge from "@/app/shared/kit/CustomBadge/CustomBadge";
+import Badges from "../Badges/Badges";
+import FooterButtons from "./FooterButtons";
+import { UsersAdsContext } from "@/app/context/UsersAdsContext";
+import { AllAdsContext } from "@/app/context/AllAdsContext";
 
 interface Image {
   url: string;
   file_id: string;
 }
 
-interface AdProps {
-  ad?: IAdvertisement;
-  setAd: (ad: IAdvertisement | undefined) => void;
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-}
-
-export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
+export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
+  const { openedAd, setOpenedAd, openedAdLoading, setOpenedAdLoading } =
+    useContext(isUsersAds ? UsersAdsContext : AllAdsContext);
   const [images, setImages] = useState<Image[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!ad) return;
+    if (!openedAd) return;
     let timeout: NodeJS.Timeout;
-    setIsLoading(true);
-    ad.photos.forEach((photo) => {
-      fetch(
-        `https://api.telegram.org/bot${process.env.NEXT_PUBLIC_BOT_TOKEN}/getFile?file_id=${photo}`
-      )
+    setOpenedAdLoading(true);
+    openedAd.photos.forEach((photo) => {
+      fetch(`${TELEGRAM_API_URL}/getFile?file_id=${photo}`)
         .then((res) => res.json())
         .then((fileData) => {
           if (!fileData.ok) {
@@ -46,26 +48,24 @@ export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
           setImages((prev) => [
             ...prev,
             {
-              url: `https://api.telegram.org/file/bot${process.env.NEXT_PUBLIC_BOT_TOKEN}/${filePath}`,
+              url: `${TELEGRAM_FILE_API_URL}/${filePath}`,
               file_id: photo,
             },
           ]);
-        })
-        .finally(() => {
-          timeout = setTimeout(() => {
-            setIsLoading(false);
-          }, 700);
         });
     });
+
+    timeout = setTimeout(() => {
+      setOpenedAdLoading(false);
+    }, 1000);
 
     return () => {
       clearTimeout(timeout);
     };
-  }, [ad]);
+  }, [openedAd]);
 
   const onDismiss = () => {
-    setIsOpen(false);
-    setAd(undefined);
+    setOpenedAd(null);
     setImages([]);
   };
 
@@ -92,40 +92,25 @@ export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
 
   return (
     <CustomBottomSheet
-      open={isOpen}
+      open={!!openedAd}
       onDismiss={onDismiss}
       snap={95}
       disableDragClose
-      footer={
-        ad && !isLoading ? (
-          <CustomFlex direction="row" gap="10px">
-            <CustomButton
-              onClick={() => {}}
-              className={classNames(styles.footerButtons, styles.messageButton)}
-            >
-              Написать
-            </CustomButton>
-            {ad?.phoneNumber && (
-              <CustomButton
-                onClick={() => {}}
-                className={classNames(styles.footerButtons, styles.callButton)}
-              >
-                Позвонить
-              </CustomButton>
-            )}
-          </CustomFlex>
-        ) : undefined
-      }
+      footer={<FooterButtons isUsersAds={isUsersAds} />}
     >
-      {ad && !isLoading ? (
+      {openedAd && !openedAdLoading ? (
         <div className={styles.adContainer}>
           <div className={styles.imagesContainer}>
             <CustomSlider items={renderImages} />
           </div>
           <div className={styles.adInfoContainer}>
+            <div className={styles.badgesContainer}>
+              <Badges ad={openedAd} />
+            </div>
             <CustomFlex direction="column" gap="10px">
               <CustomTyphography fontSize="20px" fontWeight="bold">
-                {ad?.Brand?.name} {ad?.CarModel?.name} {ad?.year} г.
+                {openedAd?.Brand?.name} {openedAd?.CarModel?.name}
+                {openedAd?.year} г.
               </CustomTyphography>
             </CustomFlex>
             <div className={styles.adInfoGrid}>
@@ -137,7 +122,7 @@ export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
                 Регион
               </CustomTyphography>
               <CustomTyphography fontSize="16px" fontWeight="medium">
-                {ad?.Region?.name}
+                {openedAd?.Region?.name}
               </CustomTyphography>
 
               <CustomTyphography
@@ -148,7 +133,7 @@ export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
                 Двигатель
               </CustomTyphography>
               <CustomTyphography fontSize="16px" fontWeight="medium">
-                {ad?.engineType}, {ad?.horsePower} л.с.
+                {openedAd?.engineType}, {openedAd?.horsePower} л.с.
               </CustomTyphography>
               <CustomTyphography
                 fontSize="16px"
@@ -158,7 +143,17 @@ export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
                 Привод
               </CustomTyphography>
               <CustomTyphography fontSize="16px" fontWeight="medium">
-                {ad?.transmission}
+                {openedAd?.driveType}
+              </CustomTyphography>
+              <CustomTyphography
+                fontSize="16px"
+                fontWeight="medium"
+                color="gray"
+              >
+                КПП
+              </CustomTyphography>
+              <CustomTyphography fontSize="16px" fontWeight="medium">
+                {openedAd?.transmission}
               </CustomTyphography>
 
               <CustomTyphography
@@ -168,9 +163,28 @@ export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
               >
                 Пробег
               </CustomTyphography>
+
               <CustomTyphography fontSize="16px" fontWeight="medium">
-                {ad?.mileage} км
+                {openedAd?.mileage} км
               </CustomTyphography>
+
+              {openedAd?.autotekaLink && (
+                <>
+                  <CustomTyphography
+                    fontSize="16px"
+                    fontWeight="medium"
+                    color="gray"
+                  >
+                    Автотека
+                  </CustomTyphography>
+                  <CustomTyphography fontSize="16px" fontWeight="medium">
+                    <Link href={openedAd?.autotekaLink} target="_blank">
+                      Открыть
+                    </Link>
+                  </CustomTyphography>
+                </>
+              )}
+
               <CustomTyphography
                 fontSize="16px"
                 fontWeight="medium"
@@ -179,14 +193,14 @@ export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
                 Описание
               </CustomTyphography>
               <CustomTyphography fontSize="16px" fontWeight="medium">
-                {ad?.description}
+                {openedAd?.description}
               </CustomTyphography>
             </div>
           </div>
         </div>
       ) : (
         <div className={styles.loaderWrapper}>
-          <CustomLoader size={36} />
+          <CustomLoader size={36} label="Обновляем информацию" />
         </div>
       )}
     </CustomBottomSheet>

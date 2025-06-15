@@ -83,7 +83,7 @@ export const CustomBottomSheet: FC<IProps> = ({
       onDismiss={onDismiss}
     >
       {closeIcon && (
-        <CustomButton className={styles.closeButton} onClick={onDismiss}>
+        <CustomButton className={styles.closeButton} onClick={onDismiss} stretched align="center" isText={false}>
           <CloseIcon />
         </CustomButton>
       )}

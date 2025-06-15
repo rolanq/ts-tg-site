@@ -5,6 +5,11 @@ import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyph
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import styles from "./AdCard.module.css";
 import { useEffect, useState } from "react";
+import {
+  TELEGRAM_API_URL,
+  TELEGRAM_FILE_API_URL,
+} from "@/app/shared/constants/telegram";
+import Badges from "../Badges/Badges";
 
 interface AdCardProps {
   ad: IAdvertisement;
@@ -20,7 +25,7 @@ export default function AdCard({ ad, onClick }: AdCardProps) {
         if (!ad.photos[0]) return;
 
         const fileInfo = await fetch(
-          `https://api.telegram.org/bot${process.env.NEXT_PUBLIC_BOT_TOKEN}/getFile?file_id=${ad.photos[0]}`
+          `${TELEGRAM_API_URL}/getFile?file_id=${ad.photos[0]}`
         );
         const fileData = await fileInfo.json();
 
@@ -30,9 +35,7 @@ export default function AdCard({ ad, onClick }: AdCardProps) {
         }
 
         const filePath = fileData.result.file_path;
-        setImageUrl(
-          `https://api.telegram.org/file/bot${process.env.NEXT_PUBLIC_BOT_TOKEN}/${filePath}`
-        );
+        setImageUrl(`${TELEGRAM_FILE_API_URL}/${filePath}`);
       } catch (error) {
         console.error("Ошибка при загрузке изображения:", error);
       }
@@ -41,18 +44,6 @@ export default function AdCard({ ad, onClick }: AdCardProps) {
     fetchImageUrl();
   }, [ad]);
 
-  const badges = () => {
-    if (!ad.createdAt) return null;
-    return (
-      ad.createdAt > new Date(Date.now() - 1000 * 60 * 60 * 24) && (
-        <CustomFlex direction="column" align="center">
-          <CustomTyphography fontSize="14px" fontWeight="bold">
-            Новое
-          </CustomTyphography>
-        </CustomFlex>
-      )
-    );
-  };
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     onClick();
@@ -85,7 +76,9 @@ export default function AdCard({ ad, onClick }: AdCardProps) {
                 {ad.Region?.name}
               </CustomTyphography>
             </CustomFlex>
-            {badges()}
+            <div className={styles.badgesContainer}>
+              <Badges ad={ad} size="small" />
+            </div>
           </CustomFlex>
           {ad.updatedAt && (
             <CustomTyphography color="gray" fontSize="14px">

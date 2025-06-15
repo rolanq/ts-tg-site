@@ -1,6 +1,7 @@
 import { IAdvertisementDraft, IBrand, ICarModel, IRegion } from "@/app/db/db";
 import { Dispatch, SetStateAction } from "react";
 
+
 export interface IContextCreateAd {
   preparedData: IAdvertisementDraft;
   setPreparedData: Dispatch<SetStateAction<IAdvertisementDraft>>;
@@ -26,4 +27,7 @@ export interface IContextCreateAd {
   setPreparedVideo: Dispatch<SetStateAction<File | null>>;
   preparedPhotos: File[];
   setPreparedPhotos: Dispatch<SetStateAction<File[]>>;
+
+  isPublishing: boolean;
+  setIsPublishing: Dispatch<SetStateAction<boolean>>;
 }

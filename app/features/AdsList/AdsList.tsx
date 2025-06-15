@@ -1,5 +1,5 @@
 "use client";
-import React, { lazy, useEffect, useState } from "react";
+import React, { lazy, useContext, useEffect, useState } from "react";
 import AdCard from "../AdCard/AdCard";
 import styles from "./AdsList.module.css";
 import { getAllAds } from "@/app/services/Ads";
@@ -8,9 +8,8 @@ import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
 import { CustomInput } from "@/app/shared/kit/CustomInput/CustomInput";
-
-
-const Ad = lazy(() => import("../Ad/Ad").then((mod) => ({ default: mod.Ad })));
+import { AllAdsContext } from "@/app/context/AllAdsContext";
+import { Ad } from "../Ad/Ad";
 
 interface AdsListProps {
   title?: string;
@@ -18,28 +17,10 @@ interface AdsListProps {
 }
 
 export default function AdsList({ title, withSearch = false }: AdsListProps) {
-  const [ads, setAds] = useState<IAdvertisement[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [ad, setAd] = useState<IAdvertisement | undefined>(undefined);
-  const [isAdOpen, setIsAdOpen] = useState(false);
-
-  useEffect(() => {
-    setIsLoading(true);
-    getAllAds().then((ads) => {
-      setAds(ads);
-      setIsLoading(false);
-    });
-  }, []);
+  const { ads, isLoading, openedAd, setOpenedAd } = useContext(AllAdsContext);
 
   const handleAdClick = (ad: IAdvertisement) => {
-    if (isAdOpen) {
-      setIsAdOpen(false);
-      setAd(undefined);
-      return;
-    }
-
-    setAd(ad);
-    setIsAdOpen(true);
+    setOpenedAd(ad);
   };
 
   if (isLoading) {
@@ -68,8 +49,7 @@ export default function AdsList({ title, withSearch = false }: AdsListProps) {
         ))}
       </div>
 
-
-      <Ad ad={ad} setAd={setAd} isOpen={isAdOpen} setIsOpen={setIsAdOpen} />
+      <Ad />
     </>
   );
 }

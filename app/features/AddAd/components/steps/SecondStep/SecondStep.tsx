@@ -94,6 +94,7 @@ export const SecondStep = () => {
         className={styles.stepCommonBody}
       >
         <CustomSelect
+          value={preparedData.engineType || ""}
           options={preparedOptions.engines}
           onChange={handleEngineChange}
           placeholder="Выберите тип двигателя"
@@ -101,6 +102,7 @@ export const SecondStep = () => {
         />
         <CustomFlex gap="10px" className={styles.stepCommonBody}>
           <CustomSelect
+            value={preparedData.driveType || ""}
             options={preparedOptions.drivetypes}
             onChange={handleDrivetypeChange}
             placeholder="Выберите привод"
@@ -108,6 +110,7 @@ export const SecondStep = () => {
             className={styles.flexStepSelector}
           />
           <CustomSelect
+            value={preparedData.transmission || ""}
             options={preparedOptions.transmissiontypes}
             onChange={handleTransmissiontypeChange}
             placeholder="Выберите коробку передач"

@@ -1,6 +1,7 @@
 "use server";
 
 import { AdvertisementDraft, IAdvertisementDraft } from "../db/db";
+import { DEFAULT_AD_DRAFT } from "../shared/constants/telegram";
 
 export const getDraft = async (userId: number) => {
   const draft = await AdvertisementDraft.findOne({
@@ -8,6 +9,16 @@ export const getDraft = async (userId: number) => {
       userId: String(userId),
     },
   });
+
+  if (!draft) {
+    const newDraft = await AdvertisementDraft.create({
+      ...DEFAULT_AD_DRAFT,
+      userId: String(userId),
+    });
+
+    return newDraft.toJSON() as IAdvertisementDraft;
+  }
+
   return draft?.toJSON() as IAdvertisementDraft;
 };
 
