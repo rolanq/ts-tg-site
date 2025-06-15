@@ -15,7 +15,6 @@ import {
   TELEGRAM_FILE_API_URL,
 } from "@/app/shared/constants/telegram";
 import Link from "next/link";
-import CustomBadge from "@/app/shared/kit/CustomBadge/CustomBadge";
 import Badges from "../Badges/Badges";
 import FooterButtons from "./FooterButtons";
 import { UsersAdsContext } from "@/app/context/UsersAdsContext";
@@ -26,10 +25,16 @@ interface Image {
   file_id: string;
 }
 
+interface Video {
+  url: string;
+  file_id: string;
+}
+
 export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
   const { openedAd, setOpenedAd, openedAdLoading, setOpenedAdLoading } =
     useContext(isUsersAds ? UsersAdsContext : AllAdsContext);
   const [images, setImages] = useState<Image[]>([]);
+  const [video, setVideo] = useState<Video | null>(null);
 
   useEffect(() => {
     if (!openedAd) return;
@@ -54,6 +59,23 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
           ]);
         });
     });
+
+    if (openedAd.video) {
+      fetch(`${TELEGRAM_API_URL}/getFile?file_id=${openedAd.video}`)
+        .then((res) => res.json())
+        .then((fileData) => {
+          if (!fileData.ok) {
+            console.error("Ошибка получения информации о файле:", fileData);
+            return;
+          }
+
+          const filePath = fileData.result.file_path;
+          setVideo({
+            url: `${TELEGRAM_FILE_API_URL}/${filePath}`,
+            file_id: openedAd.video!,
+          });
+        });
+    }
 
     timeout = setTimeout(() => {
       setOpenedAdLoading(false);
@@ -90,6 +112,16 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
     ));
   }, [images]);
 
+  const renderVideo = useMemo(() => {
+    if (!openedAd?.video) return null;
+
+    return (
+      <div className={styles.imageContainer}>
+        <video src={video?.url} controls className={styles.video} />
+      </div>
+    );
+  }, [openedAd]);
+
   return (
     <CustomBottomSheet
       open={!!openedAd}
@@ -101,7 +133,7 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
       {openedAd && !openedAdLoading ? (
         <div className={styles.adContainer}>
           <div className={styles.imagesContainer}>
-            <CustomSlider items={renderImages} />
+            <CustomSlider items={[renderVideo, ...renderImages]} />
           </div>
           <div className={styles.adInfoContainer}>
             <div className={styles.badgesContainer}>

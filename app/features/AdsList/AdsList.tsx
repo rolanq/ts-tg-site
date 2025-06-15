@@ -17,7 +17,7 @@ interface AdsListProps {
 }
 
 export default function AdsList({ title, withSearch = false }: AdsListProps) {
-  const { ads, isLoading, openedAd, setOpenedAd } = useContext(AllAdsContext);
+  const { ads, isLoading, setOpenedAd } = useContext(AllAdsContext);
 
   const handleAdClick = (ad: IAdvertisement) => {
     setOpenedAd(ad);
@@ -30,7 +30,7 @@ export default function AdsList({ title, withSearch = false }: AdsListProps) {
         align="center"
         className={styles.loaderWrapper}
       >
-        <CustomLoader size={36} />
+        <CustomLoader size={36} label="Загружаем объявления" />
       </CustomFlex>
     );
   }

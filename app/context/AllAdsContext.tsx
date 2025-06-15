@@ -43,7 +43,15 @@ export const AllAdsProvier = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AllAdsContext.Provider
-      value={{ ads, setAds, isLoading, openedAd, setOpenedAd, openedAdLoading, setOpenedAdLoading }}
+      value={{
+        ads,
+        setAds,
+        isLoading,
+        openedAd,
+        setOpenedAd,
+        openedAdLoading,
+        setOpenedAdLoading,
+      }}
     >
       {children}
     </AllAdsContext.Provider>
