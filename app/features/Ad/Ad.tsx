@@ -137,7 +137,7 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
       return [renderVideo, ...renderImages];
     }
     return renderImages;
-  }, [openedAd]);
+  }, [openedAd, renderImages, renderVideo]);
 
   return (
     <CustomBottomSheet
