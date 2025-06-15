@@ -68,3 +68,11 @@
   grid-row-gap: 8px;
   grid-column-gap: 16px;
 }
+
+.loaderWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  width: 100vw;
+}

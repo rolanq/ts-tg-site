@@ -9,6 +9,7 @@ import styles from "./Ad.module.css";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
 import classNames from "classnames";
+import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 
 interface Image {
   url: string;
@@ -24,10 +25,12 @@ interface AdProps {
 
 export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
   const [images, setImages] = useState<Image[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!ad) return;
-
+    let timeout: NodeJS.Timeout;
+    setIsLoading(true);
     ad.photos.forEach((photo) => {
       fetch(
         `https://api.telegram.org/bot${process.env.NEXT_PUBLIC_BOT_TOKEN}/getFile?file_id=${photo}`
@@ -47,8 +50,15 @@ export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
               file_id: photo,
             },
           ]);
+        })
+        .finally(() => {
+          timeout = setTimeout(() => {
+            setIsLoading(false);
+          }, 700);
         });
     });
+
+    return () => clearTimeout(timeout);
   }, [ad]);
 
   const onDismiss = () => {
@@ -85,25 +95,27 @@ export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
       snap={95}
       disableDragClose
       footer={
-        <CustomFlex direction="row" gap="10px">
-          <CustomButton
-            onClick={() => {}}
-            className={classNames(styles.footerButtons, styles.messageButton)}
-          >
-            Написать
-          </CustomButton>
-          {ad?.phoneNumber && (
+        ad && !isLoading ? (
+          <CustomFlex direction="row" gap="10px">
             <CustomButton
               onClick={() => {}}
-              className={classNames(styles.footerButtons, styles.callButton)}
+              className={classNames(styles.footerButtons, styles.messageButton)}
             >
-              Позвонить
+              Написать
             </CustomButton>
-          )}
-        </CustomFlex>
+            {ad?.phoneNumber && (
+              <CustomButton
+                onClick={() => {}}
+                className={classNames(styles.footerButtons, styles.callButton)}
+              >
+                Позвонить
+              </CustomButton>
+            )}
+          </CustomFlex>
+        ) : undefined
       }
     >
-      {ad && (
+      {ad && !isLoading ? (
         <div className={styles.adContainer}>
           <div className={styles.imagesContainer}>
             <CustomSlider items={renderImages} />
@@ -169,6 +181,10 @@ export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
               </CustomTyphography>
             </div>
           </div>
+        </div>
+      ) : (
+        <div className={styles.loaderWrapper}>
+          <CustomLoader size={36} />
         </div>
       )}
     </CustomBottomSheet>
