@@ -1,3 +1,4 @@
+"use client";
 import { IAdvertisement } from "../db/db";
 import {
   createContext,
@@ -6,7 +7,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useTelegram } from "../shared/hooks/useTelegram";
 import { getAllAds } from "../services/Ads";
 
 export const AllAdsContext = createContext<{
