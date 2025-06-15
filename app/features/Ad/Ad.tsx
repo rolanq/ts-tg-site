@@ -132,6 +132,13 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
     );
   }, [openedAd]);
 
+  const renderItems = useMemo(() => {
+    if (openedAd?.video) {
+      return [renderVideo, ...renderImages];
+    }
+    return renderImages;
+  }, [openedAd]);
+
   return (
     <CustomBottomSheet
       open={!!openedAd}
@@ -147,7 +154,7 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
       {openedAd && !openedAdLoading ? (
         <div className={styles.adContainer}>
           <div className={styles.imagesContainer}>
-            <CustomSlider items={[renderVideo, ...renderImages]} />
+            <CustomSlider items={renderItems} />
           </div>
           <div className={styles.adInfoContainer}>
             <div className={styles.badgesContainer}>
