@@ -12,3 +12,14 @@
 .placeholderColor {
   color: gray;
 }
+
+.label {
+  font-size: 12px;
+  font-weight: 500;
+  color: gray;
+}
+
+.selectWrapper {
+  display: flex;
+  flex-direction: column;
+}

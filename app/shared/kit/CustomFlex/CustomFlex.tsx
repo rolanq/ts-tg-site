@@ -8,6 +8,9 @@ interface CustomFlexProps {
   align?: "start" | "center" | "end" | "space-between" | "space-around";
   gap?: string;
   className?: string;
+  height?: string;
+  width?: string;
+  onClick?: () => void;
 }
 
 export const CustomFlex = ({
@@ -17,6 +20,9 @@ export const CustomFlex = ({
   align,
   gap,
   className,
+  height,
+  width,
+  onClick,
 }: CustomFlexProps) => {
   return (
     <div
@@ -25,8 +31,11 @@ export const CustomFlex = ({
         alignItems: align,
         justifyContent: justify,
         flexDirection: direction,
+        height,
+        width,
       }}
       className={`${styles.flex} ${className}`}
+      onClick={onClick}
     >
       {children}
     </div>

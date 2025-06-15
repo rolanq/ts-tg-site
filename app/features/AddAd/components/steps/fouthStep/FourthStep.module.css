@@ -6,14 +6,44 @@
   border: 1px solid #ccc;
   border-radius: 12px;
   padding: 10px;
-  height: 100px;
+  height: 60vh;
   width: 100%;
   box-sizing: border-box;
 }
-
-.addButton {
-  width: 100%;
-}
 .addedImage {
   border-radius: 12px;
+  object-fit: cover;
+}
+
+.addedImageWrapper {
+  position: relative;
+  height: 100px;
+  width: 125px;
+}
+
+.closeIcon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: #fff;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  box-shadow: none;
+  transition: all 0.3s ease;
+}
+
+.photosScroll {
+  overflow-x: auto;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
 }

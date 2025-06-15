@@ -1,5 +1,8 @@
 import React from "react";
 import styles from "./FourthStep.module.css";
+import Image from "next/image";
+import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
+import CloseIcon from "@/app/shared/Icons/CloseIcon";
 
 interface AddedImageProps {
   photo: File;
@@ -13,12 +16,19 @@ export const AddedImage = ({ photo, index, setPhotos }: AddedImageProps) => {
   };
 
   return (
-    <img
-      src={URL.createObjectURL(photo)}
-      alt="photo"
-      key={index}
-      className={styles.addedImage}
-      onClick={handleDeletePhoto}
-    />
+    <div className={styles.addedImageWrapper}>
+      <Image
+        src={URL.createObjectURL(photo)}
+        alt="photo"
+        key={index}
+        className={styles.addedImage}
+        unoptimized
+        height={100}
+        width={125}
+      />
+      <button onClick={handleDeletePhoto} className={styles.closeIcon}>
+        <CloseIcon />
+      </button>
+    </div>
   );
 };

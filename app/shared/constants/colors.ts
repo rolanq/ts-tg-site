@@ -9,6 +9,7 @@ export const COLORS = {
   gray: "#808080", // серый
   white: "#ffffff",
   black: "#000000",
+  red: "#ff0000",
 };
 
 export const COLORS_CSS_VARS = `

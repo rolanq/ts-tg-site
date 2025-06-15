@@ -21,6 +21,7 @@ export default function UserCard() {
               width={80}
               height={80}
               unoptimized
+              className={styles.userImage}
             />
           ) : (
             <DefaultUser className={styles.defaultUser} />

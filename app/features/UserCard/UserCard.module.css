@@ -26,3 +26,7 @@
 .userInfo {
   max-width: 200px;
 }
+
+.userImage {
+  border-radius: 50%;
+}

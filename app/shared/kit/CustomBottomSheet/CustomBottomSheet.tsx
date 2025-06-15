@@ -17,6 +17,7 @@ interface IProps {
   footerWithoutBoxShadow?: boolean;
   closeIcon?: boolean;
   disableDragClose?: boolean;
+  disableScrollX?: boolean;
 }
 
 export const CustomBottomSheet: FC<IProps> = ({
@@ -28,6 +29,7 @@ export const CustomBottomSheet: FC<IProps> = ({
   footerWithoutBoxShadow,
   closeIcon = true,
   disableDragClose = false,
+  disableScrollX = false,
 }) => {
   const [viewportHeight, setViewportHeight] = useState(0);
 
@@ -68,7 +70,8 @@ export const CustomBottomSheet: FC<IProps> = ({
   return (
     <BottomSheet
       className={classNames(
-        footerWithoutBoxShadow && styles.footerWithoutBoxShadow
+        footerWithoutBoxShadow && styles.footerWithoutBoxShadow,
+        disableScrollX && styles.disableScrollX
       )}
       footer={footer}
       scrollLocking

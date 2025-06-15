@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
 import styles from "../../commonSteps.module.css";
@@ -10,21 +10,30 @@ import {
   TRANSMISSION_TYPES,
 } from "@/app/shared/types/config";
 import { CustomInput } from "@/app/shared/kit/CustomInput/CustomInput";
+import { updateDraft } from "@/app/services/Draft";
+import { checkIsSecondStepValid } from "../../utils";
 
 export const SecondStep = () => {
-  const { preparedData, setPreparedData } = useContext(AddAdContext);
+  const {
+    preparedData,
+    setPreparedData,
+    setIsNextStepDisabled,
+    setOnClickNextStep,
+    setOpenedStep,
+    openedStep,
+  } = useContext(AddAdContext);
 
   const handleEngineChange = (value: string) => {
-    setPreparedData((prev) => ({ ...prev, engine: value }));
+    setPreparedData((prev) => ({ ...prev, engineType: value }));
   };
   const handleDrivetypeChange = (value: string) => {
-    setPreparedData((prev) => ({ ...prev, drivetype: value }));
+    setPreparedData((prev) => ({ ...prev, driveType: value }));
   };
   const handleTransmissiontypeChange = (value: string) => {
-    setPreparedData((prev) => ({ ...prev, transmissiontype: value }));
+    setPreparedData((prev) => ({ ...prev, transmission: value }));
   };
   const handleHorsePowerChange = (value: string) => {
-    setPreparedData((prev) => ({ ...prev, horsepower: Number(value) }));
+    setPreparedData((prev) => ({ ...prev, horsePower: Number(value) }));
   };
   const handleMileageChange = (value: string) => {
     setPreparedData((prev) => ({ ...prev, mileage: Number(value) }));
@@ -47,6 +56,32 @@ export const SecondStep = () => {
     };
   }, [preparedData]);
 
+  useEffect(() => {
+    if (openedStep !== 2) {
+      return;
+    }
+
+    if (checkIsSecondStepValid(preparedData)) {
+      setIsNextStepDisabled(false);
+
+      setOnClickNextStep(() => {
+        return () => {
+          updateDraft(Number(preparedData.userId), preparedData);
+          setOpenedStep((prev) => prev + 1);
+        };
+      });
+    } else {
+      setIsNextStepDisabled(true);
+      setOnClickNextStep(() => {});
+    }
+  }, [
+    preparedData,
+    setIsNextStepDisabled,
+    setOnClickNextStep,
+    setOpenedStep,
+    openedStep,
+  ]);
+
   return (
     <CustomFlex direction="column" gap="10px" className={styles.stepCommon}>
       <CustomTyphography fontSize="18px" fontWeight="bold">
@@ -61,31 +96,42 @@ export const SecondStep = () => {
         <CustomSelect
           options={preparedOptions.engines}
           onChange={handleEngineChange}
-          placeholder="Тип двигателя"
+          placeholder="Выберите тип двигателя"
+          label="Тип двигателя"
         />
         <CustomFlex gap="10px" className={styles.stepCommonBody}>
           <CustomSelect
             options={preparedOptions.drivetypes}
             onChange={handleDrivetypeChange}
-            placeholder="Привод"
+            placeholder="Выберите привод"
+            label="Привод"
+            className={styles.flexStepSelector}
           />
           <CustomSelect
             options={preparedOptions.transmissiontypes}
             onChange={handleTransmissiontypeChange}
-            placeholder="Коробка передач"
+            placeholder="Выберите коробку передач"
+            label="Коробка передач"
+            className={styles.flexStepSelector}
           />
         </CustomFlex>
         <CustomInput
           value={preparedData.horsePower?.toString() || ""}
           onChange={handleHorsePowerChange}
-          placeholder="Мощность двигателя"
+          placeholder="Введите мощность двигателя"
+          label="Мощность двигателя"
           type="number"
+          min={0}
+          max={5000}
         />
         <CustomInput
           value={preparedData.mileage?.toString() || ""}
           onChange={handleMileageChange}
-          placeholder="Пробег"
+          placeholder="Введите пробег"
+          label="Пробег"
           type="number"
+          min={0}
+          max={1000000}
         />
       </CustomFlex>
     </CustomFlex>

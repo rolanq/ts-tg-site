@@ -27,8 +27,6 @@ const initialState: IContextCreateAd = {
     userId: "0",
   },
   setPreparedData: () => {},
-  preparedPhotos: [],
-  setPreparedPhotos: () => {},
   openedStep: 0,
   setOpenedStep: () => {},
   brands: [],
@@ -37,6 +35,17 @@ const initialState: IContextCreateAd = {
   setBrands: () => {},
   setRegions: () => {},
   setModels: () => {},
+  isNextStepDisabled: false,
+  setIsNextStepDisabled: () => {},
+  onClickNextStep: () => {},
+  setOnClickNextStep: () => {},
+  isDraftLoading: true,
+  setIsDraftLoading: () => {},
+
+  preparedVideo: null,
+  setPreparedVideo: () => {},
+  preparedPhotos: [],
+  setPreparedPhotos: () => {},
 };
 
 export const AddAdContext = createContext<IContextCreateAd>(initialState);
@@ -52,6 +61,11 @@ export const AddAdProvider = ({ children }: { children: React.ReactNode }) => {
     initialState.preparedData
   );
   const [preparedPhotos, setPreparedPhotos] = useState<File[]>([]);
+  const [preparedVideo, setPreparedVideo] = useState<File | null>(null);
+
+  const [isNextStepDisabled, setIsNextStepDisabled] = useState(false);
+  const [onClickNextStep, setOnClickNextStep] = useState<() => void>(() => {});
+  const [isDraftLoading, setIsDraftLoading] = useState(true);
 
   useEffect(() => {
     loadBrandsAndRegions().then(({ serializedBrands, serializedRegions }) => {
@@ -71,10 +85,18 @@ export const AddAdProvider = ({ children }: { children: React.ReactNode }) => {
   }, [preparedData?.brandId]);
 
   useEffect(() => {
+    setIsDraftLoading(true);
     if (user?.id) {
-      getDraft(user.id).then((draft) => {
-        setPreparedData(draft);
-      });
+      getDraft(user.id)
+        .then((draft) => {
+          setPreparedData(draft);
+        })
+        .finally(() => {
+          const timeout = setTimeout(() => {
+            setIsDraftLoading(false);
+            clearTimeout(timeout);
+          }, 500);
+        });
     }
   }, [user?.id]);
 
@@ -83,16 +105,28 @@ export const AddAdProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         preparedData,
         setPreparedData,
-        preparedPhotos,
-        setPreparedPhotos,
         openedStep,
         setOpenedStep,
+
         brands,
         regions,
         models,
         setBrands,
         setRegions,
         setModels,
+
+        isNextStepDisabled,
+        setIsNextStepDisabled,
+        onClickNextStep,
+        setOnClickNextStep,
+
+        isDraftLoading,
+        setIsDraftLoading,
+
+        preparedVideo,
+        setPreparedVideo,
+        preparedPhotos,
+        setPreparedPhotos,
       }}
     >
       {children}
