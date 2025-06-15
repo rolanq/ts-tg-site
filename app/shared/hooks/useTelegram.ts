@@ -7,7 +7,10 @@ const defaultUser: TelegramUser = {
   first_name: "Rolan",
   last_name: "Oyun",
   username: "rolan_oyun",
-  language_code: "ru",
+  is_bot: false,
+  is_premium: false,
+  photo_url:
+    "https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png",
 };
 
 const isTelegramWebAppInitialized = () => {
@@ -15,7 +18,7 @@ const isTelegramWebAppInitialized = () => {
 };
 
 export const useTelegram = () => {
-  const [user, setUser] = useState<TelegramUser | null>(defaultUser);
+  const [user, setUser] = useState<TelegramUser | null>(null);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {

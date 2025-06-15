@@ -1,15 +1,28 @@
 .userCard {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 10px;
   height: 100px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   margin-bottom: 20px;
+  padding: 16px;
 }
 
 .userCardWrapper {
   padding: 8px;
+}
+
+.idWrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.defaultUser {
+  width: 80px;
+  height: 80px;
+}
+.userInfo {
+  max-width: 200px;
 }

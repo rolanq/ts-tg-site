@@ -13,7 +13,6 @@ export const CustomButton = ({
   className,
 }: CustomButtonProps) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
     onClick?.();
   };
 

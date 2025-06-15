@@ -58,7 +58,9 @@ export const Ad = ({ ad, setAd, isOpen, setIsOpen }: AdProps) => {
         });
     });
 
-    return () => clearTimeout(timeout);
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [ad]);
 
   const onDismiss = () => {

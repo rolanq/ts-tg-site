@@ -21,6 +21,7 @@ export default function AddAdForm() {
       footerWithoutBoxShadow
       disableDragClose
       footer={<FooterButtons />}
+      closeIcon={false}
     >
       <div className={`${styles.stepsWrapper} ${styles[`slide${openedStep}`]}`}>
         <div className={styles.step}>
