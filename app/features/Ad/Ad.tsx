@@ -19,6 +19,7 @@ import Badges from "../Badges/Badges";
 import FooterButtons from "./FooterButtons";
 import { UsersAdsContext } from "@/app/context/UsersAdsContext";
 import { AllAdsContext } from "@/app/context/AllAdsContext";
+import { useTelegram } from "@/app/shared/hooks/useTelegram";
 
 interface Image {
   url: string;
@@ -31,10 +32,13 @@ interface Video {
 }
 
 export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
+  const { user } = useTelegram();
   const { openedAd, setOpenedAd, openedAdLoading, setOpenedAdLoading } =
     useContext(isUsersAds ? UsersAdsContext : AllAdsContext);
   const [images, setImages] = useState<Image[]>([]);
   const [video, setVideo] = useState<Video | null>(null);
+
+  const isOwner = openedAd?.userId === String(user?.id);
 
   useEffect(() => {
     if (!openedAd) return;
@@ -117,7 +121,13 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
 
     return (
       <div className={styles.imageContainer}>
-        <video src={video?.url} controls className={styles.video} />
+        <video
+          src={video?.url}
+          controls
+          className={styles.video}
+          rel="preload"
+          preload="auto"
+        />
       </div>
     );
   }, [openedAd]);
@@ -128,7 +138,11 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
       onDismiss={onDismiss}
       snap={95}
       disableDragClose
-      footer={<FooterButtons isUsersAds={isUsersAds} />}
+      footer={
+        isOwner && !openedAd?.isActive ? (
+          <FooterButtons isUsersAds={isUsersAds} />
+        ) : undefined
+      }
     >
       {openedAd && !openedAdLoading ? (
         <div className={styles.adContainer}>
@@ -141,7 +155,7 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
             </div>
             <CustomFlex direction="column" gap="10px">
               <CustomTyphography fontSize="20px" fontWeight="bold">
-                {openedAd?.Brand?.name} {openedAd?.CarModel?.name}
+                {openedAd?.Brand?.name} {openedAd?.CarModel?.name},&nbsp;
                 {openedAd?.year} г.
               </CustomTyphography>
             </CustomFlex>

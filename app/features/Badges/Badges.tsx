@@ -20,7 +20,7 @@ export default function Badges({ ad, size = "medium" }: BadgesProps) {
     <CustomFlex direction="row" gap="5px" align="center">
       {isNew && <CustomBadge text="Новое" variant="success" size={size} />}
       {isOnHold && (
-        <CustomBadge text="Под задатком" variant="danger" size={size} />
+        <CustomBadge text="Задаток" variant="danger" size={size} />
       )}
       {isSold && <CustomBadge text="Продано" variant="info" size={size} />}
     </CustomFlex>
