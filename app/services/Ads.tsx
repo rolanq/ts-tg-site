@@ -62,6 +62,8 @@ export const publishAd = async (userId: number) => {
     ...draft.toJSON(),
     id: newAdId,
     userId: String(userId),
+    createdAt: new Date(),
+    updatedAt: new Date(),
   });
 
   await draft.destroy();
