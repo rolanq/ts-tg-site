@@ -13,7 +13,7 @@ import { UsersAdsContext } from "@/app/context/UsersAdsContext";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 export default function UsersAdsList() {
-  const { ads, isLoading, setOpenedAd, setIsAdOpen, openedAd } =
+  const { ads, isLoading, setOpenedAd, setIsAdOpen } =
     useContext(UsersAdsContext);
   const [showList, setShowList] = useState(false);
 

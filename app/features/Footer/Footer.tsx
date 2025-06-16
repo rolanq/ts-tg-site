@@ -6,36 +6,33 @@ import { PAGES } from "@/app/shared/constants/pages";
 import { IconWrapper } from "./IconWrapper";
 import { AddAd } from "../AddAd/AddAd";
 import Link from "next/link";
-import { AddAdProvider } from "../AddAd/context/AddAdContext";
 
 export default function Footer() {
   const pathname = usePathname();
 
   return (
     <div className={styles.footer}>
-      <AddAdProvider>
-        {PAGES.map((page) =>
-          page.path === "/add_ad" ? (
-            <AddAd key={page.name} />
-          ) : (
-            <Link
-              key={page.name}
-              href={page.path}
-              className={styles.footerItem}
-              style={{
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "start",
-              }}
-            >
-              <IconWrapper
-                icon={<page.icon />}
-                isActive={pathname === page.path}
-              />
-            </Link>
-          )
-        )}
-      </AddAdProvider>
+      {PAGES.map((page) =>
+        page.path === "/add_ad" ? (
+          <AddAd key={page.name} />
+        ) : (
+          <Link
+            key={page.name}
+            href={page.path}
+            className={styles.footerItem}
+            style={{
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "start",
+            }}
+          >
+            <IconWrapper
+              icon={<page.icon />}
+              isActive={pathname === page.path}
+            />
+          </Link>
+        )
+      )}
     </div>
   );
 }

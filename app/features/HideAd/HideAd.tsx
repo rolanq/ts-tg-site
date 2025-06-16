@@ -18,6 +18,8 @@ export default function HideAd({ open, onDismiss, isUsersAds }: HideAdProps) {
   const { openedAd, setAds, setOpenedAd, setOpenedAdLoading } = useContext(
     isUsersAds ? UsersAdsContext : AllAdsContext
   );
+  const { refetch: refetchAds } = useContext(AllAdsContext);
+  const { refetch: refetchUsersAds } = useContext(UsersAdsContext);
 
   const handleHide = () => {
     if (!openedAd?.id) return;
@@ -33,6 +35,8 @@ export default function HideAd({ open, onDismiss, isUsersAds }: HideAdProps) {
       );
       setOpenedAd(ad);
       setOpenedAdLoading(false);
+      refetchAds();
+      refetchUsersAds();
     });
   };
 

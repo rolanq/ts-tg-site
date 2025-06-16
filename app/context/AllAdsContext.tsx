@@ -4,6 +4,7 @@ import {
   createContext,
   Dispatch,
   SetStateAction,
+  useCallback,
   useEffect,
   useState,
 } from "react";
@@ -20,6 +21,7 @@ export const AllAdsContext = createContext<{
   setOpenedAdLoading: Dispatch<SetStateAction<boolean>>;
   isAdOpen: boolean;
   setIsAdOpen: Dispatch<SetStateAction<boolean>>;
+  refetch: () => void;
 }>({
   ads: [],
   setAds: () => {},
@@ -31,9 +33,10 @@ export const AllAdsContext = createContext<{
   setOpenedAdLoading: () => {},
   isAdOpen: false,
   setIsAdOpen: () => {},
+  refetch: () => {},
 });
 
-export const AllAdsProvier = ({ children }: { children: React.ReactNode }) => {
+export const AllAdsProvider = ({ children }: { children: React.ReactNode }) => {
   const [ads, setAds] = useState<IAdvertisement[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [openedAd, setOpenedAd] = useState<IAdvertisement | null>(null);
@@ -41,6 +44,14 @@ export const AllAdsProvier = ({ children }: { children: React.ReactNode }) => {
   const [isAdOpen, setIsAdOpen] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
+    getAllAds().then((ads) => {
+      setAds(ads);
+      setIsLoading(false);
+    });
+  }, []);
+
+  const refetchAds = useCallback(() => {
     setIsLoading(true);
     getAllAds().then((ads) => {
       setAds(ads);
@@ -61,6 +72,7 @@ export const AllAdsProvier = ({ children }: { children: React.ReactNode }) => {
         setOpenedAdLoading,
         isAdOpen,
         setIsAdOpen,
+        refetch: refetchAds,
       }}
     >
       {children}

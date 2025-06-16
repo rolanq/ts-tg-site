@@ -1,14 +1,14 @@
 import Layout from "@/app/features/Layout/Layout";
 import React from "react";
 import AdsList from "../features/AdsList/AdsList";
-import { AllAdsProvier } from "../context/AllAdsContext";
+import { AllAdsProvider } from "../context/AllAdsContext";
 
 export default function Ads() {
   return (
     <Layout>
-      <AllAdsProvier>
+      <AllAdsProvider>
         <AdsList title="Объявления" />
-      </AllAdsProvier>
+      </AllAdsProvider>
     </Layout>
   );
 }

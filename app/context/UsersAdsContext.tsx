@@ -3,6 +3,7 @@ import {
   createContext,
   Dispatch,
   SetStateAction,
+  useCallback,
   useEffect,
   useState,
 } from "react";
@@ -20,6 +21,8 @@ export const UsersAdsContext = createContext<{
   setOpenedAdLoading: Dispatch<SetStateAction<boolean>>;
   isAdOpen: boolean;
   setIsAdOpen: Dispatch<SetStateAction<boolean>>;
+
+  refetch: () => void;
 }>({
   ads: [],
   setAds: () => {},
@@ -31,9 +34,10 @@ export const UsersAdsContext = createContext<{
   setOpenedAdLoading: () => {},
   isAdOpen: false,
   setIsAdOpen: () => {},
+  refetch: () => {},
 });
 
-export const UsersAdsProvier = ({
+export const UsersAdsProvider = ({
   children,
 }: {
   children: React.ReactNode;
@@ -55,9 +59,30 @@ export const UsersAdsProvier = ({
     });
   }, [user?.id]);
 
+  const refetchAds = useCallback(() => {
+    if (!user?.id) return;
+    setIsLoading(true);
+    getAds(user.id).then((ads) => {
+      setAds(ads);
+      setIsLoading(false);
+    });
+  }, [user?.id]);
+
   return (
     <UsersAdsContext.Provider
-      value={{ ads, setAds, isLoading, setIsLoading, openedAd, setOpenedAd, openedAdLoading, setOpenedAdLoading, isAdOpen, setIsAdOpen }}
+      value={{
+        ads,
+        setAds,
+        isLoading,
+        setIsLoading,
+        openedAd,
+        setOpenedAd,
+        openedAdLoading,
+        setOpenedAdLoading,
+        isAdOpen,
+        setIsAdOpen,
+        refetch: refetchAds,
+      }}
     >
       {children}
     </UsersAdsContext.Provider>

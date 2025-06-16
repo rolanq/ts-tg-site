@@ -9,6 +9,8 @@ import { sendPhotos, sendVideo } from "@/app/services/ClientTelegram";
 import { updateDraft } from "@/app/services/Draft";
 import { publishAd } from "@/app/services/Ads";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
+import { AllAdsContext } from "@/app/context/AllAdsContext";
+import { UsersAdsContext } from "@/app/context/UsersAdsContext";
 
 export const FooterButtons = () => {
   const {
@@ -23,6 +25,8 @@ export const FooterButtons = () => {
     preparedPhotos,
     setIsPublishing,
   } = useContext(AddAdContext);
+  const { refetch: refetchAds } = useContext(AllAdsContext);
+  const { refetch: refetchUsersAds } = useContext(UsersAdsContext);
   const [isPublishDisabled, setIsPublishDisabled] = useState(true);
   const [isShowButtons, setIsShowButtons] = useState(false);
 
@@ -52,9 +56,17 @@ export const FooterButtons = () => {
       if (newAd.id) {
         setIsPublishing(false);
         setOpenedStep(0);
+        refetchAds();
+        refetchUsersAds();
       }
     });
-  }, [preparedPhotos, preparedVideo, preparedData]);
+  }, [
+    preparedPhotos,
+    preparedVideo,
+    preparedData,
+    refetchAds,
+    refetchUsersAds,
+  ]);
 
   useEffect(() => {
     if (isAvailableToPublish(preparedData)) {
