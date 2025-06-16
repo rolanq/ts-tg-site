@@ -130,6 +130,7 @@ export const FirstStep = () => {
             label={`Год выпуска`}
             min={1900}
             max={new Date().getFullYear()}
+            strictCheck={false}
           />
         </CustomFlex>
       </CustomFlex>

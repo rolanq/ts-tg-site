@@ -70,10 +70,10 @@ export default function FooterButtons({
     if (isOwner) {
       return (
         <CustomFlex gap="10px">
-          <CustomButton onClick={handleOnHold} stretched padding="medium">
+          <CustomButton onClick={handleOnHold} stretched padding="small">
             {openedAd.isOnHold ? "Убрать задаток" : "Под задатком"}
           </CustomButton>
-          <CustomButton onClick={handleHide} stretched padding="medium">
+          <CustomButton onClick={handleHide} stretched padding="small">
             Скрыть
           </CustomButton>
         </CustomFlex>

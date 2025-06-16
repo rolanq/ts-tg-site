@@ -15,6 +15,7 @@ interface ICustomInputProps {
   errorMessage?: string;
   isNegative?: boolean;
   checkValue?: (value: string) => boolean;
+  strictCheck?: boolean;
 }
 
 export const CustomInput = ({
@@ -29,6 +30,7 @@ export const CustomInput = ({
   errorMessage: errorMessageProp,
   isNegative = false,
   checkValue,
+  strictCheck = true,
 }: ICustomInputProps) => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(errorMessageProp);
@@ -46,13 +48,29 @@ export const CustomInput = ({
           return;
         }
 
-        if (min && numValue < min) {
-          onChange(min.toString());
-          return;
-        }
+        if (strictCheck) {
+          if (min && numValue < min) {
+            onChange(min.toString());
+            return;
+          }
 
-        if (max && numValue > max) {
-          onChange(max.toString());
+          if (max && numValue > max) {
+            onChange(max.toString());
+            return;
+          }
+        } else {
+          if (min && numValue < min) {
+            setError(true);
+            setErrorMessage(`Значение должно быть больше ${min}`);
+          } else if (max && numValue > max) {
+            setError(true);
+            setErrorMessage(`Значение должно быть меньше ${max}`);
+          } else {
+            setError(false);
+            setErrorMessage("");
+          }
+
+          onChange(numValue.toString());
           return;
         }
 

@@ -1,4 +1,4 @@
-import { IAdvertisement } from "../db/db";
+import { IAdvertisement, ISavedSearch } from "../db/db";
 import {
   createContext,
   Dispatch,
@@ -9,33 +9,9 @@ import {
 } from "react";
 import { useTelegram } from "../shared/hooks/useTelegram";
 import { getAds } from "../services/Ads";
+import { defaultContext, IContextAds } from "./defaulContext";
 
-export const UsersAdsContext = createContext<{
-  ads: IAdvertisement[];
-  setAds: Dispatch<SetStateAction<IAdvertisement[]>>;
-  isLoading: boolean;
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
-  openedAd: IAdvertisement | null;
-  setOpenedAd: Dispatch<SetStateAction<IAdvertisement | null>>;
-  openedAdLoading: boolean;
-  setOpenedAdLoading: Dispatch<SetStateAction<boolean>>;
-  isAdOpen: boolean;
-  setIsAdOpen: Dispatch<SetStateAction<boolean>>;
-
-  refetch: () => void;
-}>({
-  ads: [],
-  setAds: () => {},
-  isLoading: false,
-  setIsLoading: () => {},
-  openedAd: null,
-  setOpenedAd: () => {},
-  openedAdLoading: false,
-  setOpenedAdLoading: () => {},
-  isAdOpen: false,
-  setIsAdOpen: () => {},
-  refetch: () => {},
-});
+export const UsersAdsContext = createContext<IContextAds>(defaultContext);
 
 export const UsersAdsProvider = ({
   children,
@@ -82,6 +58,11 @@ export const UsersAdsProvider = ({
         isAdOpen,
         setIsAdOpen,
         refetch: refetchAds,
+
+        includeFilters: false,
+        setIncludeFilters: () => {},
+        savedSearch: undefined,
+        setSavedSearch: () => {},
       }}
     >
       {children}

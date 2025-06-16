@@ -12,42 +12,10 @@ import { getAllAds } from "../services/Ads";
 import { getAdvertismentWhereCondition } from "../shared/utils/utils";
 import { useTelegram } from "../shared/hooks/useTelegram";
 import { getSavedSearch } from "../services/SavedSearch";
+import { IContextAds } from "./defaulContext";
+import { defaultContext } from "./defaulContext";
 
-export const AllAdsContext = createContext<{
-  ads: IAdvertisement[];
-  setAds: Dispatch<SetStateAction<IAdvertisement[]>>;
-  isLoading: boolean;
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
-  openedAd: IAdvertisement | null;
-  setOpenedAd: Dispatch<SetStateAction<IAdvertisement | null>>;
-  openedAdLoading: boolean;
-  setOpenedAdLoading: Dispatch<SetStateAction<boolean>>;
-  isAdOpen: boolean;
-  setIsAdOpen: Dispatch<SetStateAction<boolean>>;
-  includeFilters: boolean;
-  setIncludeFilters: Dispatch<SetStateAction<boolean>>;
-  savedSearch: Partial<ISavedSearch> | undefined;
-  setSavedSearch: Dispatch<SetStateAction<Partial<ISavedSearch> | undefined>>;
-
-  refetch: () => void;
-}>({
-  ads: [],
-  setAds: () => {},
-  isLoading: false,
-  setIsLoading: () => {},
-  openedAd: null,
-  setOpenedAd: () => {},
-  openedAdLoading: false,
-  setOpenedAdLoading: () => {},
-  isAdOpen: false,
-  setIsAdOpen: () => {},
-  includeFilters: false,
-  setIncludeFilters: () => {},
-  savedSearch: undefined,
-  setSavedSearch: () => {},
-
-  refetch: () => {},
-});
+export const AllAdsContext = createContext<IContextAds>(defaultContext);
 
 export const AllAdsProvider = ({ children }: { children: React.ReactNode }) => {
   const { user } = useTelegram();
