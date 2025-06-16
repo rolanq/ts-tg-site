@@ -18,6 +18,8 @@ export const AllAdsContext = createContext<{
   setOpenedAd: Dispatch<SetStateAction<IAdvertisement | null>>;
   openedAdLoading: boolean;
   setOpenedAdLoading: Dispatch<SetStateAction<boolean>>;
+  isAdOpen: boolean;
+  setIsAdOpen: Dispatch<SetStateAction<boolean>>;
 }>({
   ads: [],
   setAds: () => {},
@@ -27,6 +29,8 @@ export const AllAdsContext = createContext<{
   setOpenedAd: () => {},
   openedAdLoading: false,
   setOpenedAdLoading: () => {},
+  isAdOpen: false,
+  setIsAdOpen: () => {},
 });
 
 export const AllAdsProvier = ({ children }: { children: React.ReactNode }) => {
@@ -34,6 +38,7 @@ export const AllAdsProvier = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [openedAd, setOpenedAd] = useState<IAdvertisement | null>(null);
   const [openedAdLoading, setOpenedAdLoading] = useState(false);
+  const [isAdOpen, setIsAdOpen] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -54,6 +59,8 @@ export const AllAdsProvier = ({ children }: { children: React.ReactNode }) => {
         setOpenedAd,
         openedAdLoading,
         setOpenedAdLoading,
+        isAdOpen,
+        setIsAdOpen,
       }}
     >
       {children}

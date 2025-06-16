@@ -18,7 +18,7 @@ interface AdsListProps {
 }
 
 export default function AdsList({ title, withSearch = false }: AdsListProps) {
-  const { ads, isLoading, setOpenedAd } = useContext(AllAdsContext);
+  const { ads, isLoading, setOpenedAd, setIsAdOpen } = useContext(AllAdsContext);
   const [showList, setShowList] = useState(false);
 
   useEffect(() => {
@@ -35,6 +35,7 @@ export default function AdsList({ title, withSearch = false }: AdsListProps) {
 
   const handleAdClick = (ad: IAdvertisement) => {
     setOpenedAd(ad);
+    setIsAdOpen(true);
   };
 
   return (

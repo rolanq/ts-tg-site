@@ -7,6 +7,7 @@ import "./override.css";
 import classNames from "classnames";
 import { CustomButton } from "../CustomButton/CustomButton";
 import CloseIcon from "../../Icons/CloseIcon";
+import { SpringEvent } from "react-spring-bottom-sheet/dist/types";
 
 interface IProps {
   open: boolean;
@@ -18,11 +19,13 @@ interface IProps {
   closeIcon?: boolean;
   disableDragClose?: boolean;
   disableScrollX?: boolean;
+  onSpringEnd?: (event: SpringEvent) => void;
 }
 
 export const CustomBottomSheet: FC<IProps> = ({
   open,
   onDismiss,
+  onSpringEnd,
   children,
   footer,
   snap = 30,
@@ -81,6 +84,7 @@ export const CustomBottomSheet: FC<IProps> = ({
       maxHeight={(viewportHeight / 100) * snap}
       open={open}
       onDismiss={onDismiss}
+      onSpringEnd={onSpringEnd}
     >
       {closeIcon && (
         <CustomButton

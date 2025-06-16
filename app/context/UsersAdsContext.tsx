@@ -18,6 +18,8 @@ export const UsersAdsContext = createContext<{
   setOpenedAd: Dispatch<SetStateAction<IAdvertisement | null>>;
   openedAdLoading: boolean;
   setOpenedAdLoading: Dispatch<SetStateAction<boolean>>;
+  isAdOpen: boolean;
+  setIsAdOpen: Dispatch<SetStateAction<boolean>>;
 }>({
   ads: [],
   setAds: () => {},
@@ -27,6 +29,8 @@ export const UsersAdsContext = createContext<{
   setOpenedAd: () => {},
   openedAdLoading: false,
   setOpenedAdLoading: () => {},
+  isAdOpen: false,
+  setIsAdOpen: () => {},
 });
 
 export const UsersAdsProvier = ({
@@ -39,6 +43,7 @@ export const UsersAdsProvier = ({
   const [isLoading, setIsLoading] = useState(false);
   const [openedAd, setOpenedAd] = useState<IAdvertisement | null>(null);
   const [openedAdLoading, setOpenedAdLoading] = useState(false);
+  const [isAdOpen, setIsAdOpen] = useState(false);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -52,7 +57,7 @@ export const UsersAdsProvier = ({
 
   return (
     <UsersAdsContext.Provider
-      value={{ ads, setAds, isLoading, setIsLoading, openedAd, setOpenedAd, openedAdLoading, setOpenedAdLoading }}
+      value={{ ads, setAds, isLoading, setIsLoading, openedAd, setOpenedAd, openedAdLoading, setOpenedAdLoading, isAdOpen, setIsAdOpen }}
     >
       {children}
     </UsersAdsContext.Provider>

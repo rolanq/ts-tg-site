@@ -19,6 +19,7 @@ import { useTelegram } from "@/app/shared/hooks/useTelegram";
 import HideAd from "../HideAd/HideAd";
 import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
+import { SpringEvent } from "react-spring-bottom-sheet/dist/types";
 
 interface Image {
   url: string;
@@ -31,12 +32,11 @@ interface Video {
 }
 
 export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
-  const { openedAd, setOpenedAd, openedAdLoading, setOpenedAdLoading } =
+  const { openedAd, setOpenedAd, openedAdLoading, setOpenedAdLoading, setIsAdOpen, isAdOpen } =
     useContext(isUsersAds ? UsersAdsContext : AllAdsContext);
   const [images, setImages] = useState<Image[]>([]);
   const [video, setVideo] = useState<Video | null>(null);
   const [hideAdOpen, setHideAdOpen] = useState(false);
-  const [showFooter, setShowFooter] = useState(false);
 
   useEffect(() => {
     if (!openedAd) return;
@@ -89,8 +89,14 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
   }, [openedAd]);
 
   const onDismiss = () => {
-    setOpenedAd(null);
-    setImages([]);
+    setIsAdOpen(false);
+  };
+
+  const onSpringEnd = (event: SpringEvent) => {
+    if (event.type === "CLOSE") {
+      setImages([]);
+      setOpenedAd(null);
+    }
   };
 
   const renderImages = useMemo(() => {
@@ -140,8 +146,9 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
   return (
     <>
       <CustomBottomSheet
-        open={!!openedAd}
+        open={isAdOpen}
         onDismiss={onDismiss}
+        onSpringEnd={onSpringEnd}
         snap={95}
         disableDragClose
         footerWithoutBoxShadow
