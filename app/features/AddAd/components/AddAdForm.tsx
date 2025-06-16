@@ -14,8 +14,14 @@ import classNames from "classnames";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 export default function AddAdForm() {
-  const { openedStep, setOpenedStep, isDraftLoading, isPublishing } =
-    useContext(AddAdContext);
+  const {
+    openedStep,
+    setOpenedStep,
+    isDraftLoading,
+    isPublishing,
+    setPreparedPhotos,
+    setPreparedVideo,
+  } = useContext(AddAdContext);
 
   const [showBottomSheet, setShowBottomSheet] = useState(false);
 
@@ -49,23 +55,17 @@ export default function AddAdForm() {
     }
   }, [isDraftLoading]);
 
-  // const content = useMemo(() => {
-  //   if (isPublishing) {
-  //     return (
-  //       <CustomLoader
-  //         size={36}
-  //         label="Создаем объявление"
-  //         className={styles.loader}
-  //       />
-  //     );
-  //   }
-  // }, [isPublishing, openedStep]);
-
   return (
     <CustomBottomSheet
       snap={75}
       open={!!openedStep}
       onDismiss={() => setOpenedStep(0)}
+      onSpringEnd={(event) => {
+        if (event.type === "CLOSE") {
+          setPreparedPhotos([]);
+          setPreparedVideo(null);
+        }
+      }}
       footerWithoutBoxShadow
       disableDragClose
       footer={<FooterButtons />}
@@ -94,25 +94,38 @@ export default function AddAdForm() {
               />
             </div>
           ) : (
-            <div
-              className={classNames(
-                styles.stepsWrapper,
-                styles[`slide${openedStep}`]
+            <>
+              {isPublishing ? (
+                <div className={styles.loaderWrapper}>
+                  <CustomLoader
+                    size={36}
+                    label="Создаем объявление"
+                    successLabel="Объявление создано"
+                    loading={isPublishing}
+                  />
+                </div>
+              ) : (
+                <div
+                  className={classNames(
+                    styles.stepsWrapper,
+                    styles[`slide${openedStep}`]
+                  )}
+                >
+                  <div className={styles.step}>
+                    <FirstStep />
+                  </div>
+                  <div className={styles.step}>
+                    <SecondStep />
+                  </div>
+                  <div className={styles.step}>
+                    <ThirdStep />
+                  </div>
+                  <div className={styles.step}>
+                    <FourthStep />
+                  </div>
+                </div>
               )}
-            >
-              <div className={styles.step}>
-                <FirstStep />
-              </div>
-              <div className={styles.step}>
-                <SecondStep />
-              </div>
-              <div className={styles.step}>
-                <ThirdStep />
-              </div>
-              <div className={styles.step}>
-                <FourthStep />
-              </div>
-            </div>
+            </>
           )}
         </CSSTransition>
       </SwitchTransition>

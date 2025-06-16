@@ -1,6 +1,6 @@
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
-import React, { useRef, useState, useEffect, useContext } from "react";
+import React, { useRef, useContext } from "react";
 import commonStyles from "../../commonSteps.module.css";
 import styles from "./FourthStep.module.css";
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
@@ -9,13 +9,8 @@ import { AddedVideo } from "./AddedVideo";
 import { AddAdContext } from "../../../context/AddAdContext";
 
 export const FourthStep = () => {
-  const {
-    setPreparedData,
-    preparedVideo,
-    setPreparedVideo,
-    preparedPhotos,
-    setPreparedPhotos,
-  } = useContext(AddAdContext);
+  const { preparedVideo, setPreparedVideo, preparedPhotos, setPreparedPhotos } =
+    useContext(AddAdContext);
   const photoInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddPhoto = () => {
@@ -43,12 +38,6 @@ export const FourthStep = () => {
       }
     }
   };
-
-  useEffect(() => {
-    setPreparedData((prev) => ({
-      ...prev,
-    }));
-  }, [preparedPhotos, preparedVideo]);
 
   return (
     <CustomFlex

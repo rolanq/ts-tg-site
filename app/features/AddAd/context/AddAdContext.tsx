@@ -41,7 +41,6 @@ const initialState: IContextCreateAd = {
 export const AddAdContext = createContext<IContextCreateAd>(initialState);
 
 export const AddAdProvider = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useContext(telegramContext);
   const [openedStep, setOpenedStep] = useState(0);
   const [brands, setBrands] = useState<IBrand[]>([]);
   const [regions, setRegions] = useState<IRegion[]>([]);
