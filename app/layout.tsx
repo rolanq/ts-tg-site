@@ -2,7 +2,7 @@ import Script from "next/script";
 import "./globals.css";
 import { Noto_Sans } from "next/font/google";
 import { Telegram } from "@twa-dev/types";
-import { TelegramProvider } from "./providers/TelegramProvider";
+import { TelegramProvider } from "./context/TelegramContext";
 
 export const metadata = {
   title: "В Касание",

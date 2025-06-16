@@ -4,12 +4,26 @@ import classNames from "classnames";
 import { CustomTyphography } from "../CustomTyphography/CustomTyphography";
 import { CustomFlex } from "../CustomFlex/CustomFlex";
 
+const textColor = {
+  primary: "white",
+  secondary: "white",
+  tertiary: "black",
+  outline: "black",
+} as const;
+
+const textSize = {
+  small: "14px",
+  medium: "16px",
+  large: "18px",
+  none: "14px",
+} as const;
+
 interface CustomButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
   className?: string;
   disabled?: boolean;
-  variant?: "primary" | "secondary" | "tertiary";
+  variant?: "primary" | "secondary" | "tertiary" | "outline";
   stretched?: boolean;
   beforeIcon?: React.ReactNode;
   afterIcon?: React.ReactNode;
@@ -44,6 +58,7 @@ export const CustomButton = ({
         [styles.primary]: variant === "primary" && !disabled,
         [styles.secondary]: variant === "secondary" && !disabled,
         [styles.tertiary]: variant === "tertiary" && !disabled,
+        [styles.outline]: variant === "outline" && !disabled,
         [styles.stretched]: stretched,
         [styles.small]: padding === "small",
         [styles.medium]: padding === "medium",
@@ -66,9 +81,9 @@ export const CustomButton = ({
         {beforeIcon && <div className={styles.beforeIcon}>{beforeIcon}</div>}
         {isText ? (
           <CustomTyphography
-            fontSize="16px"
+            fontSize={textSize[padding]}
             fontWeight="bold"
-            color={variant === "tertiary" ? "black" : "white"}
+            color={textColor[variant]}
             className={styles.text}
           >
             {children}

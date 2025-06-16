@@ -5,7 +5,7 @@ import { PlusIcon } from "../../shared/Icons/PlusIcon";
 import AddAdForm from "./components/AddAdForm";
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
-import { AddAdContext } from "./context/AddAdContext";
+import { AddAdContext } from "../../context/AddAdContext";
 import {
   checkIsFirstStepValid,
   checkIsSecondStepValid,
@@ -13,7 +13,7 @@ import {
   isAvailableToPublish,
 } from "./components/utils";
 import { getDraft } from "@/app/services/Draft";
-import { telegramContext } from "@/app/providers/TelegramProvider";
+import { telegramContext } from "@/app/context/TelegramContext";
 
 export const AddAd = () => {
   const { user } = useContext(telegramContext);

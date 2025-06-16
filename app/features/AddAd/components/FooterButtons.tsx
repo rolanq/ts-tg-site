@@ -2,7 +2,7 @@
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { AddAdContext } from "../context/AddAdContext";
+import { AddAdContext } from "../../../context/AddAdContext";
 import styles from "./commonSteps.module.css";
 import { isAvailableToPublish } from "./utils";
 import { sendPhotos, sendVideo } from "@/app/services/ClientTelegram";

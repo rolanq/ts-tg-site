@@ -2,7 +2,7 @@ import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import { CustomSelect } from "@/app/shared/kit/CustomSelect/CustomSelect";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
 import React, { useContext, useEffect, useMemo } from "react";
-import { AddAdContext } from "../../../context/AddAdContext";
+import { AddAdContext } from "../../../../../context/AddAdContext";
 import { CustomInput } from "@/app/shared/kit/CustomInput/CustomInput";
 import styles from "../../commonSteps.module.css";
 import { updateDraft } from "@/app/services/Draft";

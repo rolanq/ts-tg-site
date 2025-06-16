@@ -20,6 +20,7 @@ interface IProps {
   disableDragClose?: boolean;
   disableScrollX?: boolean;
   onSpringEnd?: (event: SpringEvent) => void;
+  disableDismiss?: boolean;
 }
 
 export const CustomBottomSheet: FC<IProps> = ({
@@ -33,6 +34,7 @@ export const CustomBottomSheet: FC<IProps> = ({
   closeIcon = true,
   disableDragClose = false,
   disableScrollX = false,
+  disableDismiss = false,
 }) => {
   const [viewportHeight, setViewportHeight] = useState(0);
 

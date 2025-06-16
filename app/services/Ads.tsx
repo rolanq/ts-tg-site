@@ -8,6 +8,9 @@ import {
   initDatabase,
   Region,
 } from "@/app/db/db";
+import { WhereOptions } from "sequelize";
+import { getSavedSearch } from "./SavedSearch";
+import { getAdvertismentWhereCondition } from "../shared/utils/utils";
 
 export const getAds = async (userId: number) => {
   await initDatabase();
@@ -20,13 +23,23 @@ export const getAds = async (userId: number) => {
   return ads.map((ad) => ad.toJSON());
 };
 
-export const getAllAds = async () => {
+export const getAllAds = async (
+  includeSavedSearch: boolean = false,
+  userId?: number
+) => {
   await initDatabase();
+  let where;
+  if (includeSavedSearch && userId) {
+    const search = await getSavedSearch(userId);
+    where = getAdvertismentWhereCondition(search);
+  }
+
   const advertisements = await Advertisement.findAll({
     include: [Brand, CarModel, Region],
     where: {
+      ...where,
       isActive: true,
-    }
+    },
   });
   return advertisements.map((ad) => ad.toJSON());
 };

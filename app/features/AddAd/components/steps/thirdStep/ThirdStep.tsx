@@ -3,7 +3,7 @@ import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyph
 import React, { useCallback, useContext, useEffect } from "react";
 import styles from "../../commonSteps.module.css";
 import { CustomInput } from "@/app/shared/kit/CustomInput/CustomInput";
-import { AddAdContext } from "../../../context/AddAdContext";
+import { AddAdContext } from "../../../../../context/AddAdContext";
 import { updateDraft } from "@/app/services/Draft";
 import CustomMaskInput from "@/app/shared/kit/CustomMaskInput/CustomMaskInput";
 import { checkIsThirdStepValid } from "../../utils";

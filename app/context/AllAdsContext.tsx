@@ -1,5 +1,5 @@
 "use client";
-import { IAdvertisement } from "../db/db";
+import { IAdvertisement, ISavedSearch } from "../db/db";
 import {
   createContext,
   Dispatch,
@@ -9,6 +9,9 @@ import {
   useState,
 } from "react";
 import { getAllAds } from "../services/Ads";
+import { getAdvertismentWhereCondition } from "../shared/utils/utils";
+import { useTelegram } from "../shared/hooks/useTelegram";
+import { getSavedSearch } from "../services/SavedSearch";
 
 export const AllAdsContext = createContext<{
   ads: IAdvertisement[];
@@ -21,6 +24,11 @@ export const AllAdsContext = createContext<{
   setOpenedAdLoading: Dispatch<SetStateAction<boolean>>;
   isAdOpen: boolean;
   setIsAdOpen: Dispatch<SetStateAction<boolean>>;
+  includeFilters: boolean;
+  setIncludeFilters: Dispatch<SetStateAction<boolean>>;
+  savedSearch: Partial<ISavedSearch> | undefined;
+  setSavedSearch: Dispatch<SetStateAction<Partial<ISavedSearch> | undefined>>;
+
   refetch: () => void;
 }>({
   ads: [],
@@ -33,31 +41,42 @@ export const AllAdsContext = createContext<{
   setOpenedAdLoading: () => {},
   isAdOpen: false,
   setIsAdOpen: () => {},
+  includeFilters: false,
+  setIncludeFilters: () => {},
+  savedSearch: undefined,
+  setSavedSearch: () => {},
+
   refetch: () => {},
 });
 
 export const AllAdsProvider = ({ children }: { children: React.ReactNode }) => {
+  const { user } = useTelegram();
   const [ads, setAds] = useState<IAdvertisement[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [openedAd, setOpenedAd] = useState<IAdvertisement | null>(null);
   const [openedAdLoading, setOpenedAdLoading] = useState(false);
   const [isAdOpen, setIsAdOpen] = useState(false);
-
-  useEffect(() => {
-    setIsLoading(true);
-    getAllAds().then((ads) => {
-      setAds(ads);
-      setIsLoading(false);
-    });
-  }, []);
+  const [includeFilters, setIncludeFilters] = useState(false);
+  const [savedSearch, setSavedSearch] = useState<Partial<ISavedSearch>>();
 
   const refetchAds = useCallback(() => {
     setIsLoading(true);
-    getAllAds().then((ads) => {
+
+    if (user?.id) {
+      getSavedSearch(user?.id).then((savedSearch) => {
+        setSavedSearch(savedSearch);
+      });
+    }
+
+    getAllAds(includeFilters, user?.id).then((ads) => {
       setAds(ads);
       setIsLoading(false);
     });
-  }, []);
+  }, [user?.id, includeFilters]);
+
+  useEffect(() => {
+    refetchAds();
+  }, [includeFilters]);
 
   return (
     <AllAdsContext.Provider
@@ -72,6 +91,11 @@ export const AllAdsProvider = ({ children }: { children: React.ReactNode }) => {
         setOpenedAdLoading,
         isAdOpen,
         setIsAdOpen,
+        includeFilters,
+        setIncludeFilters,
+        savedSearch,
+        setSavedSearch,
+
         refetch: refetchAds,
       }}
     >

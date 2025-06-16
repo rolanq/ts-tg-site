@@ -4,7 +4,7 @@ import { CustomBottomSheet } from "@/app/shared/kit/CustomBottomSheet/CustomBott
 import { useContext, useEffect, useMemo, useState } from "react";
 import styles from "./commonSteps.module.css";
 import { FirstStep } from "./steps/firstStep/FirstStep";
-import { AddAdContext } from "../context/AddAdContext";
+import { AddAdContext } from "../../../context/AddAdContext";
 import { SecondStep } from "./steps/SecondStep/SecondStep";
 import { ThirdStep } from "./steps/thirdStep/ThirdStep";
 import { FooterButtons } from "./FooterButtons";

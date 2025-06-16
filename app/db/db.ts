@@ -186,6 +186,9 @@ export interface ISavedSearch {
   priceTo: number | null;
   createdAt?: Date;
   updatedAt?: Date;
+
+  Brand?: IBrand;
+  Region?: IRegion;
 }
 
 export interface INotification {

@@ -1,15 +1,47 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { IContextCreateAd } from "./types";
-import { STEPS_ENUM } from "@/app/shared/types/config";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { IBrand, IRegion, ICarModel, IAdvertisementDraft } from "@/app/db/db";
-import { getDraft } from "../../../services/Draft";
-import { loadBrandsAndRegions, getModels } from "../../../services/GetBrands";
-import { telegramContext } from "@/app/providers/TelegramProvider";
+import { loadBrandsAndRegions, getModels } from "../services/GetBrands";
 import {
   DEFAULT_AD_DRAFT,
   TELEGRAM_API_URL,
   TELEGRAM_FILE_API_URL,
 } from "@/app/shared/constants/telegram";
+
+export interface IContextCreateAd {
+  preparedData: IAdvertisementDraft;
+  setPreparedData: Dispatch<SetStateAction<IAdvertisementDraft>>;
+  openedStep: number;
+  setOpenedStep: Dispatch<SetStateAction<number>>;
+
+  brands: IBrand[];
+  setBrands: Dispatch<SetStateAction<IBrand[]>>;
+  regions: IRegion[];
+  setRegions: Dispatch<SetStateAction<IRegion[]>>;
+  models: ICarModel[];
+  setModels: Dispatch<SetStateAction<ICarModel[]>>;
+
+  isNextStepDisabled: boolean;
+  setIsNextStepDisabled: Dispatch<SetStateAction<boolean>>;
+  onClickNextStep: () => void;
+  setOnClickNextStep: Dispatch<SetStateAction<() => void>>;
+
+  isDraftLoading: boolean;
+  setIsDraftLoading: Dispatch<SetStateAction<boolean>>;
+
+  preparedVideo: File | null;
+  setPreparedVideo: Dispatch<SetStateAction<File | null>>;
+  preparedPhotos: File[];
+  setPreparedPhotos: Dispatch<SetStateAction<File[]>>;
+
+  isPublishing: boolean;
+  setIsPublishing: Dispatch<SetStateAction<boolean>>;
+}
 
 const initialState: IContextCreateAd = {
   preparedData: DEFAULT_AD_DRAFT,

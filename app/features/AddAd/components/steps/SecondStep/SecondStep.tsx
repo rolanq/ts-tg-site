@@ -3,7 +3,7 @@ import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
 import styles from "../../commonSteps.module.css";
 import { CustomSelect } from "@/app/shared/kit/CustomSelect/CustomSelect";
-import { AddAdContext } from "../../../context/AddAdContext";
+import { AddAdContext } from "../../../../../context/AddAdContext";
 import {
   DRIVE_TYPES,
   ENGINE_TYPES,

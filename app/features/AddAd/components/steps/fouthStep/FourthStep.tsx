@@ -6,7 +6,7 @@ import styles from "./FourthStep.module.css";
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
 import { AddedImage } from "./AddedImage";
 import { AddedVideo } from "./AddedVideo";
-import { AddAdContext } from "../../../context/AddAdContext";
+import { AddAdContext } from "../../../../../context/AddAdContext";
 
 export const FourthStep = () => {
   const { preparedVideo, setPreparedVideo, preparedPhotos, setPreparedPhotos } =
