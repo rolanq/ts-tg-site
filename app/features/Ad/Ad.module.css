@@ -115,3 +115,25 @@
 .mainContent {
   flex: 2;
 }
+
+.footerFadeEnter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.footerFadeEnterActive {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 300ms ease;
+}
+
+.footerFadeExit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.footerFadeExitActive {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 300ms ease;
+}

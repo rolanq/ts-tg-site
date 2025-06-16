@@ -4,12 +4,13 @@ import { IAdvertisement } from "@/app/db/db";
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import classNames from "classnames";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import styles from "./Ad.module.css";
 import { useTelegram } from "@/app/shared/hooks/useTelegram";
 import { updateAd } from "@/app/services/Ads";
 import { AllAdsContext } from "@/app/context/AllAdsContext";
 import { UsersAdsContext } from "@/app/context/UsersAdsContext";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 export default function FooterButtons({
   isUsersAds,
@@ -21,6 +22,7 @@ export default function FooterButtons({
   const { user } = useTelegram();
   const { openedAd, setAds, setOpenedAd, openedAdLoading, setOpenedAdLoading } =
     useContext(isUsersAds ? UsersAdsContext : AllAdsContext);
+  const [isShowButtons, setIsShowButtons] = useState(false);
 
   const isOwner = openedAd?.userId === String(user?.id);
 
@@ -52,9 +54,17 @@ export default function FooterButtons({
     window.open(`https://t.me/${openedAd?.telegramUsername}`, "_blank");
   };
 
-  if (isOwner) {
-    return (
-      <>
+  useEffect(() => {
+    if (!openedAdLoading) {
+      setIsShowButtons(true);
+    } else {
+      setIsShowButtons(false);
+    }
+  }, [openedAdLoading]);
+
+  const content = useMemo(() => {
+    if (isOwner) {
+      return (
         <CustomFlex gap="10px">
           <CustomButton onClick={handleOnHold} stretched padding="medium">
             {openedAd.isOnHold ? "Убрать задаток" : "Под задатком"}
@@ -63,12 +73,10 @@ export default function FooterButtons({
             Скрыть
           </CustomButton>
         </CustomFlex>
-      </>
-    );
-  }
+      );
+    }
 
-  return openedAd ? (
-    <>
+    return (
       <CustomFlex direction="column" gap="10px">
         <CustomFlex direction="row" gap="10px">
           <CustomButton
@@ -91,6 +99,23 @@ export default function FooterButtons({
           )}
         </CustomFlex>
       </CustomFlex>
-    </>
-  ) : undefined;
+    );
+  }, [isOwner]);
+
+  return (
+    <SwitchTransition mode="out-in">
+      <CSSTransition
+        key={isShowButtons ? "content" : "loader"}
+        timeout={300}
+        classNames={{
+          enter: styles.footerFadeEnter,
+          enterActive: styles.footerFadeEnterActive,
+          exit: styles.footerFadeExit,
+          exitActive: styles.footerFadeExitActive,
+        }}
+      >
+        {isShowButtons ? content : <div></div>}
+      </CSSTransition>
+    </SwitchTransition>
+  );
 }
