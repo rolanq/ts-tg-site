@@ -1,0 +1,11 @@
+.loaderPath {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 0;
+  animation: finishDraw 0.25s ease-out forwards;
+}
+
+@keyframes finishDraw {
+  to {
+    stroke-dashoffset: 50;
+  }
+}

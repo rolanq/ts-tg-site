@@ -52,10 +52,6 @@ export default function FooterButtons({
     window.open(`https://t.me/${openedAd?.telegramUsername}`, "_blank");
   };
 
-  if (openedAdLoading) {
-    return null;
-  }
-
   if (isOwner) {
     return (
       <>

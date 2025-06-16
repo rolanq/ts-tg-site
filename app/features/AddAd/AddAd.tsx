@@ -67,7 +67,11 @@ export const AddAd = () => {
   return (
     <>
       <CustomFlex className={styles.footerItem} justify="center">
-        <CustomButton onClick={handleOpenAddAd} className={styles.addButton}>
+        <CustomButton
+          onClick={handleOpenAddAd}
+          className={styles.addButton}
+          isText={false}
+        >
           <PlusIcon color="var(--color-white)" />
         </CustomButton>
       </CustomFlex>

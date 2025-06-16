@@ -41,6 +41,7 @@ interface CustomTyphographyProps {
   fontSize?: TypographySize;
   className?: string;
   textAlign?: "left" | "center" | "right" | "justify";
+  textWrap?: "nowrap" | "wrap";
 }
 
 export const CustomTyphography = ({
@@ -50,6 +51,7 @@ export const CustomTyphography = ({
   fontSize = "16px",
   className,
   textAlign = "left",
+  textWrap = "wrap",
 }: CustomTyphographyProps) => {
   return (
     <p
@@ -58,6 +60,7 @@ export const CustomTyphography = ({
         fontWeight: typographyWeight[fontWeight],
         fontSize: typographySize[fontSize],
         textAlign,
+        textWrap,
       }}
       className={`${className} ${styles.height}`}
     >

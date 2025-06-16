@@ -16,6 +16,7 @@ export const IconWrapper = ({
         [styles.activeIconButton]: isActive,
         [styles.notActiveIconButton]: !isActive,
       })}
+      isText={false}
     >
       {icon}
     </CustomButton>

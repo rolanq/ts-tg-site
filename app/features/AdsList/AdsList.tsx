@@ -10,6 +10,7 @@ import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyph
 import { CustomInput } from "@/app/shared/kit/CustomInput/CustomInput";
 import { AllAdsContext } from "@/app/context/AllAdsContext";
 import { Ad } from "../Ad/Ad";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 interface AdsListProps {
   title?: string;
@@ -18,38 +19,61 @@ interface AdsListProps {
 
 export default function AdsList({ title, withSearch = false }: AdsListProps) {
   const { ads, isLoading, setOpenedAd } = useContext(AllAdsContext);
+  const [showList, setShowList] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading) {
+      const timer = setTimeout(() => {
+        setShowList(true);
+      }, 600);
+
+      return () => clearTimeout(timer);
+    } else {
+      setShowList(false);
+    }
+  }, [isLoading]);
 
   const handleAdClick = (ad: IAdvertisement) => {
     setOpenedAd(ad);
   };
 
-  if (isLoading) {
-    return (
-      <CustomFlex
-        justify="center"
-        align="center"
-        className={styles.loaderWrapper}
-      >
-        <CustomLoader size={36} label="Загружаем объявления" />
-      </CustomFlex>
-    );
-  }
-
   return (
-    <>
-      <div className={styles.list}>
-        {withSearch && (
-          <CustomInput placeholder="Поиск" value="" onChange={() => {}} />
+    <SwitchTransition mode="out-in">
+      <CSSTransition
+        key={showList ? "list" : "loader"}
+        timeout={300}
+        classNames={{
+          enter: styles.fadeEnter,
+          enterActive: styles.fadeEnterActive,
+          exit: styles.fadeExit,
+          exitActive: styles.fadeExitActive,
+        }}
+        unmountOnExit
+      >
+        {showList ? (
+          <div className={styles.list}>
+            {withSearch && (
+              <CustomInput placeholder="Поиск" value="" onChange={() => {}} />
+            )}
+            <CustomTyphography fontSize="20px" fontWeight="bold">
+              {title}
+            </CustomTyphography>
+            {ads.map((ad) => (
+              <AdCard key={ad.id} ad={ad} onClick={() => handleAdClick(ad)} />
+            ))}
+            <Ad />
+          </div>
+        ) : (
+          <div className={styles.loaderWrapper}>
+            <CustomLoader
+              size={36}
+              label="Загружаем объявления"
+              loading={isLoading}
+              successLabel="Объявления загружены"
+            />
+          </div>
         )}
-        <CustomTyphography fontSize="20px" fontWeight="bold">
-          {title}
-        </CustomTyphography>
-        {ads.map((ad) => (
-          <AdCard key={ad.id} ad={ad} onClick={() => handleAdClick(ad)} />
-        ))}
-      </div>
-
-      <Ad />
-    </>
+      </CSSTransition>
+    </SwitchTransition>
   );
 }

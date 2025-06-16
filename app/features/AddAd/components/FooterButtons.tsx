@@ -9,6 +9,7 @@ import { sendPhotos, sendVideo } from "@/app/services/ClientTelegram";
 import { updateDraft } from "@/app/services/Draft";
 import { publishAd } from "@/app/services/Ads";
 import toast from "react-hot-toast";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 export const FooterButtons = () => {
   const {
@@ -23,8 +24,8 @@ export const FooterButtons = () => {
     preparedPhotos,
     setIsPublishing,
   } = useContext(AddAdContext);
-
   const [isPublishDisabled, setIsPublishDisabled] = useState(true);
+  const [isShowButtons, setIsShowButtons] = useState(false);
 
   const handleBackStep = () => {
     setOpenedStep((prev) => prev - 1);
@@ -65,44 +66,69 @@ export const FooterButtons = () => {
     }
   }, [preparedData]);
 
-  if (isDraftLoading || isPublishing) {
-    return null;
-  }
+  useEffect(() => {
+    if (!isDraftLoading && !isPublishing) {
+      const timer = setTimeout(() => {
+        setIsShowButtons(true);
+      }, 300);
+
+      return () => clearTimeout(timer);
+    } else {
+      setIsShowButtons(false);
+    }
+  }, [isDraftLoading, isPublishing]);
 
   return (
-    <CustomFlex gap="10px">
-      {openedStep > 1 && (
-        <CustomButton
-          className={styles.backStepButton}
-          onClick={handleBackStep}
-          variant="secondary"
-          padding="medium"
-        >
-          Назад
-        </CustomButton>
-      )}
-      {openedStep < 4 && (
-        <CustomButton
-          className={styles.nextStepButton}
-          onClick={onClickNextStep}
-          disabled={isNextStepDisabled}
-          stretched
-          padding="medium"
-        >
-          Далее
-        </CustomButton>
-      )}
-      {openedStep === 4 && (
-        <CustomButton
-          className={styles.nextStepButton}
-          onClick={handlePublish}
-          stretched
-          padding="medium"
-          disabled={isPublishDisabled}
-        >
-          Опубликовать
-        </CustomButton>
-      )}
-    </CustomFlex>
+    <SwitchTransition mode="out-in">
+      <CSSTransition
+        key={isShowButtons ? "buttons" : "loader"}
+        timeout={300}
+        classNames={{
+          enter: styles.fadeFooterEnter,
+          enterActive: styles.fadeFooterEnterActive,
+          exit: styles.fadeFooterExit,
+          exitActive: styles.fadeFooterExitActive,
+        }}
+      >
+        {isShowButtons ? (
+          <CustomFlex gap="10px" className={styles.buttonsWrapper}>
+            {openedStep > 1 && (
+              <CustomButton
+                className={styles.backStepButton}
+                onClick={handleBackStep}
+                variant="secondary"
+                padding="medium"
+              >
+                Назад
+              </CustomButton>
+            )}
+            {openedStep < 4 && (
+              <CustomButton
+                className={styles.nextStepButton}
+                onClick={onClickNextStep}
+                disabled={isNextStepDisabled}
+                stretched
+                padding="medium"
+              >
+                Далее
+              </CustomButton>
+            )}
+            {openedStep === 4 && (
+              <CustomButton
+                className={styles.nextStepButton}
+                onClick={handlePublish}
+                stretched
+                padding="medium"
+                disabled={isPublishDisabled}
+              >
+                Опубликовать
+              </CustomButton>
+            )}
+          </CustomFlex>
+        ) : (
+          <div></div>
+        )}
+      </CSSTransition>
+    </SwitchTransition>
   );
 };

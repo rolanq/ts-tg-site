@@ -70,11 +70,10 @@
 }
 
 .loaderWrapper {
+  height: 90vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90vh;
-  width: 100vw;
 }
 
 .badgesContainer {
@@ -85,4 +84,26 @@
 .video {
   width: 100%;
   height: 300px;
+}
+
+.fadeEnter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.fadeEnterActive {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 300ms ease;
+}
+
+.fadeExit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fadeExitActive {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 300ms ease;
 }

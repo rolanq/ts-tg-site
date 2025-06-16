@@ -38,6 +38,53 @@
   flex: 1;
 }
 
-.loader {
-  height: 75vh;
+.loaderWrapper {
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fadeEnter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.fadeEnterActive {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 300ms ease;
+}
+
+.fadeExit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fadeExitActive {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 300ms ease;
+}
+
+.fadeFooterEnter {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 300ms ease;
+}
+
+.fadeFooterEnterActive {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fadeFooterExit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fadeFooterExitActive {
+  opacity: 0;
+  transform: translateY(-50px);
+  transition: all 300ms ease;
 }

@@ -6,5 +6,30 @@
 }
 
 .loaderWrapper {
-  height: 50%;
+  height: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fadeEnter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.fadeEnterActive {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 200ms ease-in-out;
+}
+
+.fadeExit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fadeExitActive {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 200ms ease-in-out;
 }

@@ -115,7 +115,7 @@ export const FourthStep = () => {
                     <CustomFlex gap="5px">
                       {preparedPhotos.map((photo, index) => (
                         <AddedImage
-                          key={photo.name}
+                          key={photo.name + index}
                           photo={photo}
                           index={index}
                           setPhotos={setPreparedPhotos}

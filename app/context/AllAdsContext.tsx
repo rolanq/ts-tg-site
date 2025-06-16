@@ -13,6 +13,7 @@ export const AllAdsContext = createContext<{
   ads: IAdvertisement[];
   setAds: Dispatch<SetStateAction<IAdvertisement[]>>;
   isLoading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
   openedAd: IAdvertisement | null;
   setOpenedAd: Dispatch<SetStateAction<IAdvertisement | null>>;
   openedAdLoading: boolean;
@@ -21,6 +22,7 @@ export const AllAdsContext = createContext<{
   ads: [],
   setAds: () => {},
   isLoading: false,
+  setIsLoading: () => {},
   openedAd: null,
   setOpenedAd: () => {},
   openedAdLoading: false,
@@ -47,6 +49,7 @@ export const AllAdsProvier = ({ children }: { children: React.ReactNode }) => {
         ads,
         setAds,
         isLoading,
+        setIsLoading,
         openedAd,
         setOpenedAd,
         openedAdLoading,

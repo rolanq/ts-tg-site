@@ -13,6 +13,7 @@ export const UsersAdsContext = createContext<{
   ads: IAdvertisement[];
   setAds: Dispatch<SetStateAction<IAdvertisement[]>>;
   isLoading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
   openedAd: IAdvertisement | null;
   setOpenedAd: Dispatch<SetStateAction<IAdvertisement | null>>;
   openedAdLoading: boolean;
@@ -21,6 +22,7 @@ export const UsersAdsContext = createContext<{
   ads: [],
   setAds: () => {},
   isLoading: false,
+  setIsLoading: () => {},
   openedAd: null,
   setOpenedAd: () => {},
   openedAdLoading: false,
@@ -50,7 +52,7 @@ export const UsersAdsProvier = ({
 
   return (
     <UsersAdsContext.Provider
-      value={{ ads, setAds, isLoading, openedAd, setOpenedAd, openedAdLoading, setOpenedAdLoading }}
+      value={{ ads, setAds, isLoading, setIsLoading, openedAd, setOpenedAd, openedAdLoading, setOpenedAdLoading }}
     >
       {children}
     </UsersAdsContext.Provider>

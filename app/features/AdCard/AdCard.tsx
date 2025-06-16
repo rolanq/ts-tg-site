@@ -14,36 +14,10 @@ import Badges from "../Badges/Badges";
 interface AdCardProps {
   ad: IAdvertisement;
   onClick: () => void;
+  imageUrl?: string;
 }
 
-export default function AdCard({ ad, onClick }: AdCardProps) {
-  const [imageUrl, setImageUrl] = useState<string | undefined>();
-
-  useEffect(() => {
-    async function fetchImageUrl() {
-      try {
-        if (!ad.photos[0]) return;
-
-        const fileInfo = await fetch(
-          `${TELEGRAM_API_URL}/getFile?file_id=${ad.photos[0]}`
-        );
-        const fileData = await fileInfo.json();
-
-        if (!fileData.ok) {
-          console.error("Ошибка получения информации о файле:", fileData);
-          return;
-        }
-
-        const filePath = fileData.result.file_path;
-        setImageUrl(`${TELEGRAM_FILE_API_URL}/${filePath}`);
-      } catch (error) {
-        console.error("Ошибка при загрузке изображения:", error);
-      }
-    }
-
-    fetchImageUrl();
-  }, [ad]);
-
+export default function AdCard({ ad, onClick, imageUrl }: AdCardProps) {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     onClick();

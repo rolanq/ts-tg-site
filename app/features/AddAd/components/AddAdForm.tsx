@@ -11,10 +11,13 @@ import { FooterButtons } from "./FooterButtons";
 import { FourthStep } from "./steps/fouthStep/FourthStep";
 import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 import classNames from "classnames";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 export default function AddAdForm() {
   const { openedStep, setOpenedStep, isDraftLoading, isPublishing } =
     useContext(AddAdContext);
+
+  const [showBottomSheet, setShowBottomSheet] = useState(false);
 
   const handleSlideChange = (event: any) => {
     const slideIndex = event.target.scrollLeft / event.target.offsetWidth;
@@ -34,47 +37,29 @@ export default function AddAdForm() {
     };
   }, []);
 
-  const content = useMemo(() => {
-    if (isPublishing) {
-      return (
-        <CustomLoader
-          size={36}
-          label="Создаем объявление"
-          className={styles.loader}
-        />
-      );
+  useEffect(() => {
+    if (!isDraftLoading) {
+      const timer = setTimeout(() => {
+        setShowBottomSheet(true);
+      }, 700);
+
+      return () => clearTimeout(timer);
+    } else {
+      setShowBottomSheet(false);
     }
-    if (isDraftLoading) {
-      return (
-        <CustomLoader
-          size={36}
-          label="Загружаем черновик"
-          className={styles.loader}
-        />
-      );
-    }
-    return (
-      <div
-        className={classNames(
-          styles.stepsWrapper,
-          styles[`slide${openedStep}`]
-        )}
-      >
-        <div className={styles.step}>
-          <FirstStep />
-        </div>
-        <div className={styles.step}>
-          <SecondStep />
-        </div>
-        <div className={styles.step}>
-          <ThirdStep />
-        </div>
-        <div className={styles.step}>
-          <FourthStep />
-        </div>
-      </div>
-    );
-  }, [isDraftLoading, isPublishing, openedStep]);
+  }, [isDraftLoading]);
+
+  // const content = useMemo(() => {
+  //   if (isPublishing) {
+  //     return (
+  //       <CustomLoader
+  //         size={36}
+  //         label="Создаем объявление"
+  //         className={styles.loader}
+  //       />
+  //     );
+  //   }
+  // }, [isPublishing, openedStep]);
 
   return (
     <CustomBottomSheet
@@ -87,7 +72,50 @@ export default function AddAdForm() {
       closeIcon={false}
       disableScrollX
     >
-      {content}
+      <SwitchTransition mode="out-in">
+        <CSSTransition
+          key={!showBottomSheet ? "loader" : "content"}
+          timeout={300}
+          classNames={{
+            enter: styles.fadeEnter,
+            enterActive: styles.fadeEnterActive,
+            exit: styles.fadeExit,
+            exitActive: classNames(styles.fadeExitActive),
+          }}
+        >
+          {!showBottomSheet ? (
+            <div className={styles.loaderWrapper}>
+              <CustomLoader
+                size={36}
+                label="Загружаем черновик"
+                successLabel="Черновик загружен"
+                className={styles.loader}
+                loading={isDraftLoading}
+              />
+            </div>
+          ) : (
+            <div
+              className={classNames(
+                styles.stepsWrapper,
+                styles[`slide${openedStep}`]
+              )}
+            >
+              <div className={styles.step}>
+                <FirstStep />
+              </div>
+              <div className={styles.step}>
+                <SecondStep />
+              </div>
+              <div className={styles.step}>
+                <ThirdStep />
+              </div>
+              <div className={styles.step}>
+                <FourthStep />
+              </div>
+            </div>
+          )}
+        </CSSTransition>
+      </SwitchTransition>
     </CustomBottomSheet>
   );
 }

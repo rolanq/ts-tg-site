@@ -1,5 +1,4 @@
 "use client";
-import { IAdvertisement } from "@/app/db/db";
 import { CustomBottomSheet } from "@/app/shared/kit/CustomBottomSheet/CustomBottomSheet";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import React, { useContext, useEffect, useMemo, useState } from "react";
@@ -7,9 +6,6 @@ import { ImageContainer } from "../ImageContainer/ImageContainer";
 import CustomSlider from "@/app/shared/kit/CustomSlider/CustomSlider";
 import styles from "./Ad.module.css";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
-import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
-import classNames from "classnames";
-import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 import {
   TELEGRAM_API_URL,
   TELEGRAM_FILE_API_URL,
@@ -34,8 +30,9 @@ interface Video {
 
 export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
   const { user } = useTelegram();
-  const { openedAd, setOpenedAd, openedAdLoading, setOpenedAdLoading } =
-    useContext(isUsersAds ? UsersAdsContext : AllAdsContext);
+  const { openedAd, setOpenedAd, setOpenedAdLoading } = useContext(
+    isUsersAds ? UsersAdsContext : AllAdsContext
+  );
   const [images, setImages] = useState<Image[]>([]);
   const [video, setVideo] = useState<Video | null>(null);
   const [hideAdOpen, setHideAdOpen] = useState(false);
@@ -150,11 +147,14 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
         disableDragClose
         footer={
           isOwner && openedAd?.isActive ? (
-            <FooterButtons isUsersAds={isUsersAds} setHideAdOpen={setHideAdOpen} />
+            <FooterButtons
+              isUsersAds={isUsersAds}
+              setHideAdOpen={setHideAdOpen}
+            />
           ) : undefined
         }
       >
-        {openedAd && !openedAdLoading ? (
+        {openedAd && (
           <div className={styles.adContainer}>
             <div className={styles.imagesContainer}>
               <CustomSlider items={renderItems} />
@@ -253,10 +253,6 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
                 </CustomTyphography>
               </div>
             </div>
-          </div>
-        ) : (
-          <div className={styles.loaderWrapper}>
-            <CustomLoader size={36} label="Обновляем информацию" />
           </div>
         )}
       </CustomBottomSheet>

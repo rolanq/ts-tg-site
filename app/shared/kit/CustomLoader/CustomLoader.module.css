@@ -7,12 +7,20 @@
 }
 
 .loader {
-  border: 3px solid var(--color-dark);
-  border-bottom-color: transparent;
+  color: var(--color-dark);
   border-radius: 50%;
-  display: inline-block;
   box-sizing: border-box;
-  animation: rotation 1s linear infinite;
+  animation: rotation 0.65s linear infinite;
+  height: 48px;
+  width: 48px;
+}
+
+.loaderEnter {
+  opacity: 0;
+}
+
+.loaderEnterActive {
+  opacity: 1;
 }
 
 @keyframes rotation {
@@ -20,6 +28,47 @@
     transform: rotate(0deg);
   }
   100% {
-    transform: rotate(360deg);
+    transform: rotate(-360deg);
   }
+}
+
+/* Анимация скрытия лоадера */
+.loaderExit {
+  opacity: 1;
+}
+
+.loaderExitActive {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 300ms ease-in-out;
+}
+
+/* Done icon */
+.doneIcon {
+  color: var(--color-dark);
+  width: 48px;
+  height: 48px;
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: doneDraw 0.7s ease-out forwards;
+  transition: stroke-dashoffset 0.7s ease-out;
+}
+
+/* Отрисовка галочки */
+@keyframes doneDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.label {
+  max-width: 100px;
+}
+
+.loaderWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 }
