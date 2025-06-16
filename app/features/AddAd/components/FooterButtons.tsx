@@ -8,7 +8,6 @@ import { isAvailableToPublish } from "./utils";
 import { sendPhotos, sendVideo } from "@/app/services/ClientTelegram";
 import { updateDraft } from "@/app/services/Draft";
 import { publishAd } from "@/app/services/Ads";
-import toast from "react-hot-toast";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 export const FooterButtons = () => {
@@ -53,7 +52,6 @@ export const FooterButtons = () => {
       if (newAd.id) {
         setIsPublishing(false);
         setOpenedStep(0);
-        toast.success("Объявление успешно создано", { duration: 3000 });
       }
     });
   }, [preparedPhotos, preparedVideo, preparedData]);

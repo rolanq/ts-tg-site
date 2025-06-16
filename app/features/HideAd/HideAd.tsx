@@ -6,7 +6,6 @@ import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
 import React, { useContext } from "react";
-import toast from "react-hot-toast";
 import styles from "./HideAd.module.css";
 
 interface HideAdProps {
@@ -34,7 +33,6 @@ export default function HideAd({ open, onDismiss, isUsersAds }: HideAdProps) {
       );
       setOpenedAd(ad);
       setOpenedAdLoading(false);
-      toast.success("Объявление успешно скрыто", { duration: 3000 });
     });
   };
 
