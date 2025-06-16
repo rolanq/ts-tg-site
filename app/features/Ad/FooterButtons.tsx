@@ -67,6 +67,14 @@ export default function FooterButtons({
   }, [openedAdLoading]);
 
   const content = useMemo(() => {
+    if (!openedAd?.isActive) {
+      return (
+        <CustomButton stretched padding="medium" disabled>
+          Объявление снято с продажи
+        </CustomButton>
+      );
+    }
+
     if (isOwner) {
       return (
         <CustomFlex gap="10px">
@@ -104,7 +112,7 @@ export default function FooterButtons({
         </CustomFlex>
       </CustomFlex>
     );
-  }, [isOwner]);
+  }, [isOwner, openedAd]);
 
   return (
     <SwitchTransition mode="out-in">

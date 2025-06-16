@@ -20,6 +20,7 @@ import { CustomInput } from "@/app/shared/kit/CustomInput/CustomInput";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 import { AddAdContext } from "@/app/context/AddAdContext";
+import FooterButtons from "./FooterButtons";
 
 interface SavedSearchProps {
   open: boolean;
@@ -143,20 +144,14 @@ export default function SavedSearch({ open, onDismiss }: SavedSearchProps) {
       onDismiss={onDismiss}
       snap={60}
       closeIcon={false}
+      footerWithoutBoxShadow
       footer={
-        <CustomFlex justify="center" gap="10px">
-          <CustomButton
-            variant="secondary"
-            stretched
-            padding="small"
-            onClick={onDismiss}
-          >
-            Закрыть
-          </CustomButton>
-          <CustomButton stretched padding="small" onClick={handleSave}>
-            Сохранить
-          </CustomButton>
-        </CustomFlex>
+        <FooterButtons
+          onDismiss={onDismiss}
+          handleSave={handleSave}
+          isLoading={!isShowContent}
+          isUpdating={isUpdating}
+        />
       }
     >
       <SwitchTransition mode="out-in">
