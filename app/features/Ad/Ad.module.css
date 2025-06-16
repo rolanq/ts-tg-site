@@ -107,3 +107,11 @@
   transform: translateY(10px);
   transition: all 300ms ease;
 }
+
+.info {
+  flex: 1;
+}
+
+.mainContent {
+  flex: 2;
+}

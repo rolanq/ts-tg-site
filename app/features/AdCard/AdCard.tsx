@@ -17,15 +17,42 @@ interface AdCardProps {
   imageUrl?: string;
 }
 
-export default function AdCard({ ad, onClick, imageUrl }: AdCardProps) {
+export default function AdCard({ ad, onClick }: AdCardProps) {
+  const [imageUrl, setImageUrl] = useState<string | undefined>();
+
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     onClick();
   };
 
+  useEffect(() => {
+    async function fetchImageUrl() {
+      try {
+        if (!ad.photos[0]) return;
+
+        const fileInfo = await fetch(
+          `${TELEGRAM_API_URL}/getFile?file_id=${ad.photos[0]}`
+        );
+        const fileData = await fileInfo.json();
+
+        if (!fileData.ok) {
+          console.error("Ошибка получения информации о файле:", fileData);
+          return;
+        }
+
+        const filePath = fileData.result.file_path;
+        setImageUrl(`${TELEGRAM_FILE_API_URL}/${filePath}`);
+      } catch (error) {
+        console.error("Ошибка при загрузке изображения:", error);
+      }
+    }
+
+    fetchImageUrl();
+  }, [ad]);
+
   return (
     <button className={styles.card} onClick={handleClick}>
-      <CustomFlex gap="10px">
+      <CustomFlex gap="10px" className={styles.cardContainer}>
         <ImageContainer image={imageUrl} />
         <CustomFlex justify="space-between" className={styles.cardBody}>
           <CustomFlex direction="column" justify="space-between">
@@ -54,11 +81,13 @@ export default function AdCard({ ad, onClick, imageUrl }: AdCardProps) {
               <Badges ad={ad} size="small" />
             </div>
           </CustomFlex>
-          {ad.updatedAt && (
-            <CustomTyphography color="gray" fontSize="14px">
-              {new Date(ad.updatedAt).toLocaleDateString()}
-            </CustomTyphography>
-          )}
+          <div className={styles.date}>
+            {ad.createdAt && (
+              <CustomTyphography color="gray" fontSize="14px">
+                {new Date(ad.createdAt).toLocaleDateString()}
+              </CustomTyphography>
+            )}
+          </div>
         </CustomFlex>
       </CustomFlex>
     </button>

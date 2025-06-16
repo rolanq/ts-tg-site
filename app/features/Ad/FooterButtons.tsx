@@ -69,25 +69,27 @@ export default function FooterButtons({
 
   return openedAd ? (
     <>
-      <CustomFlex direction="row" gap="10px">
-        <CustomButton
-          onClick={handleMessage}
-          className={classNames(styles.footerButtons, styles.messageButton)}
-          stretched
-          padding="medium"
-        >
-          Написать
-        </CustomButton>
-        {openedAd?.phoneNumber && (
+      <CustomFlex direction="column" gap="10px">
+        <CustomFlex direction="row" gap="10px">
           <CustomButton
-            onClick={handleCall}
-            className={classNames(styles.footerButtons, styles.callButton)}
+            onClick={handleMessage}
+            className={classNames(styles.footerButtons, styles.messageButton)}
             stretched
             padding="medium"
           >
-            Позвонить
+            Написать
           </CustomButton>
-        )}
+          {openedAd?.phoneNumber && (
+            <CustomButton
+              onClick={handleCall}
+              className={classNames(styles.footerButtons, styles.callButton)}
+              stretched
+              padding="medium"
+            >
+              Позвонить
+            </CustomButton>
+          )}
+        </CustomFlex>
       </CustomFlex>
     </>
   ) : undefined;

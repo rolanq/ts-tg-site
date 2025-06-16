@@ -116,7 +116,7 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
   }, [images]);
 
   const renderVideo = useMemo(() => {
-    if (!openedAd?.video) return null;
+    if (!video) return null;
 
     return (
       <div className={styles.imageContainer}>
@@ -129,14 +129,14 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
         />
       </div>
     );
-  }, [openedAd]);
+  }, [video]);
 
   const renderItems = useMemo(() => {
-    if (openedAd?.video) {
+    if (renderVideo) {
       return [renderVideo, ...renderImages];
     }
     return renderImages;
-  }, [openedAd, renderImages, renderVideo]);
+  }, [renderImages, renderVideo]);
 
   return (
     <>
@@ -146,7 +146,7 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
         snap={95}
         disableDragClose
         footer={
-          isOwner && openedAd?.isActive ? (
+          openedAd?.isActive ? (
             <FooterButtons
               isUsersAds={isUsersAds}
               setHideAdOpen={setHideAdOpen}
@@ -163,13 +163,49 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
               <div className={styles.badgesContainer}>
                 <Badges ad={openedAd} />
               </div>
-              <CustomFlex direction="column" gap="10px">
-                <CustomTyphography fontSize="20px" fontWeight="bold">
+              <CustomFlex direction="row" justify="space-between">
+                <CustomTyphography
+                  fontSize="20px"
+                  fontWeight="bold"
+                  className={styles.mainContent}
+                >
                   {openedAd?.Brand?.name} {openedAd?.CarModel?.name},&nbsp;
                   {openedAd?.year} г.
                 </CustomTyphography>
+                <CustomFlex
+                  direction="column"
+                  align="end"
+                  className={styles.info}
+                >
+                  {openedAd?.createdAt && (
+                    <CustomTyphography
+                      fontSize="16px"
+                      fontWeight="medium"
+                      color="gray"
+                    >
+                      {new Date(openedAd?.createdAt).toLocaleDateString()}
+                    </CustomTyphography>
+                  )}
+                  <CustomTyphography
+                    fontSize="16px"
+                    fontWeight="medium"
+                    color="gray"
+                  >
+                    ID {openedAd?.id}
+                  </CustomTyphography>
+                </CustomFlex>
               </CustomFlex>
               <div className={styles.adInfoGrid}>
+                <CustomTyphography
+                  fontSize="16px"
+                  fontWeight="medium"
+                  color="gray"
+                >
+                  Цена
+                </CustomTyphography>
+                <CustomTyphography fontSize="16px" fontWeight="medium">
+                  {openedAd?.price} ₽
+                </CustomTyphography>
                 <CustomTyphography
                   fontSize="16px"
                   fontWeight="medium"
