@@ -12,8 +12,8 @@ type Media = {
 export const sendPhotos = async (files: File[]) => {
   const mediaGroupPromises = files.map(async (photo) => {
     const formData = new FormData();
-    const watermarkedPhoto = await addWatermark(photo);
-    formData.append("photo", watermarkedPhoto);
+    // const watermarkedPhoto = await addWatermark(photo);
+    formData.append("photo", photo);
     formData.append("chat_id", process.env.NEXT_PUBLIC_PHOTOS_CHANNEL_ID!);
 
     const response = await fetch(`${TELEGRAM_API_URL}/sendPhoto`, {
