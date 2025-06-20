@@ -55,18 +55,22 @@ export const CustomBottomSheet: FC<IProps> = ({
     const handleClick = (event: Event) => {
       event.stopPropagation();
       event.preventDefault();
+
+      if (!disableDismiss) {
+        onDismiss();
+      }
     };
 
     if (overlay) {
-      overlay.addEventListener("click", handleClick);
+      overlay.addEventListener("click", handleClick, { capture: true });
     }
 
     return () => {
       if (overlay) {
-        overlay.removeEventListener("click", handleClick);
+        overlay.removeEventListener("click", handleClick, { capture: true });
       }
     };
-  }, []);
+  }, [onDismiss, disableDismiss]);
 
   if (viewportHeight === 0) {
     return null;
@@ -85,7 +89,7 @@ export const CustomBottomSheet: FC<IProps> = ({
       snapPoints={() => [(viewportHeight / 100) * snap]}
       maxHeight={(viewportHeight / 100) * snap}
       open={open}
-      onDismiss={onDismiss}
+      onDismiss={() => {}}
       onSpringEnd={onSpringEnd}
     >
       {closeIcon && (
