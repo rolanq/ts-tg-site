@@ -5,9 +5,13 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AddAdContext } from "../../../context/AddAdContext";
 import styles from "./commonSteps.module.css";
 import { isAvailableToPublish } from "./utils";
-import { sendPhotos, sendVideo } from "@/app/services/ClientTelegram";
+import {
+  sendAdToChannel,
+  sendPhotos,
+  sendVideo,
+} from "@/app/services/ClientTelegram";
 import { updateDraft } from "@/app/services/Draft";
-import { publishAd } from "@/app/services/Ads";
+import { publishAd, updateAd } from "@/app/services/Ads";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { AllAdsContext } from "@/app/context/AllAdsContext";
 import { UsersAdsContext } from "@/app/context/UsersAdsContext";
@@ -42,23 +46,33 @@ export const FooterButtons = () => {
     const photosIds = await sendPhotos(filteredPhotos);
 
     const isVideoAlreadyUploaded = preparedVideo?.name.startsWith("https");
-    const videoId =
-      !isVideoAlreadyUploaded && preparedVideo
-        ? await sendVideo(preparedVideo)
-        : preparedData.video;
 
-    updateDraft(Number(preparedData.userId), {
+    const videoId = isVideoAlreadyUploaded
+      ? preparedData.video
+      : preparedVideo
+      ? await sendVideo(preparedVideo)
+      : null;
+
+    await updateDraft(Number(preparedData.userId), {
       ...preparedData,
       photos: photosIds,
       video: videoId,
-    }).then(async () => {
-      const newAd = await publishAd(Number(preparedData.userId));
+    });
+
+    publishAd(Number(preparedData.userId)).then(async (newAd) => {
+      const messageId = await sendAdToChannel(newAd);
+
       if (newAd.id) {
-        setIsPublishing(false);
-        setOpenedStep(0);
-        refetchAds();
-        refetchUsersAds();
+        await updateAd(newAd.id, {
+          ...newAd,
+          channelMessageId: messageId,
+        });
       }
+
+      setIsPublishing(false);
+      setOpenedStep(0);
+      refetchAds();
+      refetchUsersAds();
     });
   }, [
     preparedPhotos,
@@ -66,6 +80,8 @@ export const FooterButtons = () => {
     preparedData,
     refetchAds,
     refetchUsersAds,
+    setIsPublishing,
+    setOpenedStep,
   ]);
 
   useEffect(() => {

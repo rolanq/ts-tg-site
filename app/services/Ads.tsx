@@ -74,13 +74,21 @@ export const publishAd = async (userId: number) => {
     throw new Error("Draft not found");
   }
 
-  const newAd = await Advertisement.create({
+  await Advertisement.create({
     ...draft.toJSON(),
     id: newAdId,
     userId: String(userId),
     createdAt: new Date(),
     updatedAt: new Date(),
   });
+
+  const newAd = await Advertisement.findByPk(newAdId, {
+    include: [Brand, CarModel, Region],
+  });
+
+  if (!newAd) {
+    throw new Error("New ad not found");
+  }
 
   await draft.destroy();
 

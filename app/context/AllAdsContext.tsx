@@ -1,15 +1,7 @@
 "use client";
 import { IAdvertisement, ISavedSearch } from "../db/db";
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { getAllAds } from "../services/Ads";
-import { getAdvertismentWhereCondition } from "../shared/utils/utils";
 import { useTelegram } from "../shared/hooks/useTelegram";
 import { getSavedSearch } from "../services/SavedSearch";
 import { IContextAds } from "./defaulContext";

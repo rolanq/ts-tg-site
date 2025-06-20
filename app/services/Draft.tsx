@@ -3,7 +3,7 @@
 import { AdvertisementDraft, IAdvertisementDraft } from "../db/db";
 import { DEFAULT_AD_DRAFT } from "../shared/constants/telegram";
 
-export const getDraft = async (userId: number) => {
+export const getDraft = async (userId: number, telegramUsername?: string) => {
   const draft = await AdvertisementDraft.findOne({
     where: {
       userId: String(userId),
@@ -14,6 +14,7 @@ export const getDraft = async (userId: number) => {
     const newDraft = await AdvertisementDraft.create({
       ...DEFAULT_AD_DRAFT,
       userId: String(userId),
+      telegramUsername,
     });
 
     return newDraft.toJSON() as IAdvertisementDraft;

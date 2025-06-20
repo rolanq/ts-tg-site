@@ -1,12 +1,5 @@
-import { IAdvertisement, ISavedSearch } from "../db/db";
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { IAdvertisement } from "../db/db";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { useTelegram } from "../shared/hooks/useTelegram";
 import { getAds } from "../services/Ads";
 import { defaultContext, IContextAds } from "./defaulContext";

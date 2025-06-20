@@ -11,6 +11,7 @@ import { updateAd } from "@/app/services/Ads";
 import { AllAdsContext } from "@/app/context/AllAdsContext";
 import { UsersAdsContext } from "@/app/context/UsersAdsContext";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
+import { editAdInChannel } from "@/app/services/ClientTelegram";
 
 export default function FooterButtons({
   isUsersAds,
@@ -36,6 +37,9 @@ export default function FooterButtons({
       ...openedAd,
       isOnHold: !openedAd.isOnHold,
     }).then((ad) => {
+      if (ad.channelMessageId) {
+        editAdInChannel(ad);
+      }
       setAds((prev) =>
         prev.map((prevAd) => (prevAd.id === ad.id ? ad : prevAd))
       );

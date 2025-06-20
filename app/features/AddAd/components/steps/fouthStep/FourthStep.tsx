@@ -1,6 +1,6 @@
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
-import React, { useRef, useContext } from "react";
+import React, { useRef, useContext, useState } from "react";
 import commonStyles from "../../commonSteps.module.css";
 import styles from "./FourthStep.module.css";
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
@@ -11,6 +11,7 @@ import { AddAdContext } from "../../../../../context/AddAdContext";
 export const FourthStep = () => {
   const { preparedVideo, setPreparedVideo, preparedPhotos, setPreparedPhotos } =
     useContext(AddAdContext);
+  const [videoError, setVideoError] = useState(false);
   const photoInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddPhoto = () => {
@@ -25,7 +26,12 @@ export const FourthStep = () => {
     if (files) {
       const isVideo = files.item(0)?.type.startsWith("video");
       if (isVideo) {
-        setPreparedVideo(files.item(0) as File);
+        const file = files.item(0) as File;
+        if (file.size > 5 * 1024 * 1024) {
+          setVideoError(true);
+          return;
+        }
+        setPreparedVideo(file);
         return;
       } else {
         setPreparedPhotos((prev) => {
@@ -78,9 +84,11 @@ export const FourthStep = () => {
                   <CustomTyphography
                     fontSize="14px"
                     fontWeight="light"
-                    color="gray"
+                    color={videoError ? "red" : "gray"}
                   >
-                    Не более 1 видео
+                    {videoError
+                      ? "Размер видео не должен превышать 5 МБ"
+                      : "Не более 1 видео, не более 5 МБ"}
                   </CustomTyphography>
                   {preparedVideo && (
                     <AddedVideo

@@ -9,7 +9,8 @@ const defaultUser: TelegramUser = {
   username: "rolan_oyun",
   is_bot: false,
   is_premium: false,
-  photo_url: "https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png",
+  photo_url:
+    "https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png",
 };
 
 const isTelegramWebAppInitialized = () => {

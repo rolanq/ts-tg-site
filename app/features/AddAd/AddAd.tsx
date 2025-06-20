@@ -30,7 +30,7 @@ export const AddAd = () => {
   const handleOpenAddAd = useCallback(() => {
     setIsDraftLoading(true);
     if (user?.id) {
-      getDraft(user.id)
+      getDraft(user.id, user.username)
         .then((draft) => {
           setPreparedData(draft);
         })
