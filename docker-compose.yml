@@ -41,8 +41,6 @@ services:
       - WEBHOOK_URL=https://vkasanie.com/api/webhook
     depends_on:
       - app
-    networks:
-      - app-network
 
 volumes:
   postgres_data:
