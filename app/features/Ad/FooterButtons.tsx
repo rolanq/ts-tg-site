@@ -20,10 +20,14 @@ export default function FooterButtons({
   setHideAdOpen: (open: boolean) => void;
 }) {
   const { user } = useTelegram();
-  const { openedAd, setAds, setOpenedAd, openedAdLoading, setOpenedAdLoading } =
-    useContext(isUsersAds ? UsersAdsContext : AllAdsContext);
-  const { refetch: refetchAds } = useContext(AllAdsContext);
-  const { refetch: refetchUsersAds } = useContext(UsersAdsContext);
+  const {
+    openedAd,
+    setAds,
+    setOpenedAd,
+    openedAdLoading,
+    setOpenedAdLoading,
+    refetch,
+  } = useContext(isUsersAds ? UsersAdsContext : AllAdsContext);
   const [isShowButtons, setIsShowButtons] = useState(false);
 
   const isOwner = openedAd?.userId === String(user?.id);
@@ -44,8 +48,7 @@ export default function FooterButtons({
       );
       setOpenedAd(ad);
       setOpenedAdLoading(false);
-      refetchAds();
-      refetchUsersAds();
+      refetch();
     });
   };
 

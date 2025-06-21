@@ -1,3 +1,9 @@
+.sliderContainer {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
 .slider {
   display: flex;
   overflow-x: auto;
@@ -7,10 +13,43 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
   width: 100vw;
+  scroll-snap-stop: always;
+}
+
+.slider::-webkit-scrollbar {
+  display: none;
 }
 
 .item {
   flex: 0 0 100%;
   scroll-snap-align: start;
   width: 100vw;
+  user-select: none;
+}
+
+.indicators {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  position: absolute;
+  bottom: 16px;
+  left: 0;
+  right: 0;
+  z-index: 999;
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.indicatorActive {
+  background: rgba(255, 255, 255, 0.9);
 }

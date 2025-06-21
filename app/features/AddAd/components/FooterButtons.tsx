@@ -13,9 +13,6 @@ import {
 import { updateDraft } from "@/app/services/Draft";
 import { publishAd, updateAd } from "@/app/services/Ads";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import { AllAdsContext } from "@/app/context/AllAdsContext";
-import { UsersAdsContext } from "@/app/context/UsersAdsContext";
-import { SearchAdsContext } from "@/app/context/SearchAdsContext";
 import { usePathname } from "next/navigation";
 
 export const FooterButtons = () => {
