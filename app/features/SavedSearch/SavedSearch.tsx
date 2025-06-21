@@ -49,41 +49,41 @@ export default function SavedSearch({ open, onDismiss }: SavedSearchProps) {
     };
   }, [regions, brands]);
 
-  const handleRegionChange = useCallback((value: string) => {
-    if (!user?.id) {
-      return;
-    }
+  const handleRegionChange = useCallback(
+    (value: string) => {
+      console.log(value);
 
-    setSavedSearch((prev) => ({
-      ...prev,
-      regionId: Number(value),
-    }));
-  }, []);
+      setSavedSearch((prev) => ({
+        ...prev,
+        regionId: Number(value),
+      }));
+    },
+    [user?.id, setSavedSearch]
+  );
 
-  const handleBrandChange = useCallback((value: string) => {
-    if (!user?.id) {
-      return;
-    }
-
-    setSavedSearch((prev) => ({
-      ...prev,
-      brandId: Number(value),
-    }));
-  }, []);
+  const handleBrandChange = useCallback(
+    (value: string) => {
+      setSavedSearch((prev) => ({
+        ...prev,
+        brandId: Number(value),
+      }));
+    },
+    [user?.id, setSavedSearch]
+  );
 
   const handleResetRegion = useCallback(() => {
     setSavedSearch((prev) => ({
       ...prev,
       regionId: null,
     }));
-  }, []);
+  }, [setSavedSearch]);
 
   const handleResetBrand = useCallback(() => {
     setSavedSearch((prev) => ({
       ...prev,
       brandId: null,
     }));
-  }, []);
+  }, [setSavedSearch]);
 
   const handlePriceFromChange = useCallback((value: string) => {
     setSavedSearch((prev) => ({
