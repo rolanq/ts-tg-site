@@ -52,10 +52,6 @@ export const UsersAdsProvider = ({
         setIsAdOpen,
         refetch: refetchAds,
 
-        includeFilters: false,
-        setIncludeFilters: () => {},
-        savedSearch: undefined,
-        setSavedSearch: () => {},
       }}
     >
       {children}
