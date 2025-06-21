@@ -1,6 +1,8 @@
 FROM alpine:latest
 
-RUN apk add --no-cache curl
+# Меняем репозиторий на зеркало Яндекса
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirror.yandex.ru\/mirrors/g' /etc/apk/repositories \
+    && apk add --no-cache curl
 
 COPY scripts/setup-webhook.sh /setup-webhook.sh
 RUN chmod +x /setup-webhook.sh
