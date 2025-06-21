@@ -1,6 +1,4 @@
 "use client";
-
-import { IAdvertisement } from "@/app/db/db";
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import classNames from "classnames";
@@ -12,6 +10,7 @@ import { AllAdsContext } from "@/app/context/AllAdsContext";
 import { UsersAdsContext } from "@/app/context/UsersAdsContext";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { editAdInChannel } from "@/app/services/ClientTelegram";
+import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
 
 export default function FooterButtons({
   isUsersAds,
@@ -79,7 +78,20 @@ export default function FooterButtons({
       );
     }
 
-    if (isOwner) {
+    if (isOwner && !isUsersAds) {
+      return (
+        <CustomTyphography
+          fontSize="16px"
+          fontWeight="light"
+          color="gray"
+          textAlign="center"
+        >
+          Это ваше объявление, управлять им можно через ваш профиль
+        </CustomTyphography>
+      );
+    }
+
+    if (isOwner && isUsersAds) {
       return (
         <CustomFlex gap="10px">
           <CustomButton onClick={handleOnHold} stretched padding="small">

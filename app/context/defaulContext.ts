@@ -12,10 +12,6 @@ export interface IContextAds {
   setOpenedAdLoading: Dispatch<SetStateAction<boolean>>;
   isAdOpen: boolean;
   setIsAdOpen: Dispatch<SetStateAction<boolean>>;
-  includeFilters: boolean;
-  setIncludeFilters: Dispatch<SetStateAction<boolean>>;
-  savedSearch: Partial<ISavedSearch> | undefined;
-  setSavedSearch: Dispatch<SetStateAction<Partial<ISavedSearch> | undefined>>;
 
   refetch: () => void;
 }
@@ -31,10 +27,6 @@ export const defaultContext: IContextAds = {
   setOpenedAdLoading: () => {},
   isAdOpen: false,
   setIsAdOpen: () => {},
-  includeFilters: false,
-  setIncludeFilters: () => {},
-  savedSearch: undefined,
-  setSavedSearch: () => {},
 
   refetch: () => {},
 };

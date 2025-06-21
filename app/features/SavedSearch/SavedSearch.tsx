@@ -10,17 +10,15 @@ import React, {
 } from "react";
 import styles from "./SavedSearch.module.css";
 import { CustomSelect } from "@/app/shared/kit/CustomSelect/CustomSelect";
-import { IBrand, IRegion, ISavedSearch } from "@/app/db/db";
-import { loadBrandsAndRegions } from "@/app/services/GetBrands";
 import { getSavedSearch, updateSavedSearch } from "@/app/services/SavedSearch";
 import { useTelegram } from "@/app/shared/hooks/useTelegram";
-import { AllAdsContext } from "@/app/context/AllAdsContext";
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
 import { CustomInput } from "@/app/shared/kit/CustomInput/CustomInput";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 import { AddAdContext } from "@/app/context/AddAdContext";
 import FooterButtons from "./FooterButtons";
+import { SearchAdsContext } from "@/app/context/SearchAdsContext";
 
 interface SavedSearchProps {
   open: boolean;
@@ -29,7 +27,7 @@ interface SavedSearchProps {
 
 export default function SavedSearch({ open, onDismiss }: SavedSearchProps) {
   const { user } = useTelegram();
-  const { refetch, savedSearch, setSavedSearch } = useContext(AllAdsContext);
+  const { refetch, savedSearch, setSavedSearch } = useContext(SearchAdsContext);
   const { regions, brands } = useContext(AddAdContext);
 
   const [isShowContent, setIsShowContent] = useState(false);
@@ -51,8 +49,6 @@ export default function SavedSearch({ open, onDismiss }: SavedSearchProps) {
 
   const handleRegionChange = useCallback(
     (value: string) => {
-      console.log(value);
-
       setSavedSearch((prev) => ({
         ...prev,
         regionId: Number(value),

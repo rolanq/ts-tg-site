@@ -1,11 +1,11 @@
 import Layout from "@/app/features/Layout/Layout";
 import React from "react";
-import AdsList from "../features/AdsList/AdsList";
+import SearchAdsList from "../features/SearchAdsList/SearchAdsList";
 
 export default function Ads() {
   return (
     <Layout>
-      <AdsList withSearch />
+      <SearchAdsList />
     </Layout>
   );
 }

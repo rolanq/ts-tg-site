@@ -15,8 +15,11 @@ import { publishAd, updateAd } from "@/app/services/Ads";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { AllAdsContext } from "@/app/context/AllAdsContext";
 import { UsersAdsContext } from "@/app/context/UsersAdsContext";
+import { SearchAdsContext } from "@/app/context/SearchAdsContext";
+import { usePathname } from "next/navigation";
 
 export const FooterButtons = () => {
+  const pathname = usePathname();
   const {
     openedStep,
     setOpenedStep,
@@ -31,12 +34,23 @@ export const FooterButtons = () => {
   } = useContext(AddAdContext);
   const { refetch: refetchAds } = useContext(AllAdsContext);
   const { refetch: refetchUsersAds } = useContext(UsersAdsContext);
+  const { refetch: refetchSearchAds } = useContext(SearchAdsContext);
   const [isPublishDisabled, setIsPublishDisabled] = useState(true);
   const [isShowButtons, setIsShowButtons] = useState(false);
 
   const handleBackStep = () => {
     setOpenedStep((prev) => prev - 1);
   };
+
+  const refetch = useCallback(() => {
+    if (pathname === "/ads") {
+      refetchSearchAds();
+    } else if (pathname === "/profile") {
+      refetchUsersAds();
+    } else {
+      refetchAds();
+    }
+  }, [refetchAds, refetchUsersAds, refetchSearchAds, pathname]);
 
   const handlePublish = useCallback(async () => {
     setIsPublishing(true);
@@ -71,8 +85,7 @@ export const FooterButtons = () => {
 
       setIsPublishing(false);
       setOpenedStep(0);
-      refetchAds();
-      refetchUsersAds();
+      refetch();
     });
   }, [
     preparedPhotos,
@@ -82,6 +95,7 @@ export const FooterButtons = () => {
     refetchUsersAds,
     setIsPublishing,
     setOpenedStep,
+    refetch,
   ]);
 
   useEffect(() => {
