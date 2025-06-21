@@ -18,7 +18,7 @@ const isTelegramWebAppInitialized = () => {
 };
 
 export const useTelegram = () => {
-  const [user, setUser] = useState<TelegramUser | null>(defaultUser);
+  const [user, setUser] = useState<TelegramUser | null>(null);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {

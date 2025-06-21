@@ -9,6 +9,7 @@ import {
   Region,
 } from "@/app/db/db";
 import {
+  clearNull,
   convertDraftToAd,
   getAdvertismentWhereCondition,
 } from "../shared/utils/utils";
@@ -35,9 +36,11 @@ export const getAllAds = async () => {
 
 export const getAdsBySavedSearch = async (search: ISavedSearch) => {
   const where = getAdvertismentWhereCondition(search);
+  const clearedWhere = clearNull(where);
+
   const advertisements = await Advertisement.findAll({
     where: {
-      ...where,
+      ...clearedWhere,
       isActive: true,
     },
     include: [Brand, CarModel, Region],

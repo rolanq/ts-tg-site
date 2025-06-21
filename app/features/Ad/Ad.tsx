@@ -1,7 +1,13 @@
 "use client";
 import { CustomBottomSheet } from "@/app/shared/kit/CustomBottomSheet/CustomBottomSheet";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  useCallback,
+} from "react";
 import { ImageContainer } from "../ImageContainer/ImageContainer";
 import CustomSlider from "@/app/shared/kit/CustomSlider/CustomSlider";
 import styles from "./Ad.module.css";
@@ -31,79 +37,109 @@ interface Video {
   file_id: string;
 }
 
+const getFileUrl = async (fileId: string): Promise<string> => {
+  try {
+    const response = await fetch(
+      `${TELEGRAM_API_URL}/getFile?file_id=${fileId}`
+    );
+    const fileData = await response.json();
+
+    if (!fileData.ok) {
+      console.error("Ошибка получения информации о файле:", fileData);
+      return "";
+    }
+
+    return `${TELEGRAM_FILE_API_URL}/${fileData.result.file_path}`;
+  } catch (error) {
+    console.error("Ошибка при получении URL файла:", error);
+    return "";
+  }
+};
+
+const preloadImage = (url: string): Promise<void> => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve();
+    img.src = url;
+  });
+};
+
 export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
-  const { openedAd, setOpenedAd, openedAdLoading, setOpenedAdLoading, setIsAdOpen, isAdOpen } =
-    useContext(isUsersAds ? UsersAdsContext : AllAdsContext);
+  const {
+    openedAd,
+    setOpenedAd,
+    openedAdLoading,
+    setOpenedAdLoading,
+    setIsAdOpen,
+    isAdOpen,
+  } = useContext(isUsersAds ? UsersAdsContext : AllAdsContext);
   const [images, setImages] = useState<Image[]>([]);
   const [video, setVideo] = useState<Video | null>(null);
   const [hideAdOpen, setHideAdOpen] = useState(false);
 
   useEffect(() => {
     if (!openedAd) return;
-    let timeout: NodeJS.Timeout;
-    setOpenedAdLoading(true);
-    openedAd.photos.forEach((photo) => {
-      fetch(`${TELEGRAM_API_URL}/getFile?file_id=${photo}`)
-        .then((res) => res.json())
-        .then((fileData) => {
-          if (!fileData.ok) {
-            console.error("Ошибка получения информации о файле:", fileData);
-            return;
+
+    const loadMedia = async () => {
+      setOpenedAdLoading(true);
+      try {
+        // Загружаем все URL параллельно
+        const photoUrls = await Promise.all(openedAd.photos.map(getFileUrl));
+
+        // Создаем массив изображений
+        const newImages = openedAd.photos
+          .map((photo, index) => ({
+            url: photoUrls[index],
+            file_id: photo,
+          }))
+          .filter((img) => img.url);
+
+        // Предзагружаем все изображения
+        await Promise.all(newImages.map((img) => preloadImage(img.url)));
+
+        setImages(newImages);
+
+        // Загружаем видео, если есть
+        if (openedAd.video) {
+          const videoUrl = await getFileUrl(openedAd.video);
+          if (videoUrl) {
+            setVideo({
+              url: videoUrl,
+              file_id: openedAd.video,
+            });
           }
-
-          const filePath = fileData.result.file_path;
-          setImages((prev) => [
-            ...prev,
-            {
-              url: `${TELEGRAM_FILE_API_URL}/${filePath}`,
-              file_id: photo,
-            },
-          ]);
-        });
-    });
-
-    if (openedAd.video) {
-      fetch(`${TELEGRAM_API_URL}/getFile?file_id=${openedAd.video}`)
-        .then((res) => res.json())
-        .then((fileData) => {
-          if (!fileData.ok) {
-            console.error("Ошибка получения информации о файле:", fileData);
-            return;
-          }
-
-          const filePath = fileData.result.file_path;
-          setVideo({
-            url: `${TELEGRAM_FILE_API_URL}/${filePath}`,
-            file_id: openedAd.video!,
-          });
-        });
-    }
-
-    timeout = setTimeout(() => {
-      setOpenedAdLoading(false);
-    }, 700);
-
-    return () => {
-      clearTimeout(timeout);
+        }
+      } catch (error) {
+        console.error("Ошибка при загрузке медиа:", error);
+      } finally {
+        setTimeout(() => {
+          setOpenedAdLoading(false);
+        }, 700);
+      }
     };
+
+    loadMedia();
   }, [openedAd]);
 
-  const onDismiss = () => {
+  const onDismiss = useCallback(() => {
     setIsAdOpen(false);
-  };
+  }, [setIsAdOpen]);
 
-  const onSpringEnd = (event: SpringEvent) => {
-    if (event.type === "CLOSE") {
-      setImages([]);
-      setOpenedAd(null);
-    }
-  };
+  const onSpringEnd = useCallback(
+    (event: SpringEvent) => {
+      if (event.type === "CLOSE") {
+        setImages([]);
+        setVideo(null);
+        setOpenedAd(null);
+      }
+    },
+    [setOpenedAd]
+  );
 
   const renderImages = useMemo(() => {
     return images.map((image) => (
-      <div className={styles.imageContainer}>
+      <div key={image.file_id} className={styles.imageContainer}>
         <ImageContainer
-          key={image.file_id}
           image={image.url}
           className={styles.image}
           width={300}
@@ -124,9 +160,9 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
     if (!video) return null;
 
     return (
-      <div className={styles.imageContainer}>
+      <div key={video.file_id} className={styles.imageContainer}>
         <video
-          src={video?.url}
+          src={video.url}
           controls
           className={styles.video}
           rel="preload"

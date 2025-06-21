@@ -2,9 +2,7 @@ import { IAdvertisement, IAdvertisementDraft, ISavedSearch } from "@/app/db/db";
 import { Op, WhereOptions } from "sequelize";
 
 export const getAdvertismentWhereCondition = (savedSearch: ISavedSearch) => {
-  const whereCondition: WhereOptions<IAdvertisement> = {
-    isActive: true,
-  };
+  const whereCondition: WhereOptions<IAdvertisement> = {};
 
   if (savedSearch.regionId) {
     whereCondition.regionId = savedSearch.regionId;
@@ -14,18 +12,18 @@ export const getAdvertismentWhereCondition = (savedSearch: ISavedSearch) => {
     whereCondition.brandId = savedSearch.brandId;
   }
 
-  if (
-    savedSearch.priceFrom !== undefined ||
-    savedSearch.priceTo !== undefined
-  ) {
+  const priceFrom = Number(savedSearch.priceFrom);
+  const priceTo = Number(savedSearch.priceTo);
+
+  if (!!priceFrom || !!priceTo) {
     const priceConditions = [];
 
-    if (savedSearch.priceFrom !== null) {
-      priceConditions.push({ [Op.gte]: Number(savedSearch.priceFrom) });
+    if (priceFrom) {
+      priceConditions.push({ [Op.gte]: priceFrom });
     }
 
-    if (savedSearch.priceTo !== null) {
-      priceConditions.push({ [Op.lte]: Number(savedSearch.priceTo) });
+    if (priceTo) {
+      priceConditions.push({ [Op.lte]: priceTo });
     }
 
     if (priceConditions.length > 0) {
@@ -52,4 +50,12 @@ export const convertDraftToAd = (
     hideReason: null,
     channelMessageId: null,
   } as IAdvertisement;
+};
+
+export const clearNull = (obj: any) => {
+  return Object.fromEntries(
+    Object.entries(obj).filter(
+      ([_, value]) => value !== null && value !== undefined && !value
+    )
+  );
 };
