@@ -30,6 +30,7 @@ export const useTelegram = () => {
       window.Telegram.WebApp.ready();
       window.Telegram.WebApp.bottomBarColor = "#ffffff";
       window.Telegram.WebApp.headerColor = "#ffffff";
+      window.Telegram.WebApp.expand();
 
       if (window.Telegram.WebApp.initDataUnsafe?.user) {
         setUser(window.Telegram.WebApp.initDataUnsafe.user);
