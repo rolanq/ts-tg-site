@@ -1,0 +1,8 @@
+FROM alpine:latest
+
+RUN apk add --no-cache curl
+
+COPY scripts/setup-webhook.sh /setup-webhook.sh
+RUN chmod +x /setup-webhook.sh
+
+CMD ["/setup-webhook.sh"] 

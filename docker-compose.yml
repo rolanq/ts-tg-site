@@ -30,5 +30,19 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  webhook-setup:
+    build:
+      context: .
+      dockerfile: Dockerfile.webhook
+    ports:
+      - "80:80"
+    environment:
+      - NEXT_PUBLIC_BOT_TOKEN=${BOT_TOKEN}
+      - WEBHOOK_URL=https://vkasanie.com/api/webhook
+    depends_on:
+      - app
+    networks:
+      - app-network
+
 volumes:
   postgres_data:
