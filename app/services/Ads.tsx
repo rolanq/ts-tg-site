@@ -5,14 +5,12 @@ import {
   Brand,
   CarModel,
   IAdvertisement,
-  initDatabase,
   ISavedSearch,
   Region,
 } from "@/app/db/db";
 import { getAdvertismentWhereCondition } from "../shared/utils/utils";
 
 export const getAds = async (userId: number) => {
-  await initDatabase();
   const ads = await Advertisement.findAll({
     where: {
       userId: String(userId),
@@ -23,8 +21,6 @@ export const getAds = async (userId: number) => {
 };
 
 export const getAllAds = async () => {
-  await initDatabase();
-
   const advertisements = await Advertisement.findAll({
     include: [Brand, CarModel, Region],
     where: {
@@ -35,7 +31,6 @@ export const getAllAds = async () => {
 };
 
 export const getAdsBySavedSearch = async (search: ISavedSearch) => {
-  await initDatabase();
   const where = getAdvertismentWhereCondition(search);
   const advertisements = await Advertisement.findAll({
     where: {
@@ -64,8 +59,6 @@ export const generateRandomIdForAdvertisement = async (): Promise<number> => {
 };
 
 export const publishAd = async (userId: number) => {
-  await initDatabase();
-
   const newAdId = await generateRandomIdForAdvertisement();
   const draft = await AdvertisementDraft.findOne({
     where: {
@@ -99,7 +92,6 @@ export const publishAd = async (userId: number) => {
 };
 
 export const updateAd = async (adId: number, data: IAdvertisement) => {
-  await initDatabase();
   const ad = await Advertisement.findByPk(adId);
   if (!ad) {
     throw new Error("Ad not found");

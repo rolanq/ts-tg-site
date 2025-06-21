@@ -41,3 +41,12 @@
 .notActiveIconButton svg {
   color: black;
 }
+
+.addButton {
+  background-color: var(--color-dark);
+}
+.addFotterItem {
+  flex: 1;
+  text-align: center;
+  padding: 8px 12px 12px;
+}

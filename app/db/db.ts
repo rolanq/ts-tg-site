@@ -26,81 +26,59 @@ const dbAdvertisementDraft = require("../../db/models/advertisementDraft.cjs");
 const dbUser = require("../../db/models/user.cjs");
 const dbNotification = require("../../db/models/notification.cjs");
 
-export interface ModelWithAssociate extends ModelStatic<Model<any>> {
+export interface ModelWithAssociate<T extends Model> extends ModelStatic<T> {
   associate?: (models: any) => void;
 }
 
-// Экспортируем модели
-export const Advertisement: ModelWithAssociate = dbAdvertisement(
-  sequelize,
-  Sequelize
-);
-export const Brand: ModelWithAssociate = dbBrand(sequelize, Sequelize);
-export const CarModel: ModelWithAssociate = dbCarModel(sequelize, Sequelize);
-export const Region: ModelWithAssociate = dbRegion(sequelize, Sequelize);
-export const SavedSearch: ModelWithAssociate = dbSavedSearch(
-  sequelize,
-  Sequelize
-);
-export const AdvertisementDraft: ModelWithAssociate = dbAdvertisementDraft(
-  sequelize,
-  Sequelize
-);
-export const User: ModelWithAssociate = dbUser(sequelize, Sequelize);
-export const Notification: ModelWithAssociate = dbNotification(
-  sequelize,
-  Sequelize
-);
+// Инициализируем модели
+export const Advertisement: ModelWithAssociate<Model<IAdvertisement>> = dbAdvertisement(sequelize, Sequelize);
+export const Brand: ModelWithAssociate<Model<IBrand>> = dbBrand(sequelize, Sequelize);
+export const CarModel: ModelWithAssociate<Model<ICarModel>> = dbCarModel(sequelize, Sequelize);
+export const Region: ModelWithAssociate<Model<IRegion>> = dbRegion(sequelize, Sequelize);
+export const SavedSearch: ModelWithAssociate<Model<ISavedSearch>> = dbSavedSearch(sequelize, Sequelize);
+export const AdvertisementDraft: ModelWithAssociate<Model<IAdvertisementDraft>> = dbAdvertisementDraft(sequelize, Sequelize);
+export const User: ModelWithAssociate<Model<IUser>> = dbUser(sequelize, Sequelize);
+export const Notification: ModelWithAssociate<Model<INotification>> = dbNotification(sequelize, Sequelize);
 
-export async function initDatabase() {
-  try {
-    await sequelize.authenticate();
-    console.log("База данных успешно подключена.");
+// Создаем объект с моделями для ассоциаций
+const models = {
+  Advertisement,
+  Brand,
+  CarModel,
+  Region,
+  SavedSearch,
+  AdvertisementDraft,
+  User,
+  Notification,
+};
 
-    // Инициализация связей между моделями
-    const models = {
-      Advertisement,
-      Brand,
-      CarModel,
-      Region,
-      SavedSearch,
-      AdvertisementDraft,
-      User,
-      Notification,
-    };
-
-    // Вызываем метод associate для каждой модели
-    Object.values(models).forEach((model) => {
-      if (model.associate) {
-        model.associate(models);
-      }
-    });
-
-    // Синхронизация моделей с базой данных
-    await sequelize.sync({ alter: true });
-    console.log("Модели синхронизированы с базой данных.");
-
-    return models;
-  } catch (error) {
-    console.error("Ошибка при инициализации базы данных:", error);
-    throw error;
+// Инициализируем ассоциации
+Object.values(models).forEach((model: any) => {
+  if (model.associate) {
+    model.associate(models);
   }
-}
+});
 
 export interface IBrand {
   id?: number;
   name: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface ICarModel {
   id?: number;
   name: string;
   brandId: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface IRegion {
   id: number;
   name: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface IChannelMessage {
@@ -108,6 +86,8 @@ export interface IChannelMessage {
   channelId: string;
   messageId: number;
   advertisementId: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface IUser {

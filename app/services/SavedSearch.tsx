@@ -3,7 +3,6 @@
 import {
   Brand,
   IBrand,
-  initDatabase,
   IRegion,
   ISavedSearch,
   Region,
@@ -11,7 +10,6 @@ import {
 } from "@/app/db/db";
 
 export const getSavedSearch = async (userId: number) => {
-  await initDatabase();
   const savedSearch = await SavedSearch.findOne({
     where: {
       userId: String(userId),
@@ -36,7 +34,6 @@ export const updateSavedSearch = async (
   userId: number,
   savedSearch: Partial<ISavedSearch>
 ) => {
-  await initDatabase();
   const savedSearchToUpdate = await SavedSearch.findOne({
     where: {
       userId: String(userId),

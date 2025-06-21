@@ -5,7 +5,7 @@ import { PlusIcon } from "../../shared/Icons/PlusIcon";
 import AddAdForm from "./components/AddAdForm";
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
-import { AddAdContext } from "../../context/AddAdContext";
+import { AddAdContext, AddAdProvider } from "../../context/AddAdContext";
 import {
   checkIsFirstStepValid,
   checkIsSecondStepValid,

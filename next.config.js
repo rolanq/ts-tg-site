@@ -1,14 +1,26 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack: (config) => {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "api.telegram.org",
+        pathname: "/file/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.telegram.org",
+        pathname: "/file/**",
+      },
+    ],
+  },
+  webpack(config) {
     config.module.rules.push({
-      test: /\.cjs$/,
-      type: "javascript/auto",
+      test: /\.svg$/,
+      use: ["@svgr/webpack"],
     });
-
     return config;
   },
-  reactStrictMode: false,
 };
 
 module.exports = nextConfig;
