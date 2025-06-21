@@ -8,7 +8,10 @@ import {
   ISavedSearch,
   Region,
 } from "@/app/db/db";
-import { getAdvertismentWhereCondition } from "../shared/utils/utils";
+import {
+  convertDraftToAd,
+  getAdvertismentWhereCondition,
+} from "../shared/utils/utils";
 
 export const getAds = async (userId: number) => {
   const ads = await Advertisement.findAll({
@@ -70,13 +73,9 @@ export const publishAd = async (userId: number) => {
     throw new Error("Draft not found");
   }
 
-  await Advertisement.create({
-    ...draft.toJSON(),
-    id: newAdId,
-    userId: String(userId),
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  });
+  await Advertisement.create(
+    convertDraftToAd(newAdId, draft.toJSON(), String(userId))
+  );
 
   const newAd = await Advertisement.findByPk(newAdId, {
     include: [Brand, CarModel, Region],

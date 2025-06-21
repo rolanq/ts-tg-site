@@ -124,8 +124,6 @@ export interface IAdvertisement {
   hideReason: HIDE_REASONS | null;
   userId: string;
   channelMessageId: number | null;
-  channelText: string | null;
-  channelStatus: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   Brand?: IBrand;

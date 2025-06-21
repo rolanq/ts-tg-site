@@ -1,4 +1,4 @@
-import { IAdvertisement, ISavedSearch } from "@/app/db/db";
+import { IAdvertisement, IAdvertisementDraft, ISavedSearch } from "@/app/db/db";
 import { Op, WhereOptions } from "sequelize";
 
 export const getAdvertismentWhereCondition = (savedSearch: ISavedSearch) => {
@@ -34,4 +34,22 @@ export const getAdvertismentWhereCondition = (savedSearch: ISavedSearch) => {
   }
 
   return whereCondition;
+};
+
+export const convertDraftToAd = (
+  id: number,
+  draft: IAdvertisementDraft,
+  userId: string
+) => {
+  return {
+    ...draft,
+    id,
+    userId,
+    isActive: true,
+    isOnHold: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    hideReason: null,
+    channelMessageId: null,
+  } as IAdvertisement;
 };

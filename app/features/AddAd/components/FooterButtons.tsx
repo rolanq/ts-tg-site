@@ -72,6 +72,8 @@ export const FooterButtons = () => {
 
       setIsPublishing(false);
       setOpenedStep(0);
+
+      window.location.reload();
     });
   }, [
     preparedPhotos,
