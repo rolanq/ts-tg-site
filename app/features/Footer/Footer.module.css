@@ -35,7 +35,7 @@
 }
 
 .notActiveIconButton {
-  background-color: var(--color-gray);
+  background-color: transparent;
 }
 
 .notActiveIconButton svg {
