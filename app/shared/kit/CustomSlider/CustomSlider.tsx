@@ -64,6 +64,7 @@ export default function CustomSlider({ items, className }: CustomSliderProps) {
       if (element.props.children) {
         return React.cloneElement(element, {
           ...element.props,
+          className: classNames(styles.indicator, element.props.className),
           children: React.Children.map(
             element.props.children,
             processIndicatorContent

@@ -56,11 +56,9 @@
   border: none;
   cursor: pointer;
   background: none;
-  border-radius: 8px;
   overflow: hidden;
   padding: 0;
   outline: none;
-  box-sizing: border-box;
   flex-shrink: 0;
   scroll-snap-align: start;
 }
@@ -71,6 +69,18 @@
   height: 100%;
   outline: none;
   pointer-events: none;
+}
+
+.indicator > * > img {
+  object-fit: cover;
+  width: 60px !important;
+  height: 60px !important;
+}
+
+.indicator > * > video {
+  object-fit: cover;
+  width: 60px !important;
+  height: 60px !important;
 }
 
 .indicator video {
