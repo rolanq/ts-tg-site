@@ -16,48 +16,22 @@ export default function CustomSlider({ items, className }: CustomSliderProps) {
   // Создаем массив с дублированными элементами для бесконечной прокрутки
   const extendedItems = [...items, ...items, ...items];
 
-  const handleScroll = () => {
-    if (sliderRef.current && !isTransitioning) {
-      const scrollLeft = sliderRef.current.scrollLeft;
-      const slideWidth = sliderRef.current.clientWidth;
-      const totalWidth = slideWidth * items.length;
-
-      // Вычисляем текущий индекс слайда
-      let newActiveSlide = Math.round(scrollLeft / slideWidth) % items.length;
-
-      // Если прокрутили до конца вправо
-      if (scrollLeft >= totalWidth * 2) {
-        setIsTransitioning(true);
-        sliderRef.current.style.scrollBehavior = "auto";
-        sliderRef.current.scrollLeft = scrollLeft - totalWidth;
-        setTimeout(() => {
-          sliderRef.current!.style.scrollBehavior = "smooth";
-          setIsTransitioning(false);
-        }, 0);
-      }
-      // Если прокрутили до конца влево
-      else if (scrollLeft <= 0) {
-        setIsTransitioning(true);
-        sliderRef.current.style.scrollBehavior = "auto";
-        sliderRef.current.scrollLeft = totalWidth;
-        setTimeout(() => {
-          sliderRef.current!.style.scrollBehavior = "smooth";
-          setIsTransitioning(false);
-        }, 0);
-      }
-
-      setActiveSlide(newActiveSlide);
-    }
-  };
-
   const scrollToSlide = (index: number) => {
-    if (sliderRef.current) {
+    if (sliderRef.current && !isTransitioning) {
+      setIsTransitioning(true);
       const slideWidth = sliderRef.current.clientWidth;
+
+      // Обновляем активный слайд
+      setActiveSlide(index);
+
       // Прокручиваем к слайду в центральном наборе элементов
-      sliderRef.current.scrollTo({
-        left: slideWidth * (index + items.length),
-        behavior: "smooth",
-      });
+      sliderRef.current.style.scrollBehavior = "smooth";
+      sliderRef.current.scrollLeft = slideWidth * (index + items.length);
+
+      // Сбрасываем флаг перехода
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 300);
     }
   };
 
@@ -66,18 +40,43 @@ export default function CustomSlider({ items, className }: CustomSliderProps) {
     if (slider) {
       // Устанавливаем начальную позицию на центральный набор элементов
       slider.scrollLeft = slider.clientWidth * items.length;
-      slider.addEventListener("scroll", handleScroll);
-      return () => slider.removeEventListener("scroll", handleScroll);
     }
   }, [items.length]);
 
+  // Функция для клонирования и модификации видео элементов
+  const processIndicatorContent = (
+    content: React.ReactNode
+  ): React.ReactNode => {
+    if (React.isValidElement(content)) {
+      const element = content as React.ReactElement;
+
+      if (element.type === "video") {
+        return React.cloneElement(element, {
+          muted: true,
+          controls: false,
+          autoplay: false,
+          playsInline: true,
+          onClick: (e: React.MouseEvent) => e.preventDefault(),
+          style: { pointerEvents: "none" },
+        });
+      }
+
+      if (element.props.children) {
+        return React.cloneElement(element, {
+          ...element.props,
+          children: React.Children.map(
+            element.props.children,
+            processIndicatorContent
+          ),
+        });
+      }
+    }
+    return content;
+  };
+
   return (
     <div className={styles.sliderContainer}>
-      <div
-        ref={sliderRef}
-        className={classNames(styles.slider, className)}
-        onScroll={handleScroll}
-      >
+      <div ref={sliderRef} className={classNames(styles.slider, className)}>
         {extendedItems.map((item, index) => (
           <div key={index} className={styles.item}>
             {item}
@@ -85,15 +84,17 @@ export default function CustomSlider({ items, className }: CustomSliderProps) {
         ))}
       </div>
       <div className={styles.indicators}>
-        {items.map((_, index) => (
-          <button
+        {items.map((item, index) => (
+          <div
             key={index}
             className={classNames(
               styles.indicator,
               index === activeSlide && styles.indicatorActive
             )}
             onClick={() => scrollToSlide(index)}
-          />
+          >
+            {processIndicatorContent(item)}
+          </div>
         ))}
       </div>
     </div>

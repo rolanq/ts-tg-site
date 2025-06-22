@@ -63,7 +63,7 @@ export default function UsersAdsList() {
                 ))}
               </div>
 
-              <Ad isUsersAds />
+              <Ad />
             </>
           ) : (
             <div className={styles.loaderWrapper}>

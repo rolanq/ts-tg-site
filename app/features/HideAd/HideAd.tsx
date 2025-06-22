@@ -1,25 +1,20 @@
-import { AllAdsContext } from "@/app/context/AllAdsContext";
-import { UsersAdsContext } from "@/app/context/UsersAdsContext";
 import { updateAd } from "@/app/services/Ads";
 import { CustomBottomSheet } from "@/app/shared/kit/CustomBottomSheet/CustomBottomSheet";
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
-import React, { useContext } from "react";
+import React from "react";
 import styles from "./HideAd.module.css";
+import { useAdsContext } from "../../shared/hooks/useAdContext";
 
 interface HideAdProps {
   open: boolean;
   onDismiss: () => void;
-  isUsersAds: boolean;
 }
 
-export default function HideAd({ open, onDismiss, isUsersAds }: HideAdProps) {
-  const { openedAd, setAds, setOpenedAd, setOpenedAdLoading } = useContext(
-    isUsersAds ? UsersAdsContext : AllAdsContext
-  );
-  const { refetch: refetchAds } = useContext(AllAdsContext);
-  const { refetch: refetchUsersAds } = useContext(UsersAdsContext);
+export default function HideAd({ open, onDismiss }: HideAdProps) {
+  const { openedAd, setOpenedAd, setOpenedAdLoading, refetch } =
+    useAdsContext();
 
   const handleHide = () => {
     if (!openedAd?.id) return;
@@ -30,13 +25,9 @@ export default function HideAd({ open, onDismiss, isUsersAds }: HideAdProps) {
       ...openedAd,
       isActive: false,
     }).then((ad) => {
-      setAds((prev) =>
-        prev.map((prevAd) => (prevAd.id === ad.id ? ad : prevAd))
-      );
       setOpenedAd(ad);
       setOpenedAdLoading(false);
-      refetchAds();
-      refetchUsersAds();
+      refetch();
     });
   };
 

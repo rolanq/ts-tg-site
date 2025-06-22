@@ -16,6 +16,7 @@ interface ICustomInputProps {
   isNegative?: boolean;
   checkValue?: (value: string) => boolean;
   strictCheck?: boolean;
+  withDelimeter?: boolean;
 }
 
 export const CustomInput = ({
@@ -31,15 +32,28 @@ export const CustomInput = ({
   isNegative = false,
   checkValue,
   strictCheck = true,
+  withDelimeter = true,
 }: ICustomInputProps) => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(errorMessageProp);
+
+  const formatNumberWithDots = (value: string): string => {
+    if (!withDelimeter || type !== "number") return value;
+    const numStr = value.replace(/\./g, "");
+    if (!numStr) return "";
+    return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
+  const removeDotsFromNumber = (value: string): string => {
+    return value.replace(/\./g, "");
+  };
+
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
+      let value = e.target.value;
 
       if (type === "number") {
-        const numValue = Number(value);
+        value = removeDotsFromNumber(value);
 
         if (value === "" || value === "-") {
           setError(false);
@@ -47,6 +61,8 @@ export const CustomInput = ({
           onChange("0");
           return;
         }
+
+        const numValue = Number(value);
 
         if (strictCheck) {
           if (min && numValue < min) {
@@ -97,20 +113,32 @@ export const CustomInput = ({
         onChange(value);
       }
     },
-    [min, max, type, onChange, setError, setErrorMessage, errorMessageProp]
+    [
+      min,
+      max,
+      type,
+      onChange,
+      setError,
+      setErrorMessage,
+      errorMessageProp,
+      withDelimeter,
+    ]
   );
+
+  const displayValue = formatNumberWithDots(value);
 
   return (
     <div className={styles.inputWrapper}>
       {label && <label className={styles.label}>{label}</label>}
       <input
-        value={value}
+        value={displayValue}
         onChange={handleChange}
         className={classNames(styles.input, className, {
           [styles.error]: error,
         })}
         placeholder={placeholder}
-        type={type}
+        type="text"
+        inputMode={type === "number" ? "numeric" : "text"}
       />
       {error && (
         <CustomTyphography

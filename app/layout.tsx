@@ -37,6 +37,16 @@ export default async function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
         />
+        <Script id="telegram-init" strategy="beforeInteractive">
+          {`
+            if (window.Telegram?.WebApp) {
+              window.Telegram.WebApp.expand();
+              window.Telegram.WebApp.ready();
+              window.Telegram.WebApp.bottomBarColor = "#ffffff";
+              window.Telegram.WebApp.headerColor = "#ffffff";
+            }
+          `}
+        </Script>
       </head>
       <body className={notoSans.className}>
         <TelegramProvider>{children}</TelegramProvider>

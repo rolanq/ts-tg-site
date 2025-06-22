@@ -55,7 +55,12 @@ export const convertDraftToAd = (
 export const clearNull = (obj: any) => {
   return Object.fromEntries(
     Object.entries(obj).filter(
-      ([_, value]) => value !== null && value !== undefined && !value
+      ([_, value]) =>
+        value !== null &&
+        value !== undefined &&
+        value !== 0 &&
+        value !== "" &&
+        value !== "0"
     )
   );
 };

@@ -1,13 +1,7 @@
 "use client";
 import { CustomBottomSheet } from "@/app/shared/kit/CustomBottomSheet/CustomBottomSheet";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
-import React, {
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  useCallback,
-} from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { ImageContainer } from "../ImageContainer/ImageContainer";
 import CustomSlider from "@/app/shared/kit/CustomSlider/CustomSlider";
 import styles from "./Ad.module.css";
@@ -19,13 +13,12 @@ import {
 import Link from "next/link";
 import Badges from "../Badges/Badges";
 import FooterButtons from "./FooterButtons";
-import { UsersAdsContext } from "@/app/context/UsersAdsContext";
-import { AllAdsContext } from "@/app/context/AllAdsContext";
-import { useTelegram } from "@/app/shared/hooks/useTelegram";
 import HideAd from "../HideAd/HideAd";
 import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { SpringEvent } from "react-spring-bottom-sheet/dist/types";
+import { useAdsContext } from "../../shared/hooks/useAdContext";
+import CustomSeparator from "@/app/shared/kit/CustomSeparator/CustomSeparator";
 
 interface Image {
   url: string;
@@ -64,7 +57,7 @@ const preloadImage = (url: string): Promise<void> => {
   });
 };
 
-export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
+export const Ad = () => {
   const {
     openedAd,
     setOpenedAd,
@@ -72,7 +65,8 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
     setOpenedAdLoading,
     setIsAdOpen,
     isAdOpen,
-  } = useContext(isUsersAds ? UsersAdsContext : AllAdsContext);
+  } = useAdsContext();
+
   const [images, setImages] = useState<Image[]>([]);
   const [video, setVideo] = useState<Video | null>(null);
   const [hideAdOpen, setHideAdOpen] = useState(false);
@@ -83,10 +77,8 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
     const loadMedia = async () => {
       setOpenedAdLoading(true);
       try {
-        // Загружаем все URL параллельно
         const photoUrls = await Promise.all(openedAd.photos.map(getFileUrl));
 
-        // Создаем массив изображений
         const newImages = openedAd.photos
           .map((photo, index) => ({
             url: photoUrls[index],
@@ -94,12 +86,10 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
           }))
           .filter((img) => img.url);
 
-        // Предзагружаем все изображения
         await Promise.all(newImages.map((img) => preloadImage(img.url)));
 
         setImages(newImages);
 
-        // Загружаем видео, если есть
         if (openedAd.video) {
           const videoUrl = await getFileUrl(openedAd.video);
           if (videoUrl) {
@@ -123,18 +113,10 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
 
   const onDismiss = useCallback(() => {
     setIsAdOpen(false);
+    setImages([]);
+    setVideo(null);
+    setOpenedAd(null);
   }, [setIsAdOpen]);
-
-  const onSpringEnd = useCallback(
-    (event: SpringEvent) => {
-      if (event.type === "CLOSE") {
-        setImages([]);
-        setVideo(null);
-        setOpenedAd(null);
-      }
-    },
-    [setOpenedAd]
-  );
 
   const renderImages = useMemo(() => {
     return images.map((image) => (
@@ -184,16 +166,10 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
       <CustomBottomSheet
         open={isAdOpen}
         onDismiss={onDismiss}
-        onSpringEnd={onSpringEnd}
         snap={95}
         disableDragClose
         footerWithoutBoxShadow
-        footer={
-          <FooterButtons
-            isUsersAds={isUsersAds}
-            setHideAdOpen={setHideAdOpen}
-          />
-        }
+        footer={<FooterButtons setHideAdOpen={setHideAdOpen} />}
       >
         <SwitchTransition mode="out-in">
           <CSSTransition
@@ -211,6 +187,7 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
                 <div className={styles.imagesContainer}>
                   <CustomSlider items={renderItems} />
                 </div>
+                {renderItems.length > 1 && <CustomSeparator />}
                 <div className={styles.adInfoContainer}>
                   <div className={styles.badgesContainer}>
                     <Badges ad={openedAd} />
@@ -355,11 +332,7 @@ export const Ad = ({ isUsersAds = false }: { isUsersAds?: boolean }) => {
           </CSSTransition>
         </SwitchTransition>
       </CustomBottomSheet>
-      <HideAd
-        open={hideAdOpen}
-        onDismiss={() => setHideAdOpen(false)}
-        isUsersAds={isUsersAds}
-      />
+      <HideAd open={hideAdOpen} onDismiss={() => setHideAdOpen(false)} />
     </>
   );
 };

@@ -83,6 +83,7 @@ export default function SearchAdsList() {
                 <AdCard key={ad.id} ad={ad} onClick={() => handleAdClick(ad)} />
               ))}
               <Ad />
+              <SavedSearch open={open} onDismiss={() => setOpen(false)} />
             </div>
           ) : (
             <div className={styles.loaderWrapper}>
@@ -96,8 +97,6 @@ export default function SearchAdsList() {
           )}
         </CSSTransition>
       </SwitchTransition>
-
-      <SavedSearch open={open} onDismiss={() => setOpen(false)} />
     </>
   );
 }

@@ -2,32 +2,32 @@
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import classNames from "classnames";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "./Ad.module.css";
 import { useTelegram } from "@/app/shared/hooks/useTelegram";
 import { updateAd } from "@/app/services/Ads";
-import { AllAdsContext } from "@/app/context/AllAdsContext";
-import { UsersAdsContext } from "@/app/context/UsersAdsContext";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { editAdInChannel } from "@/app/services/ClientTelegram";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
+import { useAdsContext } from "../../shared/hooks/useAdContext";
+import { usePathname } from "next/navigation";
 
 export default function FooterButtons({
-  isUsersAds,
   setHideAdOpen,
 }: {
-  isUsersAds: boolean;
   setHideAdOpen: (open: boolean) => void;
 }) {
+  const pathname = usePathname();
+  const isUsersAds = pathname.includes("profile");
+
   const { user } = useTelegram();
   const {
     openedAd,
-    setAds,
     setOpenedAd,
     openedAdLoading,
     setOpenedAdLoading,
     refetch,
-  } = useContext(isUsersAds ? UsersAdsContext : AllAdsContext);
+  } = useAdsContext();
   const [isShowButtons, setIsShowButtons] = useState(false);
 
   const isOwner = openedAd?.userId === String(user?.id);
@@ -43,9 +43,6 @@ export default function FooterButtons({
       if (ad.channelMessageId) {
         editAdInChannel(ad);
       }
-      setAds((prev) =>
-        prev.map((prevAd) => (prevAd.id === ad.id ? ad : prevAd))
-      );
       setOpenedAd(ad);
       setOpenedAdLoading(false);
       refetch();

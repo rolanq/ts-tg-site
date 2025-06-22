@@ -84,7 +84,7 @@ export const AddAdProvider = ({ children }: { children: React.ReactNode }) => {
   const [preparedPhotos, setPreparedPhotos] = useState<File[]>([]);
   const [preparedVideo, setPreparedVideo] = useState<File | null>(null);
 
-  const [isNextStepDisabled, setIsNextStepDisabled] = useState(false);
+  const [isNextStepDisabled, setIsNextStepDisabled] = useState(true);
   const [onClickNextStep, setOnClickNextStep] = useState<() => void>(() => {});
   const [isDraftLoading, setIsDraftLoading] = useState(true);
   const [isPublishing, setIsPublishing] = useState(false);

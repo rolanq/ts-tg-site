@@ -13,10 +13,8 @@ import {
 import { updateDraft } from "@/app/services/Draft";
 import { publishAd, updateAd } from "@/app/services/Ads";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import { usePathname } from "next/navigation";
 
 export const FooterButtons = () => {
-  const pathname = usePathname();
   const {
     openedStep,
     setOpenedStep,

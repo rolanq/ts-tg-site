@@ -18,7 +18,7 @@ const isTelegramWebAppInitialized = () => {
 };
 
 export const useTelegram = () => {
-  const [user, setUser] = useState<TelegramUser | null>(null);
+  const [user, setUser] = useState<TelegramUser | null>(defaultUser);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -27,11 +27,6 @@ export const useTelegram = () => {
     }
 
     try {
-      window.Telegram.WebApp.ready();
-      window.Telegram.WebApp.bottomBarColor = "#ffffff";
-      window.Telegram.WebApp.headerColor = "#ffffff";
-      window.Telegram.WebApp.expand();
-
       if (window.Telegram.WebApp.initDataUnsafe?.user) {
         setUser(window.Telegram.WebApp.initDataUnsafe.user);
       }

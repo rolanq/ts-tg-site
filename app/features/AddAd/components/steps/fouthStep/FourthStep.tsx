@@ -11,7 +11,8 @@ import { AddAdContext } from "../../../../../context/AddAdContext";
 export const FourthStep = () => {
   const { preparedVideo, setPreparedVideo, preparedPhotos, setPreparedPhotos } =
     useContext(AddAdContext);
-  const [videoError, setVideoError] = useState(false);
+  const [videoError, setVideoError] = useState<string | null>(null);
+  const [photoError, setPhotoError] = useState<string | null>(null);
   const photoInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddPhoto = () => {
@@ -20,27 +21,63 @@ export const FourthStep = () => {
     }
   };
 
-  const handleChangePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const validateVideo = async (file: File): Promise<boolean> => {
+    if (file.size > 10 * 1024 * 1024) {
+      setVideoError("Размер видео не должен превышать 10 МБ");
+      return false;
+    }
+
+    const video = document.createElement("video");
+    video.preload = "metadata";
+
+    return new Promise((resolve) => {
+      video.onloadedmetadata = () => {
+        window.URL.revokeObjectURL(video.src);
+        if (video.duration > 60) {
+          setVideoError("Длительность видео не должна превышать 1 минуту");
+          resolve(false);
+        }
+        resolve(true);
+      };
+      video.src = URL.createObjectURL(file);
+    });
+  };
+
+  const validatePhoto = (file: File): boolean => {
+    if (file.size > 10 * 1024 * 1024) {
+      setPhotoError("Размер фото не должен превышать 10 МБ");
+      return false;
+    }
+    return true;
+  };
+
+  const handleChangePhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
+    setVideoError(null);
+    setPhotoError(null);
 
     if (files) {
       const isVideo = files.item(0)?.type.startsWith("video");
       if (isVideo) {
         const file = files.item(0) as File;
-        if (file.size > 5 * 1024 * 1024) {
-          setVideoError(true);
-          return;
+        const isValid = await validateVideo(file);
+        if (isValid) {
+          setPreparedVideo(file);
         }
-        setPreparedVideo(file);
         return;
       } else {
-        setPreparedPhotos((prev) => {
-          const newFiles = Array.from(files);
-          const filteredNewFiles = newFiles.filter(
-            (file) => !prev.some((prevFile) => prevFile.name === file.name)
+        const newFiles = Array.from(files);
+        const validFiles = newFiles.filter((file) => {
+          const isValidSize = validatePhoto(file);
+          const isDuplicate = preparedPhotos.some(
+            (prevFile) => prevFile.name === file.name
           );
-          return [...prev, ...filteredNewFiles];
+          return isValidSize && !isDuplicate;
         });
+
+        if (validFiles.length > 0) {
+          setPreparedPhotos((prev) => [...prev, ...validFiles]);
+        }
       }
     }
   };
@@ -86,9 +123,8 @@ export const FourthStep = () => {
                     fontWeight="light"
                     color={videoError ? "red" : "gray"}
                   >
-                    {videoError
-                      ? "Размер видео не должен превышать 5 МБ"
-                      : "Не более 1 видео, не более 5 МБ"}
+                    {videoError ||
+                      "Не более 1 видео, не более 10 МБ, длительность до 1 минуты"}
                   </CustomTyphography>
                   {preparedVideo && (
                     <AddedVideo
@@ -105,9 +141,10 @@ export const FourthStep = () => {
                     <CustomTyphography
                       fontSize="14px"
                       fontWeight="light"
-                      color="gray"
+                      color={photoError ? "red" : "gray"}
                     >
-                      Не более 9 фото
+                      {photoError ||
+                        "Не более 9 фото, размер каждого не более 10 МБ"}
                     </CustomTyphography>
                     <CustomFlex gap="5px">
                       {preparedPhotos.map((photo, index) => (
