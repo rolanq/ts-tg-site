@@ -16,7 +16,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-imask": "^7.6.1",
-    "react-spring-bottom-sheet": "^3.4.1",
     "react-transition-group": "^4.4.5",
     "sequelize": "^6.37.1",
     "sequelize-cli": "^6.6.2"

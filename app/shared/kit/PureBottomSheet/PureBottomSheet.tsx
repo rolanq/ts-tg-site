@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useEffect, useState, useCallback } from "react";
+import React, { FC, useEffect, useState, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
 import styles from "./PureBottomSheet.module.css";
@@ -36,6 +36,7 @@ export const PureBottomSheet: FC<IProps> = ({
   const [currentY, setCurrentY] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [isShowContent, setIsShowContent] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -100,57 +101,83 @@ export const PureBottomSheet: FC<IProps> = ({
     [disableDismiss, onDismiss]
   );
 
-  if (!mounted || viewportHeight === 0) {
-    return null;
-  }
-
   const sheetStyle = {
     height: `${snap}vh`,
     transform: currentY ? `translateY(${currentY}px)` : undefined,
   };
 
-  const content = (
-    <CSSTransition
-      in={open}
-      timeout={300}
-      classNames={{
-        enter: styles["sheet-enter"],
-        enterActive: styles["sheet-enter-active"],
-        exit: styles["sheet-exit"],
-        exitActive: styles["sheet-exit-active"],
-      }}
-      unmountOnExit
-    >
-      <div className={styles.container} onClick={handleBackdropClick}>
-        <div
-          className={`
+  const content = useMemo(() => {
+    return (
+      <CSSTransition
+        in={open}
+        timeout={300}
+        classNames={{
+          enter: styles["container-enter"],
+          enterActive: styles["container-enter-active"],
+          exit: styles["container-exit"],
+          exitActive: styles["container-exit-active"],
+          exitDone: styles["container-exit-done"],
+        }}
+        onEnter={() => setIsShowContent(true)}
+        onExiting={() => setIsShowContent(false)}
+        unmountOnExit
+      >
+        <div className={styles.container} onClick={handleBackdropClick}>
+          <CSSTransition
+            in={isShowContent}
+            timeout={300}
+            classNames={{
+              enter: styles["sheet-enter"],
+              enterActive: styles["sheet-enter-active"],
+              exit: styles["sheet-exit"],
+              exitActive: styles["sheet-exit-active"],
+            }}
+          >
+            <div
+              className={`
             ${styles.sheet}
             ${footerWithoutBoxShadow ? styles.noShadow : ""}
             ${disableScrollX ? styles.noScrollX : ""}
           `}
-          style={sheetStyle}
-          onClick={(e) => e.stopPropagation()}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          {closeIcon && (
-            <CustomButton
-              className={styles.closeButton}
-              onClick={onDismiss}
-              stretched
-              align="center"
-              isText={false}
+              style={sheetStyle}
+              onClick={(e) => e.stopPropagation()}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
             >
-              <CloseIcon />
-            </CustomButton>
-          )}
-          <div className={styles.content}>{children}</div>
-          {footer && <div className={styles.footer}>{footer}</div>}
+              {closeIcon && (
+                <CustomButton
+                  className={styles.closeButton}
+                  onClick={onDismiss}
+                  stretched
+                  align="center"
+                  isText={false}
+                >
+                  <CloseIcon />
+                </CustomButton>
+              )}
+              <div className={styles.content}>{children}</div>
+              {footer && <div className={styles.footer}>{footer}</div>}
+            </div>
+          </CSSTransition>
         </div>
-      </div>
-    </CSSTransition>
-  );
+      </CSSTransition>
+    );
+  }, [
+    open,
+    children,
+    footer,
+    footerWithoutBoxShadow,
+    disableScrollX,
+    closeIcon,
+    onDismiss,
+    currentY,
+    sheetStyle,
+  ]);
+
+  if (!mounted || viewportHeight === 0) {
+    return null;
+  }
 
   return createPortal(content, document.body);
 };

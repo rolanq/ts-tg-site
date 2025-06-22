@@ -1,5 +1,4 @@
 "use client";
-import { CustomBottomSheet } from "@/app/shared/kit/CustomBottomSheet/CustomBottomSheet";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { ImageContainer } from "../ImageContainer/ImageContainer";
@@ -16,7 +15,6 @@ import FooterButtons from "./FooterButtons";
 import HideAd from "../HideAd/HideAd";
 import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import { SpringEvent } from "react-spring-bottom-sheet/dist/types";
 import { useAdsContext } from "../../shared/hooks/useAdContext";
 import CustomSeparator from "@/app/shared/kit/CustomSeparator/CustomSeparator";
 import { PureBottomSheet } from "@/app/shared/kit/PureBottomSheet/PureBottomSheet";

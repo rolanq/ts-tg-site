@@ -1,7 +1,6 @@
 "use client";
 
-import { CustomBottomSheet } from "@/app/shared/kit/CustomBottomSheet/CustomBottomSheet";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from "./commonSteps.module.css";
 import { FirstStep } from "./steps/firstStep/FirstStep";
 import { AddAdContext } from "../../../context/AddAdContext";
@@ -12,6 +11,7 @@ import { FourthStep } from "./steps/fouthStep/FourthStep";
 import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 import classNames from "classnames";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
+import { PureBottomSheet } from "@/app/shared/kit/PureBottomSheet/PureBottomSheet";
 
 export default function AddAdForm() {
   const {
@@ -28,6 +28,12 @@ export default function AddAdForm() {
   const handleSlideChange = (event: any) => {
     const slideIndex = event.target.scrollLeft / event.target.offsetWidth;
     setOpenedStep(Math.round(slideIndex) + 1);
+  };
+
+  const onDismiss = () => {
+    setPreparedPhotos([]);
+    setPreparedVideo(null);
+    setOpenedStep(0);
   };
 
   useEffect(() => {
@@ -56,16 +62,10 @@ export default function AddAdForm() {
   }, [isDraftLoading]);
 
   return (
-    <CustomBottomSheet
+    <PureBottomSheet
       snap={75}
       open={!!openedStep}
-      onDismiss={() => setOpenedStep(0)}
-      onSpringEnd={(event) => {
-        if (event.type === "CLOSE") {
-          setPreparedPhotos([]);
-          setPreparedVideo(null);
-        }
-      }}
+      onDismiss={onDismiss}
       footerWithoutBoxShadow
       disableDragClose
       footer={<FooterButtons />}
@@ -129,6 +129,6 @@ export default function AddAdForm() {
           )}
         </CSSTransition>
       </SwitchTransition>
-    </CustomBottomSheet>
+    </PureBottomSheet>
   );
 }

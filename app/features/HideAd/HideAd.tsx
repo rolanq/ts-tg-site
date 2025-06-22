@@ -1,11 +1,11 @@
 import { updateAd } from "@/app/services/Ads";
-import { CustomBottomSheet } from "@/app/shared/kit/CustomBottomSheet/CustomBottomSheet";
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
 import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
 import React from "react";
 import styles from "./HideAd.module.css";
 import { useAdsContext } from "../../shared/hooks/useAdContext";
+import { PureBottomSheet } from "@/app/shared/kit/PureBottomSheet/PureBottomSheet";
 
 interface HideAdProps {
   open: boolean;
@@ -32,7 +32,7 @@ export default function HideAd({ open, onDismiss }: HideAdProps) {
   };
 
   return (
-    <CustomBottomSheet
+    <PureBottomSheet
       open={open}
       onDismiss={onDismiss}
       snap={35}
@@ -67,6 +67,6 @@ export default function HideAd({ open, onDismiss }: HideAdProps) {
           действие нельзя отменить
         </CustomTyphography>
       </CustomFlex>
-    </CustomBottomSheet>
+    </PureBottomSheet>
   );
 }
