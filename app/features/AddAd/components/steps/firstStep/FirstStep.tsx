@@ -131,6 +131,7 @@ export const FirstStep = () => {
             min={1900}
             max={new Date().getFullYear()}
             strictCheck={false}
+            withDelimeter={false}
           />
         </CustomFlex>
       </CustomFlex>
