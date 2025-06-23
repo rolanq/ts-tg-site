@@ -1,20 +1,7 @@
-import { IAdvertisement, SavedSearch } from "../db/db";
+import { IAdvertisement } from "../db/db";
 import { TELEGRAM_API_URL } from "../shared/constants/telegram";
-import { addWatermark } from "../shared/utils/addWatermark";
 import { renderAdvertismentMessage } from "../shared/utils/clientUtils";
-import { Model, Op } from "sequelize";
 import { getSavedSearchesByAd } from "./SavedSearch";
-
-interface ISavedSearch {
-  id?: number;
-  userId: string;
-  regionId?: number | null;
-  brandId?: number | null;
-  priceFrom?: number | null;
-  priceTo?: number | null;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
 
 type Media = {
   type: "photo" | "video";
@@ -94,6 +81,7 @@ const sendMedia = async (ad: IAdvertisement) => {
   formData.append("media", JSON.stringify(media));
   formData.append("message_text", message);
   formData.append("chat_id", process.env.NEXT_PUBLIC_TELEGRAM_CHANNEL_ID!);
+  formData.append("parse_mode", "HTML");
 
   const response = await fetch(`${TELEGRAM_API_URL}/sendMediaGroup`, {
     method: "POST",
@@ -110,6 +98,7 @@ const sendText = async (ad: IAdvertisement) => {
 
   formData.append("chat_id", process.env.NEXT_PUBLIC_TELEGRAM_CHANNEL_ID!);
   formData.append("text", message);
+  formData.append("parse_mode", "HTML");
 
   const response = await fetch(`${TELEGRAM_API_URL}/sendMessage`, {
     method: "POST",
@@ -160,6 +149,8 @@ const sendNotificationBatch = async (
               text: "🚗 Посмотреть",
               web_app: { url: `https://vkasanie.com/?ad=${ad.id}` },
             },
+          ],
+          [
             {
               text: "Выключить уведомления",
               web_app: { url: `https://vkasanie.com/profile?user_opened=true` },
