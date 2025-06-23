@@ -3,20 +3,12 @@ import { useEffect, useState } from "react";
 import { TelegramUser } from "../types/telegram";
 import createUser from "@/app/services/Users";
 
-const defaultUser: TelegramUser = {
-  id: 359039145,
-  first_name: "",
-  last_name: "",
-  username: "",
-  language_code: "",
-};
-
 const isTelegramWebAppInitialized = () => {
   return typeof window !== "undefined" && window.Telegram?.WebApp;
 };
 
 export const useTelegram = () => {
-  const [user, setUser] = useState<TelegramUser | null>(defaultUser);
+  const [user, setUser] = useState<TelegramUser | null>(null);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
