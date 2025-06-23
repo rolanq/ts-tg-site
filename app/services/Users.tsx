@@ -36,14 +36,32 @@ export const getStatisticsByUserId = async (userId: string) => {
     ad.get({ plain: true })
   );
 
-  return {
-    adCount: formattedAdvertisements.length,
-    adsOnHold: formattedAdvertisements.filter((ad) => ad.isOnHold).length,
-    activeAdsCount: formattedAdvertisements.filter((ad) => ad.isActive).length,
-    soldCount: formattedAdvertisements.filter((ad) => !ad.isActive).length,
-    totalEarnings: formattedAdvertisements.reduce(
-      (acc, ad) => acc + Number(ad.price),
-      0
-    ),
-  };
+  const stats = formattedAdvertisements.reduce(
+    (acc, ad) => {
+      if (ad.isOnHold) {
+        acc.adsOnHold++;
+      }
+      if (ad.isActive) {
+        acc.activeAdsCount++;
+      }
+      if (!ad.isActive) {
+        acc.soldCount++;
+      }
+
+      if (!ad.isActive) {
+        acc.totalEarnings += Number(ad.price);
+      }
+
+      return acc;
+    },
+    {
+      adCount: 0,
+      adsOnHold: 0,
+      activeAdsCount: 0,
+      soldCount: 0,
+      totalEarnings: 0,
+    }
+  );
+
+  return stats;
 };
