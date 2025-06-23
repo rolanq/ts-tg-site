@@ -8,13 +8,7 @@ const isTelegramWebAppInitialized = () => {
 };
 
 export const useTelegram = () => {
-  const [user, setUser] = useState<TelegramUser | null>({
-    id: 359039145,
-    first_name: "test",
-    last_name: "test",
-    username: "test",
-    language_code: "en",
-  });
+  const [user, setUser] = useState<TelegramUser | null>(null);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
