@@ -52,17 +52,12 @@ export const SearchAdsProvider = ({
           setIsLoading(false);
         });
       });
-    } else {
-      getAllAds().then((ads) => {
-        setAds(ads);
-        setIsLoading(false);
-      });
     }
   }, [user?.id]);
 
   useEffect(() => {
     refetchAds();
-  }, []);
+  }, [user?.id]);
 
   return (
     <SearchAdsContext.Provider
