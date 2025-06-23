@@ -94,3 +94,8 @@
 .alignEnd {
   align-items: flex-end;
 }
+
+.plain {
+  background-color: transparent;
+  padding: 0;
+}

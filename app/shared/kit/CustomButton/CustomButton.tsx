@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import styles from "./CustomButton.module.css";
 import classNames from "classnames";
 import { CustomTyphography } from "../CustomTyphography/CustomTyphography";
@@ -9,6 +9,7 @@ const textColor = {
   secondary: "white",
   tertiary: "black",
   outline: "black",
+  plain: "black",
 } as const;
 
 const textSize = {
@@ -23,7 +24,7 @@ interface CustomButtonProps {
   onClick?: () => void;
   className?: string;
   disabled?: boolean;
-  variant?: "primary" | "secondary" | "tertiary" | "outline";
+  variant?: "primary" | "secondary" | "tertiary" | "outline" | "plain";
   stretched?: boolean;
   beforeIcon?: React.ReactNode;
   afterIcon?: React.ReactNode;
@@ -31,6 +32,7 @@ interface CustomButtonProps {
   boxShadow?: boolean;
   align?: "center" | "start" | "end";
   isText?: boolean;
+  ref?: React.RefObject<HTMLButtonElement> | ((instance: HTMLButtonElement | null) => void) | null;
 }
 
 export const CustomButton = ({
@@ -46,6 +48,7 @@ export const CustomButton = ({
   boxShadow = false,
   align = "start",
   isText = true,
+  ref,
 }: CustomButtonProps) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     onClick?.();
@@ -53,12 +56,14 @@ export const CustomButton = ({
 
   return (
     <button
+      ref={ref}
       className={classNames(styles.button, className, {
         [styles.disabled]: disabled,
         [styles.primary]: variant === "primary" && !disabled,
         [styles.secondary]: variant === "secondary" && !disabled,
         [styles.tertiary]: variant === "tertiary" && !disabled,
         [styles.outline]: variant === "outline" && !disabled,
+        [styles.plain]: variant === "plain" && !disabled,
         [styles.stretched]: stretched,
         [styles.small]: padding === "small",
         [styles.medium]: padding === "medium",

@@ -31,14 +31,31 @@ export interface ModelWithAssociate<T extends Model> extends ModelStatic<T> {
 }
 
 // Инициализируем модели
-export const Advertisement: ModelWithAssociate<Model<IAdvertisement>> = dbAdvertisement(sequelize, Sequelize);
-export const Brand: ModelWithAssociate<Model<IBrand>> = dbBrand(sequelize, Sequelize);
-export const CarModel: ModelWithAssociate<Model<ICarModel>> = dbCarModel(sequelize, Sequelize);
-export const Region: ModelWithAssociate<Model<IRegion>> = dbRegion(sequelize, Sequelize);
-export const SavedSearch: ModelWithAssociate<Model<ISavedSearch>> = dbSavedSearch(sequelize, Sequelize);
-export const AdvertisementDraft: ModelWithAssociate<Model<IAdvertisementDraft>> = dbAdvertisementDraft(sequelize, Sequelize);
-export const User: ModelWithAssociate<Model<IUser>> = dbUser(sequelize, Sequelize);
-export const Notification: ModelWithAssociate<Model<INotification>> = dbNotification(sequelize, Sequelize);
+export const Advertisement: ModelWithAssociate<Model<IAdvertisement>> =
+  dbAdvertisement(sequelize, Sequelize);
+export const Brand: ModelWithAssociate<Model<IBrand>> = dbBrand(
+  sequelize,
+  Sequelize
+);
+export const CarModel: ModelWithAssociate<Model<ICarModel>> = dbCarModel(
+  sequelize,
+  Sequelize
+);
+export const Region: ModelWithAssociate<Model<IRegion>> = dbRegion(
+  sequelize,
+  Sequelize
+);
+export const SavedSearch: ModelWithAssociate<Model<ISavedSearch>> =
+  dbSavedSearch(sequelize, Sequelize);
+export const AdvertisementDraft: ModelWithAssociate<
+  Model<IAdvertisementDraft>
+> = dbAdvertisementDraft(sequelize, Sequelize);
+export const User: ModelWithAssociate<Model<IUser>> = dbUser(
+  sequelize,
+  Sequelize
+);
+export const Notification: ModelWithAssociate<Model<INotification>> =
+  dbNotification(sequelize, Sequelize);
 
 // Создаем объект с моделями для ассоциаций
 const models = {
@@ -171,13 +188,16 @@ export interface ISavedSearch {
 
 export interface INotification {
   id?: number;
-  userId: string;
-  brandId: number | null;
-  regionId: number | null;
-  priceFrom: number | null;
-  priceTo: number | null;
+  userId?: string;
+  brandId?: number | null;
+  regionId?: number | null;
+  priceFrom?: number | null;
+  priceTo?: number | null;
   createdAt?: Date;
   updatedAt?: Date;
+
+  Brand?: IBrand;
+  Region?: IRegion;
 }
 
 export interface IMessageToDelete {

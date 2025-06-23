@@ -1,4 +1,9 @@
-import { IAdvertisement, IAdvertisementDraft, ISavedSearch } from "@/app/db/db";
+import {
+  IAdvertisement,
+  IAdvertisementDraft,
+  INotification,
+  ISavedSearch,
+} from "@/app/db/db";
 import { Op, WhereOptions } from "sequelize";
 
 export const getAdvertismentWhereCondition = (savedSearch: ISavedSearch) => {
@@ -34,9 +39,9 @@ export const getAdvertismentWhereCondition = (savedSearch: ISavedSearch) => {
   return whereCondition;
 };
 
-export const getWhereConditionForSavedSearch = (
+export const getWhereConditionForNotification = (
   ad: IAdvertisement
-): WhereOptions<ISavedSearch> => {
+): WhereOptions<INotification> => {
   const priceCondition = {
     [Op.or]: [
       {

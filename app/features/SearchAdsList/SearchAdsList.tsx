@@ -17,20 +17,7 @@ import { SearchAdsContext } from "@/app/context/SearchAdsContext";
 export default function SearchAdsList() {
   const { ads, isLoading, setOpenedAd, setIsAdOpen, savedSearch } =
     useContext(SearchAdsContext);
-  const [showList, setShowList] = useState(false);
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (!isLoading) {
-      const timer = setTimeout(() => {
-        setShowList(true);
-      }, 600);
-
-      return () => clearTimeout(timer);
-    } else {
-      setShowList(false);
-    }
-  }, [isLoading]);
 
   const handleAdClick = (ad: IAdvertisement) => {
     setOpenedAd(ad);
@@ -39,64 +26,50 @@ export default function SearchAdsList() {
 
   return (
     <>
-      <SwitchTransition mode="out-in">
-        <CSSTransition
-          key={showList ? "list" : "loader"}
-          timeout={300}
-          classNames={{
-            enter: styles.fadeEnter,
-            enterActive: styles.fadeEnterActive,
-            exit: styles.fadeExit,
-            exitActive: styles.fadeExitActive,
-          }}
-          unmountOnExit
-        >
-          {showList ? (
-            <div className={styles.list}>
-              <CustomFlex direction="column" justify="center" gap="10px">
-                <CustomFlex direction="column" gap="10px">
-                  <CustomTyphography fontSize="18px" fontWeight="bold">
-                    {savedSearch?.Region?.name
-                      ? `Поиск автомобилей в регионе ${savedSearch?.Region?.name}`
-                      : "Поиск автомобилей по всей России"}
-                  </CustomTyphography>
-                  <CustomButton
-                    onClick={() => setOpen(true)}
-                    variant="outline"
-                    padding="small"
-                    stretched
-                    beforeIcon={<SettingsIcon />}
-                  >
-                    Изменить параметры
-                  </CustomButton>
-                </CustomFlex>
+      {isLoading ? (
+        <div className={styles.loaderWrapper}>
+          <CustomLoader
+            size={36}
+            label="Загружаем объявления"
+            loading={isLoading}
+            successLabel="Объявления загружены"
+          />
+        </div>
+      ) : (
+        <div className={styles.list}>
+          <CustomFlex direction="column" justify="center" gap="10px">
+            <CustomFlex direction="column" gap="10px">
+              <CustomTyphography fontSize="18px" fontWeight="bold">
+                {savedSearch?.Region?.name
+                  ? `Поиск автомобилей в регионе ${savedSearch?.Region?.name}`
+                  : "Поиск автомобилей по всей России"}
+              </CustomTyphography>
+              <CustomButton
+                onClick={() => setOpen(true)}
+                variant="outline"
+                padding="small"
+                stretched
+                beforeIcon={<SettingsIcon />}
+              >
+                Изменить параметры
+              </CustomButton>
+            </CustomFlex>
 
-                <CustomTyphography fontSize="18px" fontWeight="bold">
-                  {`${ads.length} ${pluralize(ads.length, [
-                    "Объявление",
-                    "Объявления",
-                    "Объявлений",
-                  ])}`}
-                </CustomTyphography>
-              </CustomFlex>
-              {ads.map((ad) => (
-                <AdCard key={ad.id} ad={ad} onClick={() => handleAdClick(ad)} />
-              ))}
-              <Ad />
-              <SavedSearch open={open} onDismiss={() => setOpen(false)} />
-            </div>
-          ) : (
-            <div className={styles.loaderWrapper}>
-              <CustomLoader
-                size={36}
-                label="Загружаем объявления"
-                loading={isLoading}
-                successLabel="Объявления загружены"
-              />
-            </div>
-          )}
-        </CSSTransition>
-      </SwitchTransition>
+            <CustomTyphography fontSize="18px" fontWeight="bold">
+              {`${ads.length} ${pluralize(ads.length, [
+                "Объявление",
+                "Объявления",
+                "Объявлений",
+              ])}`}
+            </CustomTyphography>
+          </CustomFlex>
+          {ads.map((ad) => (
+            <AdCard key={ad.id} ad={ad} onClick={() => handleAdClick(ad)} />
+          ))}
+          <Ad />
+          <SavedSearch open={open} onDismiss={() => setOpen(false)} />
+        </div>
+      )}
     </>
   );
 }

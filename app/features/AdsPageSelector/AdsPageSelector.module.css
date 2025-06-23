@@ -1,0 +1,9 @@
+.selectorWrapper {
+  padding: 8px;
+  height: min-content;
+  box-sizing: border-box;
+}
+
+.selectorButton {
+  max-height: 40px;
+}

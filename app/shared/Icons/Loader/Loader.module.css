@@ -9,3 +9,18 @@
     stroke-dashoffset: 50;
   }
 }
+
+.doneIcon {
+  color: var(--color-dark);
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: doneDraw 0.3s ease-out forwards;
+  transition: stroke-dashoffset 0.3s ease-out;
+}
+
+/* Отрисовка галочки */
+@keyframes doneDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

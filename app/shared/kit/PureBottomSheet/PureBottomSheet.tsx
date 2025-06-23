@@ -85,7 +85,6 @@ export const PureBottomSheet: FC<IProps> = ({
     if (!isDragging || disableDragClose) return;
     setIsDragging(false);
     if (currentY > 100) {
-      // Порог для закрытия
       onDismiss();
     }
     setCurrentY(0);
@@ -102,7 +101,7 @@ export const PureBottomSheet: FC<IProps> = ({
   );
 
   const sheetStyle = {
-    height: `${snap}vh`,
+    height: `calc(${snap}vh + ${footer ? 50 : 0}px)`,
     transform: currentY ? `translateY(${currentY}px)` : undefined,
   };
 

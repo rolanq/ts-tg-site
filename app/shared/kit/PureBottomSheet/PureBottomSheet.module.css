@@ -74,7 +74,7 @@
   overflow-x: hidden;
   max-height: calc(100% - 60px);
   -webkit-overflow-scrolling: touch;
-  margin-bottom: 50px;
+  margin-bottom: 100px;
 }
 
 .footer {

@@ -9,7 +9,9 @@ import React, { useCallback, useEffect, useState } from "react";
 import styles from "./UserStats.module.css";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
 import { CustomButton } from "@/app/shared/kit/CustomButton/CustomButton";
-import { updateSavedSearch } from "@/app/services/SavedSearch";
+import { disableNotifications } from "@/app/services/Notifications";
+import toast from "react-hot-toast";
+import { useToast } from "@/app/shared/hooks/useToast";
 
 interface IProps {
   open: boolean;
@@ -19,6 +21,7 @@ interface IProps {
 export default function UserStats({ open, onDismiss }: IProps) {
   const { user } = useTelegram();
   const [statistics, setStatistics] = useState<IStatistics | null>(null);
+  const { success } = useToast();
 
   useEffect(() => {
     if (user) {
@@ -28,11 +31,8 @@ export default function UserStats({ open, onDismiss }: IProps) {
 
   const handleDisableNotifications = useCallback(() => {
     if (user?.id) {
-      updateSavedSearch(user.id, {
-        regionId: null,
-        brandId: null,
-        priceFrom: null,
-        priceTo: null,
+      disableNotifications(user.id).then(() => {
+        success("Уведомления выключены");
       });
     }
   }, [user]);

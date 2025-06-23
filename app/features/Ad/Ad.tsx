@@ -165,7 +165,7 @@ export const Ad = () => {
       <PureBottomSheet
         open={isAdOpen}
         onDismiss={onDismiss}
-        snap={95}
+        snap={90}
         disableDragClose
         footerWithoutBoxShadow
         footer={<FooterButtons setHideAdOpen={setHideAdOpen} />}

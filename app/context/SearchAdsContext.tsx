@@ -8,7 +8,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { getAdsBySavedSearch, getAllAds } from "../services/Ads";
+import { getAdsBySavedSearch } from "../services/Ads";
 import { useTelegram } from "../shared/hooks/useTelegram";
 import { getSavedSearch } from "../services/SavedSearch";
 import { IContextAds } from "./defaulContext";

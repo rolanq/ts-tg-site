@@ -35,7 +35,7 @@ export default function HideAd({ open, onDismiss }: HideAdProps) {
     <PureBottomSheet
       open={open}
       onDismiss={onDismiss}
-      snap={35}
+      snap={50}
       closeIcon={false}
       footer={
         <CustomFlex gap="10px">

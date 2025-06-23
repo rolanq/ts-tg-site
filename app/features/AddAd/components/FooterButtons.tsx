@@ -58,9 +58,7 @@ export const FooterButtons = () => {
 
     publishAd(Number(preparedData.userId)).then(async (newAd) => {
       const messageId = await sendAdToChannel(newAd);
-      console.log("sending notifications");
-      const notificationResponses = await sendNotifications(newAd);
-      console.log(notificationResponses);
+      await sendNotifications(newAd);
 
       if (newAd.id) {
         await updateAd(newAd.id, {

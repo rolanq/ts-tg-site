@@ -1,0 +1,20 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.loaderWrapper {
+  height: 100%;
+}
+
+.container {
+  padding: 8px;
+}
+
+.addButton {
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+}

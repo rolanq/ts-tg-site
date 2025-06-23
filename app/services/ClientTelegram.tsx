@@ -1,7 +1,7 @@
 import { IAdvertisement } from "../db/db";
 import { TELEGRAM_API_URL } from "../shared/constants/telegram";
 import { renderAdvertismentMessage } from "../shared/utils/clientUtils";
-import { getSavedSearchesByAd } from "./SavedSearch";
+import { getNotificationsByAd } from "./Notifications";
 
 type Media = {
   type: "photo" | "video";
@@ -131,9 +131,13 @@ export const editAdInChannel = async (ad: IAdvertisement) => {
 };
 
 const sendNotificationBatch = async (
-  notifications: { userId: string; ad: IAdvertisement }[]
+  notifications: { userId?: string; ad: IAdvertisement }[]
 ) => {
   const promises = notifications.map(({ userId, ad }) => {
+    if (!userId) {
+      return;
+    }
+
     const formData = new FormData();
     formData.append("chat_id", userId);
     formData.append(
@@ -171,12 +175,12 @@ const sendNotificationBatch = async (
 
 export const sendNotifications = async (ad: IAdvertisement) => {
   try {
-    const matchingSavedSearches = await getSavedSearchesByAd(ad);
+    const matchingNotifications = await getNotificationsByAd(ad);
     const BATCH_SIZE = 10;
     const DELAY = 1500;
 
-    const notifications = matchingSavedSearches.map((savedSearch) => ({
-      userId: savedSearch.userId,
+    const notifications = matchingNotifications.map((notification) => ({
+      userId: notification.userId,
       ad,
     }));
 
