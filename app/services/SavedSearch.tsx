@@ -2,12 +2,15 @@
 
 import {
   Brand,
+  IAdvertisement,
   IBrand,
   IRegion,
   ISavedSearch,
   Region,
   SavedSearch,
 } from "@/app/db/db";
+import { Op } from "sequelize";
+import { getWhereConditionForSavedSearch } from "../shared/utils/utils";
 
 export const getSavedSearch = async (userId: number) => {
   const savedSearch = await SavedSearch.findOne({
@@ -56,4 +59,16 @@ export const updateSavedSearch = async (
 
   const updatedSavedSearch = await getSavedSearch(userId);
   return updatedSavedSearch;
+};
+
+export const getSavedSearchesByAd = async (ad: IAdvertisement) => {
+  const where = getWhereConditionForSavedSearch(ad);
+
+  const matchingSavedSearches = await SavedSearch.findAll({
+    where: {
+      ...where,
+    },
+  });
+
+  return matchingSavedSearches.map((savedSearch) => savedSearch.toJSON());
 };

@@ -7,6 +7,7 @@ import styles from "./commonSteps.module.css";
 import { isAvailableToPublish } from "./utils";
 import {
   sendAdToChannel,
+  sendNotifications,
   sendPhotos,
   sendVideo,
 } from "@/app/services/ClientTelegram";
@@ -57,6 +58,9 @@ export const FooterButtons = () => {
 
     publishAd(Number(preparedData.userId)).then(async (newAd) => {
       const messageId = await sendAdToChannel(newAd);
+      console.log("sending notifications");
+      const notificationResponses = await sendNotifications(newAd);
+      console.log(notificationResponses);
 
       if (newAd.id) {
         await updateAd(newAd.id, {

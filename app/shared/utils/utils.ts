@@ -34,6 +34,47 @@ export const getAdvertismentWhereCondition = (savedSearch: ISavedSearch) => {
   return whereCondition;
 };
 
+export const getWhereConditionForSavedSearch = (
+  ad: IAdvertisement
+): WhereOptions<ISavedSearch> => {
+  const priceCondition = {
+    [Op.or]: [
+      {
+        [Op.and]: [
+          { priceFrom: { [Op.lte]: ad.price } },
+          { priceTo: { [Op.gte]: ad.price } },
+        ],
+      },
+      {
+        priceFrom: { [Op.lte]: ad.price },
+        priceTo: null,
+      },
+      {
+        priceFrom: null,
+        priceTo: { [Op.gte]: ad.price },
+      },
+      {
+        priceFrom: null,
+        priceTo: null,
+      },
+    ],
+  };
+
+  const brandCondition = {
+    [Op.or]: [{ brandId: ad.brandId }, { brandId: null }],
+  };
+
+  const regionCondition = {
+    [Op.or]: [{ regionId: ad.regionId }, { regionId: null }],
+  };
+
+  const whereCondition = {
+    [Op.and]: [priceCondition, brandCondition, regionCondition],
+  };
+
+  return whereCondition;
+};
+
 export const convertDraftToAd = (
   id: number,
   draft: IAdvertisementDraft,

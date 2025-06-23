@@ -1,7 +1,20 @@
-import { IAdvertisement } from "../db/db";
+import { IAdvertisement, SavedSearch } from "../db/db";
 import { TELEGRAM_API_URL } from "../shared/constants/telegram";
 import { addWatermark } from "../shared/utils/addWatermark";
 import { renderAdvertismentMessage } from "../shared/utils/clientUtils";
+import { Model, Op } from "sequelize";
+import { getSavedSearchesByAd } from "./SavedSearch";
+
+interface ISavedSearch {
+  id?: number;
+  userId: string;
+  regionId?: number | null;
+  brandId?: number | null;
+  priceFrom?: number | null;
+  priceTo?: number | null;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
 type Media = {
   type: "photo" | "video";
@@ -126,4 +139,46 @@ export const editAdInChannel = async (ad: IAdvertisement) => {
 
   const data = await response.json();
   return data.result.message_id;
+};
+
+export const sendNotifications = async (ad: IAdvertisement) => {
+  try {
+    const matchingSavedSearches = await getSavedSearchesByAd(ad);
+    console.log("matchingSavedSearches", matchingSavedSearches);
+
+    const notificationPromises = matchingSavedSearches.map(
+      async (savedSearch) => {
+        const formData = new FormData();
+        const userId = savedSearch.userId;
+        formData.append("chat_id", userId);
+        formData.append(
+          "text",
+          "По вашему сохраненному поиску появилось новое объявление"
+        );
+        formData.append(
+          "reply_markup",
+          JSON.stringify({
+            inline_keyboard: [
+              [
+                {
+                  text: "🚗 Посмотреть",
+                  web_app: { url: `https://vkasanie.com/?ad=${ad.id}` },
+                },
+              ],
+            ],
+          })
+        );
+
+        return fetch(`${TELEGRAM_API_URL}/sendMessage`, {
+          method: "POST",
+          body: formData,
+        });
+      }
+    );
+
+    const responses = await Promise.all(notificationPromises);
+    console.log(responses);
+  } catch (error) {
+    console.error("Error sending notifications:", error);
+  }
 };
