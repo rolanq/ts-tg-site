@@ -86,3 +86,11 @@ export const BAD_WORDS = [
   "шлюха",
   "шлюхи",
 ];
+
+export interface IStatistics {
+  adCount: number;
+  adsOnHold: number;
+  activeAdsCount: number;
+  soldCount: number;
+  totalEarnings: number;
+}

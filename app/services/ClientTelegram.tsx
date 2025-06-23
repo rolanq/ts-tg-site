@@ -160,6 +160,10 @@ const sendNotificationBatch = async (
               text: "🚗 Посмотреть",
               web_app: { url: `https://vkasanie.com/?ad=${ad.id}` },
             },
+            {
+              text: "Выключить уведомления",
+              web_app: { url: `https://vkasanie.com/profile?user_opened=true` },
+            },
           ],
         ],
       })

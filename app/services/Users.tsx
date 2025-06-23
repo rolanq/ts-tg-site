@@ -1,7 +1,7 @@
 "use server";
 import React from "react";
 import { TelegramUser } from "../shared/types/telegram";
-import { User } from "../db/db";
+import { Advertisement, User } from "../db/db";
 import { USER_STATE_ENUM } from "../shared/types/config";
 
 export default async function createUser(user: TelegramUser) {
@@ -26,3 +26,24 @@ export default async function createUser(user: TelegramUser) {
     return createdUser.toJSON();
   }
 }
+
+export const getStatisticsByUserId = async (userId: string) => {
+  const allAdvertisements = await Advertisement.findAll({
+    where: { userId },
+  });
+
+  const formattedAdvertisements = allAdvertisements.map((ad) =>
+    ad.get({ plain: true })
+  );
+
+  return {
+    adCount: formattedAdvertisements.length,
+    adsOnHold: formattedAdvertisements.filter((ad) => ad.isOnHold).length,
+    activeAdsCount: formattedAdvertisements.filter((ad) => ad.isActive).length,
+    soldCount: formattedAdvertisements.filter((ad) => !ad.isActive).length,
+    totalEarnings: formattedAdvertisements.reduce(
+      (acc, ad) => acc + Number(ad.price),
+      0
+    ),
+  };
+};
