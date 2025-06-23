@@ -46,16 +46,22 @@ export const getWhereConditionForSavedSearch = (
         ],
       },
       {
-        priceFrom: { [Op.lte]: ad.price },
-        priceTo: null,
+        [Op.and]: [{ priceFrom: { [Op.lte]: ad.price } }, { priceTo: null }],
       },
       {
-        priceFrom: null,
-        priceTo: { [Op.gte]: ad.price },
+        [Op.and]: [{ priceFrom: null }, { priceTo: { [Op.gte]: ad.price } }],
       },
       {
-        priceFrom: null,
-        priceTo: null,
+        [Op.and]: [
+          { priceFrom: null },
+          { priceTo: null },
+          {
+            [Op.or]: [
+              { brandId: { [Op.not]: null } },
+              { regionId: { [Op.not]: null } },
+            ],
+          },
+        ],
       },
     ],
   };

@@ -141,43 +141,58 @@ export const editAdInChannel = async (ad: IAdvertisement) => {
   return data.result.message_id;
 };
 
+const sendNotificationBatch = async (
+  notifications: { userId: string; ad: IAdvertisement }[]
+) => {
+  const promises = notifications.map(({ userId, ad }) => {
+    const formData = new FormData();
+    formData.append("chat_id", userId);
+    formData.append(
+      "text",
+      "По вашему сохраненному поиску появилось новое объявление"
+    );
+    formData.append(
+      "reply_markup",
+      JSON.stringify({
+        inline_keyboard: [
+          [
+            {
+              text: "🚗 Посмотреть",
+              web_app: { url: `https://vkasanie.com/?ad=${ad.id}` },
+            },
+          ],
+        ],
+      })
+    );
+
+    return fetch(`${TELEGRAM_API_URL}/sendMessage`, {
+      method: "POST",
+      body: formData,
+    });
+  });
+
+  await Promise.all(promises);
+};
+
 export const sendNotifications = async (ad: IAdvertisement) => {
   try {
     const matchingSavedSearches = await getSavedSearchesByAd(ad);
-    console.log("matchingSavedSearches", matchingSavedSearches);
+    const BATCH_SIZE = 10;
+    const DELAY = 1500;
 
-    const notificationPromises = matchingSavedSearches.map(
-      async (savedSearch) => {
-        const formData = new FormData();
-        const userId = savedSearch.userId;
-        formData.append("chat_id", userId);
-        formData.append(
-          "text",
-          "По вашему сохраненному поиску появилось новое объявление"
-        );
-        formData.append(
-          "reply_markup",
-          JSON.stringify({
-            inline_keyboard: [
-              [
-                {
-                  text: "🚗 Посмотреть",
-                  web_app: { url: `https://vkasanie.com/?ad=${ad.id}` },
-                },
-              ],
-            ],
-          })
-        );
+    const notifications = matchingSavedSearches.map((savedSearch) => ({
+      userId: savedSearch.userId,
+      ad,
+    }));
 
-        return fetch(`${TELEGRAM_API_URL}/sendMessage`, {
-          method: "POST",
-          body: formData,
-        });
+    for (let i = 0; i < notifications.length; i += BATCH_SIZE) {
+      const batch = notifications.slice(i, i + BATCH_SIZE);
+      await sendNotificationBatch(batch);
+
+      if (i + BATCH_SIZE < notifications.length) {
+        await new Promise((resolve) => setTimeout(resolve, DELAY));
       }
-    );
-
-    const responses = await Promise.all(notificationPromises);
-    console.log(responses);
+    }
   } catch (error) {
     console.error("Error sending notifications:", error);
   }
