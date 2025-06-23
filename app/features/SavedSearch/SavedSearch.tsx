@@ -73,6 +73,18 @@ export default function SavedSearch({ open, onDismiss }: SavedSearchProps) {
       regionId: null,
     }));
   }, [setSavedSearch]);
+  const handleResetPriceFrom = useCallback(() => {
+    setSavedSearch((prev) => ({
+      ...prev,
+      priceFrom: null,
+    }));
+  }, [setSavedSearch]);
+  const handleResetPriceTo = useCallback(() => {
+    setSavedSearch((prev) => ({
+      ...prev,
+      priceTo: null,
+    }));
+  }, [setSavedSearch]);
 
   const handleResetBrand = useCallback(() => {
     setSavedSearch((prev) => ({
@@ -173,53 +185,44 @@ export default function SavedSearch({ open, onDismiss }: SavedSearchProps) {
                   />
                 </div>
               ) : (
-                <>
-                  <CustomFlex
-                    direction="column"
-                    gap="10px"
-                    className={styles.container}
-                  >
-                    <CustomTyphography fontSize="20px" fontWeight="bold">
-                      Изменение параметров поиска
-                    </CustomTyphography>
+                <div className={styles.content}>
+                  <CustomTyphography fontSize="20px" fontWeight="bold">
+                    Изменение параметров поиска
+                  </CustomTyphography>
+                  <div className={styles.container}>
+                    <CustomSelect
+                      value={savedSearch?.regionId?.toString() || ""}
+                      options={preparedOptions.regions}
+                      onChange={handleRegionChange}
+                      placeholder="Введите регион продажи"
+                      label="Регион продажи"
+                      className={styles.select}
+                    />
+                    <CustomButton
+                      variant="tertiary"
+                      padding="small"
+                      className={styles.resetButton}
+                      onClick={handleResetRegion}
+                    >
+                      Сбросить
+                    </CustomButton>
 
-                    <CustomFlex gap="5px" align="center">
-                      <CustomSelect
-                        value={savedSearch?.regionId?.toString() || ""}
-                        options={preparedOptions.regions}
-                        onChange={handleRegionChange}
-                        placeholder="Введите регион продажи"
-                        label="Регион продажи"
-                        className={styles.select}
-                      />
-                      <CustomButton
-                        variant="tertiary"
-                        padding="small"
-                        className={styles.resetButton}
-                        onClick={handleResetRegion}
-                      >
-                        Сбросить
-                      </CustomButton>
-                    </CustomFlex>
-
-                    <CustomFlex gap="5px" align="center">
-                      <CustomSelect
-                        value={savedSearch?.brandId?.toString() || ""}
-                        options={preparedOptions.brands}
-                        onChange={handleBrandChange}
-                        placeholder="Выберите марку машины"
-                        label="Марка машины"
-                        className={styles.select}
-                      />
-                      <CustomButton
-                        variant="tertiary"
-                        padding="small"
-                        className={styles.resetButton}
-                        onClick={handleResetBrand}
-                      >
-                        Сбросить
-                      </CustomButton>
-                    </CustomFlex>
+                    <CustomSelect
+                      value={savedSearch?.brandId?.toString() || ""}
+                      options={preparedOptions.brands}
+                      onChange={handleBrandChange}
+                      placeholder="Выберите марку машины"
+                      label="Марка машины"
+                      className={styles.select}
+                    />
+                    <CustomButton
+                      variant="tertiary"
+                      padding="small"
+                      className={styles.resetButton}
+                      onClick={handleResetBrand}
+                    >
+                      Сбросить
+                    </CustomButton>
 
                     <CustomInput
                       type="number"
@@ -228,6 +231,14 @@ export default function SavedSearch({ open, onDismiss }: SavedSearchProps) {
                       value={savedSearch?.priceFrom?.toString() || ""}
                       onChange={handlePriceFromChange}
                     />
+                    <CustomButton
+                      variant="tertiary"
+                      padding="small"
+                      className={styles.resetButton}
+                      onClick={handleResetPriceFrom}
+                    >
+                      Сбросить
+                    </CustomButton>
                     <CustomInput
                       type="number"
                       label="Цена до"
@@ -235,8 +246,16 @@ export default function SavedSearch({ open, onDismiss }: SavedSearchProps) {
                       value={savedSearch?.priceTo?.toString() || ""}
                       onChange={handlePriceToChange}
                     />
-                  </CustomFlex>
-                </>
+                    <CustomButton
+                      variant="tertiary"
+                      padding="small"
+                      className={styles.resetButton}
+                      onClick={handleResetPriceTo}
+                    >
+                      Сбросить
+                    </CustomButton>
+                  </div>
+                </div>
               )}
             </>
           )}

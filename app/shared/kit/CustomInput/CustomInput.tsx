@@ -17,6 +17,7 @@ interface ICustomInputProps {
   checkValue?: (value: string) => boolean;
   strictCheck?: boolean;
   withDelimeter?: boolean;
+  inputClassName?: string;
 }
 
 export const CustomInput = ({
