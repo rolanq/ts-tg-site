@@ -31,7 +31,13 @@ ${ad.autotekaLink ? `🔗 <a href="${ad.autotekaLink}">Автотека</a>\n` :
 Телефон: ${ad.phoneNumber}
 Telegram: ${ad.telegramUsername ? `@${ad.telegramUsername}` : "Не указано"}
 
+${
+  ad.photos.length > 0 || ad.video
+    ? `
 <a href="https://t.me/Prodaisam_bot?startapp">Посмотреть объявление</a>
+`
+    : ""
+}
 `;
 
   return adMessage;
