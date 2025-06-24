@@ -47,14 +47,3 @@
   transform: translateY(10px);
   transition: all 1000ms ease;
 }
-
-.contentWrapper {
-  transition: height 0.3s ease;
-}
-
-.contentWithKeyboard {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}

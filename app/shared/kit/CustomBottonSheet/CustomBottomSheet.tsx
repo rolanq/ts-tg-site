@@ -1,6 +1,6 @@
 "use client";
-import React, { FC, useEffect, useState } from "react";
-import { BottomSheet } from "react-spring-bottom-sheet";
+import React, { FC, useEffect, useRef, useState } from "react";
+import { BottomSheet, BottomSheetRef } from "react-spring-bottom-sheet";
 import styles from "./CustomBottomSheet.module.css";
 import "react-spring-bottom-sheet/dist/style.css";
 import "./override.css";
@@ -32,10 +32,11 @@ export const CustomBottomSheet: FC<IProps> = ({
   snap = 30,
   footerWithoutBoxShadow,
   closeIcon = true,
-  disableDragClose = false,
+  disableDragClose = true,
   disableScrollX = false,
   disableDismiss = false,
 }) => {
+  const bottomSheetRef = useRef<BottomSheetRef>(null);
   const [viewportHeight, setViewportHeight] = useState(0);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [initialViewportHeight, setInitialViewportHeight] = useState(0);
@@ -54,15 +55,12 @@ export const CustomBottomSheet: FC<IProps> = ({
   useEffect(() => {
     const handleResize = () => {
       const currentHeight = window.innerHeight;
-      // Если текущая высота меньше начальной на 150px или больше,
-      // считаем что клавиатура открыта
       setIsKeyboardVisible(initialViewportHeight - currentHeight > 150);
       setViewportHeight(currentHeight);
     };
 
     window.addEventListener("resize", handleResize);
 
-    // Для iOS нужно также отслеживать изменение visualViewport
     if (window.visualViewport) {
       window.visualViewport.addEventListener("resize", handleResize);
     }
@@ -109,6 +107,7 @@ export const CustomBottomSheet: FC<IProps> = ({
         disableScrollX && styles.disableScrollX
       )}
       footer={footer}
+      ref={bottomSheetRef}
       scrollLocking
       expandOnContentDrag={!disableDragClose}
       defaultSnap={(viewportHeight / 100) * snap}
@@ -129,14 +128,7 @@ export const CustomBottomSheet: FC<IProps> = ({
           <CloseIcon />
         </CustomButton>
       )}
-      <div
-        className={classNames(
-          styles.contentWrapper,
-          isKeyboardVisible && styles.contentWithKeyboard
-        )}
-      >
-        <div>{children}</div>
-      </div>
+      {children}
     </BottomSheet>
   );
 };

@@ -63,7 +63,7 @@ export default function AddAdForm() {
 
   return (
     <CustomBottomSheet
-      snap={75}
+      snap={90}
       open={!!openedStep}
       onDismiss={onDismiss}
       footerWithoutBoxShadow
