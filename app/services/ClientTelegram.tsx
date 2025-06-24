@@ -3,6 +3,8 @@ import { TELEGRAM_API_URL } from "../shared/constants/telegram";
 import { renderAdvertismentMessage } from "../shared/utils/clientUtils";
 import { getNotificationsByAd } from "./Notifications";
 
+const channelId = process.env.NEXT_PUBLIC_TELEGRAM_CHANNEL_ID!;
+const photosChannelId = process.env.NEXT_PUBLIC_PHOTOS_CHANNEL_ID!;
 type Media = {
   type: "photo" | "video";
   media: string;
@@ -14,7 +16,7 @@ export const sendPhotos = async (files: File[]) => {
     const formData = new FormData();
     // const watermarkedPhoto = await addWatermark(photo);
     formData.append("photo", photo);
-    formData.append("chat_id", process.env.NEXT_PUBLIC_PHOTOS_CHANNEL_ID!);
+    formData.append("chat_id", photosChannelId);
 
     const response = await fetch(`${TELEGRAM_API_URL}/sendPhoto`, {
       method: "POST",
@@ -34,7 +36,7 @@ export const sendVideo = async (file: File) => {
   const formData = new FormData();
   const blob = new Blob([file], { type: file.type });
   formData.append("video", blob);
-  formData.append("chat_id", process.env.NEXT_PUBLIC_PHOTOS_CHANNEL_ID!);
+  formData.append("chat_id", channelId);
 
   const response = await fetch(`${TELEGRAM_API_URL}/sendVideo`, {
     method: "POST",
@@ -55,7 +57,17 @@ export const sendAdToChannel = async (ad: IAdvertisement) => {
   return messageId;
 };
 
-const sendMedia = async (ad: IAdvertisement) => {
+const sendMedia = async (
+  ad: IAdvertisement,
+  chatId?: string,
+  appendText?: string,
+  keyboard?: {
+    text: string;
+    web_app: {
+      url: string;
+    };
+  }[][]
+) => {
   const message = renderAdvertismentMessage(ad);
   const formData = new FormData();
   const media: Media[] = [];
@@ -76,13 +88,21 @@ const sendMedia = async (ad: IAdvertisement) => {
   }
 
   if (media.length > 0) {
-    media[0].caption = message;
+    media[0].caption = `${appendText ? appendText + "\n" : ""}${message}`;
   }
   formData.append("media", JSON.stringify(media));
-  formData.append("message_text", message);
-  formData.append("chat_id", process.env.NEXT_PUBLIC_TELEGRAM_CHANNEL_ID!);
+  formData.append(
+    "message_text",
+    `${appendText ? appendText + "\n" : ""}${message}`
+  );
+  formData.append("chat_id", chatId || channelId);
   formData.append("parse_mode", "HTML");
-
+  if (keyboard) {
+    formData.append(
+      "reply_markup",
+      JSON.stringify({ inline_keyboard: keyboard })
+    );
+  }
   const response = await fetch(`${TELEGRAM_API_URL}/sendMediaGroup`, {
     method: "POST",
     body: formData,
@@ -92,14 +112,29 @@ const sendMedia = async (ad: IAdvertisement) => {
   return data.result.message_id;
 };
 
-const sendText = async (ad: IAdvertisement) => {
+const sendText = async (
+  ad: IAdvertisement,
+  chatId?: string,
+  appendText?: string,
+  keyboard?: {
+    text: string;
+    web_app: {
+      url: string;
+    };
+  }[][]
+) => {
   const message = renderAdvertismentMessage(ad);
   const formData = new FormData();
 
-  formData.append("chat_id", process.env.NEXT_PUBLIC_TELEGRAM_CHANNEL_ID!);
-  formData.append("text", message);
+  formData.append("chat_id", chatId || channelId);
+  formData.append("text", `${appendText ? appendText + "\n\n" : ""}${message}`);
   formData.append("parse_mode", "HTML");
-
+  if (keyboard) {
+    formData.append(
+      "reply_markup",
+      JSON.stringify({ inline_keyboard: keyboard })
+    );
+  }
   const response = await fetch(`${TELEGRAM_API_URL}/sendMessage`, {
     method: "POST",
     body: formData,
@@ -117,7 +152,7 @@ export const editAdInChannel = async (ad: IAdvertisement) => {
   }
 
   const formData = new FormData();
-  formData.append("chat_id", process.env.NEXT_PUBLIC_TELEGRAM_CHANNEL_ID!);
+  formData.append("chat_id", channelId);
   formData.append("message_id", ad.channelMessageId.toString());
   formData.append("text", message);
 
@@ -133,41 +168,75 @@ export const editAdInChannel = async (ad: IAdvertisement) => {
 const sendNotificationBatch = async (
   notifications: { userId?: string; ad: IAdvertisement }[]
 ) => {
-  const promises = notifications.map(({ userId, ad }) => {
+  const keyboard = (ad: IAdvertisement) => [
+    [
+      {
+        text: "🚗 Посмотреть",
+        web_app: { url: `https://vkasanie.com/?ad=${ad.id}` },
+      },
+    ],
+    [
+      {
+        text: "Выключить уведомления",
+        web_app: {
+          url: `https://vkasanie.com/profile?user_opened=true`,
+        },
+      },
+    ],
+  ];
+  const promises = notifications.map(async ({ userId, ad }) => {
     if (!userId) {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("chat_id", userId);
-    formData.append(
-      "text",
-      "По вашему сохраненному поиску появилось новое объявление"
-    );
-    formData.append(
-      "reply_markup",
-      JSON.stringify({
-        inline_keyboard: [
-          [
-            {
-              text: "🚗 Посмотреть",
-              web_app: { url: `https://vkasanie.com/?ad=${ad.id}` },
-            },
-          ],
-          [
-            {
-              text: "Выключить уведомления",
-              web_app: { url: `https://vkasanie.com/profile?user_opened=true` },
-            },
-          ],
-        ],
-      })
-    );
+    if (ad.photos?.length || ad.video) {
+      const messageId = await sendMedia(
+        ad,
+        userId,
+        "По вашему сохраненному поиску появилось новое объявление",
+        keyboard(ad)
+      );
+      return messageId;
+    }
 
-    return fetch(`${TELEGRAM_API_URL}/sendMessage`, {
-      method: "POST",
-      body: formData,
-    });
+    const messageId = await sendText(
+      ad,
+      userId,
+      "По вашему сохраненному поиску появилось новое объявление",
+      keyboard(ad)
+    );
+    return messageId;
+
+    // const formData = new FormData();
+    // formData.append("chat_id", userId);
+    // formData.append(
+    //   "text",
+    //   "По вашему сохраненному поиску появилось новое объявление"
+    // );
+    // formData.append(
+    //   "reply_markup",
+    //   JSON.stringify({
+    //     inline_keyboard: [
+    //       [
+    //         {
+    //           text: "🚗 Посмотреть",
+    //           web_app: { url: `https://vkasanie.com/?ad=${ad.id}` },
+    //         },
+    //       ],
+    //       [
+    //         {
+    //           text: "Выключить уведомления",
+    //           web_app: { url: `https://vkasanie.com/profile?user_opened=true` },
+    //         },
+    //       ],
+    //     ],
+    //   })
+    // );
+
+    // return fetch(`${TELEGRAM_API_URL}/sendMessage`, {
+    //   method: "POST",
+    //   body: formData,
+    // });
   });
 
   await Promise.all(promises);

@@ -148,6 +148,7 @@ export const Ad = () => {
           className={styles.video}
           rel="preload"
           preload="auto"
+          autoPlay={false}
         />
       </div>
     );

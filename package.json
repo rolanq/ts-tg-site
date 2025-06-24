@@ -18,6 +18,7 @@
     "react-hot-toast": "^2.5.2",
     "react-imask": "^7.6.1",
     "react-transition-group": "^4.4.5",
+    "react-zoom-pan-pinch": "^3.7.0",
     "sequelize": "^6.37.1",
     "sequelize-cli": "^6.6.2"
   },
