@@ -128,7 +128,41 @@ export const CustomInput = ({
   );
 
   const handleFocus = () => {
-    inputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (!inputRef.current) return;
+
+    // Находим ближайший контейнер с прокруткой
+    let element: HTMLElement = inputRef.current;
+    let scrollContainer: HTMLElement | null = null;
+
+    while (element.parentElement) {
+      const { overflowY } = window.getComputedStyle(element.parentElement);
+      if (overflowY === "auto" || overflowY === "scroll") {
+        scrollContainer = element.parentElement;
+        break;
+      }
+      element = element.parentElement;
+    }
+
+    // Если нашли контейнер с прокруткой, используем scrollIntoView с этим контейнером
+    if (scrollContainer) {
+      const containerRect = scrollContainer.getBoundingClientRect();
+      const inputRect = inputRef.current.getBoundingClientRect();
+      const scrollTop = scrollContainer.scrollTop;
+
+      // Вычисляем позицию для центрирования
+      const targetScroll =
+        scrollTop +
+        (inputRect.top - containerRect.top) -
+        (containerRect.height - inputRect.height) / 2;
+
+      scrollContainer.scrollTo({
+        top: targetScroll,
+        behavior: "smooth",
+      });
+    } else {
+      // Если контейнер не найден, используем стандартный scrollIntoView
+      inputRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
   };
 
   const displayValue = formatNumberWithDots(value);
