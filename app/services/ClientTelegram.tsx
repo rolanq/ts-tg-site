@@ -10,6 +10,7 @@ type Media = {
   type: "photo" | "video";
   media: string;
   caption?: string;
+  parse_mode?: string;
 };
 
 export const sendPhotos = async (files: File[]) => {
@@ -92,6 +93,7 @@ const sendMedia = async (
 
   if (media.length > 0) {
     media[0].caption = `${appendText ? appendText + "\n" : ""}${message}`;
+    media[0].parse_mode = "HTML";
   }
   formData.append("media", JSON.stringify(media));
   formData.append(
@@ -158,6 +160,7 @@ export const editAdInChannel = async (ad: IAdvertisement) => {
   formData.append("chat_id", channelId);
   formData.append("message_id", ad.channelMessageId.toString());
   formData.append("text", message);
+  formData.append("parse_mode", "HTML");
 
   const response = await fetch(`${TELEGRAM_API_URL}/editMessageText`, {
     method: "POST",
@@ -209,37 +212,6 @@ const sendNotificationBatch = async (
       keyboard(ad)
     );
     return messageId;
-
-    // const formData = new FormData();
-    // formData.append("chat_id", userId);
-    // formData.append(
-    //   "text",
-    //   "По вашему сохраненному поиску появилось новое объявление"
-    // );
-    // formData.append(
-    //   "reply_markup",
-    //   JSON.stringify({
-    //     inline_keyboard: [
-    //       [
-    //         {
-    //           text: "🚗 Посмотреть",
-    //           web_app: { url: `https://vkasanie.com/?ad=${ad.id}` },
-    //         },
-    //       ],
-    //       [
-    //         {
-    //           text: "Выключить уведомления",
-    //           web_app: { url: `https://vkasanie.com/profile?user_opened=true` },
-    //         },
-    //       ],
-    //     ],
-    //   })
-    // );
-
-    // return fetch(`${TELEGRAM_API_URL}/sendMessage`, {
-    //   method: "POST",
-    //   body: formData,
-    // });
   });
 
   await Promise.all(promises);
