@@ -136,7 +136,7 @@ export default function Notification() {
     <CustomBottomSheet
       open={!!notification}
       onDismiss={onDismiss}
-      snap={60}
+      snap={90}
       closeIcon={false}
       footerWithoutBoxShadow
       footer={

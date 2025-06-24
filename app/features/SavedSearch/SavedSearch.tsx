@@ -139,7 +139,7 @@ export default function SavedSearch({ open, onDismiss }: SavedSearchProps) {
     <CustomBottomSheet
       open={open}
       onDismiss={onDismiss}
-      snap={60}
+      snap={90}
       closeIcon={false}
       footerWithoutBoxShadow
       footer={
