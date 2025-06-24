@@ -101,7 +101,7 @@ export const PureBottomSheet: FC<IProps> = ({
   );
 
   const sheetStyle = {
-    height: `calc(${snap}vh + ${footer ? 50 : 0}px)`,
+    height: `${snap}vh`,
     transform: currentY ? `translateY(${currentY}px)` : undefined,
   };
 

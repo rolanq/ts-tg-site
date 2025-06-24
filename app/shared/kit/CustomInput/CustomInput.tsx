@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useRef } from "react";
 import styles from "./CustomInput.module.css";
 import classNames from "classnames";
 import { CustomTyphography } from "../CustomTyphography/CustomTyphography";
@@ -37,6 +37,7 @@ export const CustomInput = ({
 }: ICustomInputProps) => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(errorMessageProp);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const formatNumberWithDots = (value: string): string => {
     if (!withDelimeter || type !== "number") return value;
@@ -126,14 +127,20 @@ export const CustomInput = ({
     ]
   );
 
+  const handleFocus = () => {
+    inputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
   const displayValue = formatNumberWithDots(value);
 
   return (
     <div className={styles.inputWrapper}>
       {label && <label className={styles.label}>{label}</label>}
       <input
+        ref={inputRef}
         value={displayValue}
         onChange={handleChange}
+        onFocus={handleFocus}
         className={classNames(styles.input, className, {
           [styles.error]: error,
         })}

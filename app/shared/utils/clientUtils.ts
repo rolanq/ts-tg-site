@@ -22,14 +22,17 @@ export const renderAdvertismentMessage = (ad: IAdvertisement) => {
 ⚙️ Привод: ${ad.driveType}
 🔄 КПП: ${ad.transmission}
 📏 Пробег: ${ad.mileage} км
-${ad.autotekaLink ? `🔗 <a href="${ad.autotekaLink}">АВТОТЕКА</a>\n\n` : ""}
+${ad.autotekaLink ? `🔗 <a href="${ad.autotekaLink}">Автотека</a>\n` : ""}
 💬 Описание: ${ad.description}
   
 💰 Цена: ${ad.price} руб.
   
 📱 Контакты:
 Телефон: ${ad.phoneNumber}
-Telegram: ${ad.telegramUsername ? `@${ad.telegramUsername}` : "Не указано"}`;
+Telegram: ${ad.telegramUsername ? `@${ad.telegramUsername}` : "Не указано"}
+
+<a href="https://t.me/Prodaisam_bot?startapp">Посмотреть объявление</a>
+`;
 
   return adMessage;
 };

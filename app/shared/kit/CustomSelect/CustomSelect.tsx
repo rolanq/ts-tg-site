@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useState, useRef } from "react";
 import styles from "./CustomSelect.module.css";
 import classNames from "classnames";
 
@@ -21,15 +21,23 @@ export const CustomSelect = ({
   disabled,
   className,
 }: CustomSelectProps) => {
+  const selectRef = useRef<HTMLSelectElement>(null);
+
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onChange(e.target.value);
+  };
+
+  const handleFocus = () => {
+    selectRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
   return (
     <div className={classNames(styles.selectWrapper, className)}>
       {label && <label className={styles.label}>{label}</label>}
       <select
+        ref={selectRef}
         onChange={handleChange}
+        onFocus={handleFocus}
         value={value}
         className={classNames(styles.select)}
         disabled={disabled}
