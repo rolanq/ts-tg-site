@@ -38,6 +38,7 @@ export const CustomInput = ({
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(errorMessageProp);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   const formatNumberWithDots = (value: string): string => {
     if (!withDelimeter || type !== "number") return value;
@@ -127,7 +128,7 @@ export const CustomInput = ({
     ]
   );
 
-  const handleFocus = () => {
+  const scrollIntoViewWithContainer = () => {
     if (!inputRef.current) return;
 
     // Находим ближайший контейнер с прокруткой
@@ -165,6 +166,26 @@ export const CustomInput = ({
     }
   };
 
+  const handleFocus = () => {
+    // Если клавиатура уже видима, скроллим сразу
+    if (isKeyboardVisible) {
+      scrollIntoViewWithContainer();
+      return;
+    }
+
+    // Если это первый фокус (клавиатура еще не открыта),
+    // ждем немного, чтобы клавиатура успела открыться
+    setIsKeyboardVisible(true);
+    setTimeout(() => {
+      scrollIntoViewWithContainer();
+    }, 200); // Подождем 300мс пока клавиатура откроется
+  };
+
+  // Сбрасываем состояние клавиатуры при потере фокуса
+  const handleBlur = () => {
+    setIsKeyboardVisible(false);
+  };
+
   const displayValue = formatNumberWithDots(value);
 
   return (
@@ -175,6 +196,7 @@ export const CustomInput = ({
         value={displayValue}
         onChange={handleChange}
         onFocus={handleFocus}
+        onBlur={handleBlur}
         className={classNames(styles.input, className, {
           [styles.error]: error,
         })}

@@ -22,12 +22,13 @@ export const CustomSelect = ({
   className,
 }: CustomSelectProps) => {
   const selectRef = useRef<HTMLSelectElement>(null);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onChange(e.target.value);
   };
 
-  const handleFocus = () => {
+  const scrollIntoViewWithContainer = () => {
     if (!selectRef.current) return;
 
     // Находим ближайший контейнер с прокруткой
@@ -65,6 +66,26 @@ export const CustomSelect = ({
     }
   };
 
+  const handleFocus = () => {
+    // Если клавиатура уже видима, скроллим сразу
+    if (isKeyboardVisible) {
+      scrollIntoViewWithContainer();
+      return;
+    }
+
+    // Если это первый фокус (клавиатура еще не открыта),
+    // ждем немного, чтобы клавиатура успела открыться
+    setIsKeyboardVisible(true);
+    setTimeout(() => {
+      scrollIntoViewWithContainer();
+    }, 300); // Подождем 300мс пока клавиатура откроется
+  };
+
+  // Сбрасываем состояние клавиатуры при потере фокуса
+  const handleBlur = () => {
+    setIsKeyboardVisible(false);
+  };
+
   return (
     <div className={classNames(styles.selectWrapper, className)}>
       {label && <label className={styles.label}>{label}</label>}
@@ -72,6 +93,7 @@ export const CustomSelect = ({
         ref={selectRef}
         onChange={handleChange}
         onFocus={handleFocus}
+        onBlur={handleBlur}
         value={value}
         className={classNames(styles.select)}
         disabled={disabled}
