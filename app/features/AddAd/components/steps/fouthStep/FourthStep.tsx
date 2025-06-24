@@ -22,8 +22,8 @@ export const FourthStep = () => {
   };
 
   const validateVideo = async (file: File): Promise<boolean> => {
-    if (file.size > 10 * 1024 * 1024) {
-      setVideoError("Размер видео не должен превышать 10 МБ");
+    if (file.size > 100 * 1024 * 1024) {
+      setVideoError("Размер видео не должен превышать 100 МБ");
       return false;
     }
 
@@ -44,8 +44,8 @@ export const FourthStep = () => {
   };
 
   const validatePhoto = (file: File): boolean => {
-    if (file.size > 10 * 1024 * 1024) {
-      setPhotoError("Размер фото не должен превышать 10 МБ");
+    if (file.size > 30 * 1024 * 1024) {
+      setPhotoError("Размер фото не должен превышать 30 МБ");
       return false;
     }
     return true;
@@ -144,7 +144,7 @@ export const FourthStep = () => {
                       color={photoError ? "red" : "gray"}
                     >
                       {photoError ||
-                        "Не более 9 фото, размер каждого не более 10 МБ"}
+                        "Не более 9 фото"}
                     </CustomTyphography>
                     <CustomFlex gap="5px">
                       {preparedPhotos.map((photo, index) => (

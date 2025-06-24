@@ -1,5 +1,6 @@
 import { IAdvertisement } from "../db/db";
 import { TELEGRAM_API_URL } from "../shared/constants/telegram";
+import { addWatermark, supressPhoto } from "../shared/utils/addWatermark";
 import { renderAdvertismentMessage } from "../shared/utils/clientUtils";
 import { getNotificationsByAd } from "./Notifications";
 
@@ -14,8 +15,10 @@ type Media = {
 export const sendPhotos = async (files: File[]) => {
   const mediaGroupPromises = files.map(async (photo) => {
     const formData = new FormData();
-    // const watermarkedPhoto = await addWatermark(photo);
-    formData.append("photo", photo);
+    const watermarkedPhoto = await addWatermark(photo);
+    const suppressedPhoto = await supressPhoto(watermarkedPhoto);
+
+    formData.append("photo", suppressedPhoto);
     formData.append("chat_id", photosChannelId);
 
     const response = await fetch(`${TELEGRAM_API_URL}/sendPhoto`, {
