@@ -1,4 +1,3 @@
-import { CustomFlex } from "@/app/shared/kit/CustomFlex/CustomFlex";
 import { CustomTyphography } from "@/app/shared/kit/CustomTyphography/CustomTyphography";
 import React, {
   useCallback,
@@ -18,7 +17,7 @@ import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 import FooterButtons from "./FooterButtons";
 import { SearchAdsContext } from "@/app/context/SearchAdsContext";
 import { BasicInfoContext } from "@/app/context/BasicInfoContext";
-import { PureBottomSheet } from "@/app/shared/kit/PureBottomSheet/PureBottomSheet";
+import { CustomBottomSheet } from "@/app/shared/kit/CustomBottonSheet/CustomBottomSheet";
 
 interface SavedSearchProps {
   open: boolean;
@@ -137,7 +136,7 @@ export default function SavedSearch({ open, onDismiss }: SavedSearchProps) {
   }, [isLoading, open]);
 
   return (
-    <PureBottomSheet
+    <CustomBottomSheet
       open={open}
       onDismiss={onDismiss}
       snap={60}
@@ -261,6 +260,6 @@ export default function SavedSearch({ open, onDismiss }: SavedSearchProps) {
           )}
         </CSSTransition>
       </SwitchTransition>
-    </PureBottomSheet>
+    </CustomBottomSheet>
   );
 }

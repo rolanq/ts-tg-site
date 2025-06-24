@@ -16,10 +16,10 @@ import { CSSTransition, SwitchTransition } from "react-transition-group";
 import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 import FooterButtons from "./FooterButtons";
 import { BasicInfoContext } from "@/app/context/BasicInfoContext";
-import { PureBottomSheet } from "@/app/shared/kit/PureBottomSheet/PureBottomSheet";
 import { NotificationsContext } from "@/app/context/NotificationsContext";
 import styles from "./Notification.module.css";
 import { updateOrCreateNotification } from "@/app/services/Notifications";
+import { CustomBottomSheet } from "@/app/shared/kit/CustomBottonSheet/CustomBottomSheet";
 
 export default function Notification() {
   const { user } = useTelegram();
@@ -133,7 +133,7 @@ export default function Notification() {
   }, [isLoading, notification]);
 
   return (
-    <PureBottomSheet
+    <CustomBottomSheet
       open={!!notification}
       onDismiss={onDismiss}
       snap={60}
@@ -244,6 +244,6 @@ export default function Notification() {
           )}
         </CSSTransition>
       </SwitchTransition>
-    </PureBottomSheet>
+    </CustomBottomSheet>
   );
 }

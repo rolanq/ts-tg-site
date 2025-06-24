@@ -10,43 +10,29 @@
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
   -webkit-tap-highlight-color: transparent;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  perspective: 1000;
-  -webkit-perspective: 1000;
 }
 
 /* Анимации для backdrop */
 .container-enter {
   visibility: visible;
   background-color: rgba(0, 0, 0, 0);
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
 }
 
 .container-enter-active {
   visibility: visible;
   background-color: rgba(0, 0, 0, 0.5);
   transition: background-color 300ms ease;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
 }
 
 .container-exit {
   visibility: visible;
   background-color: rgba(0, 0, 0, 0.5);
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
 }
 
 .container-exit-active {
   visibility: visible;
   background-color: rgba(0, 0, 0, 0);
   transition: background-color 300ms ease;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
 }
 
 .container-exit-done {
@@ -60,37 +46,24 @@
   border-radius: 12px 12px 0 0;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  touch-action: none;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  perspective: 1000;
-  -webkit-perspective: 1000;
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
 }
 
 /* Анимации для sheet */
 .sheet-enter {
   transform: translate3d(0, 100%, 0);
-  -webkit-transform: translate3d(0, 100%, 0);
 }
 
 .sheet-enter-active {
   transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
   transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sheet-exit {
   transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
 }
 
 .sheet-exit-active {
   transform: translate3d(0, 100%, 0);
-  -webkit-transform: translate3d(0, 100%, 0);
   transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -100,14 +73,6 @@
   max-height: calc(100vh - 200px);
   -webkit-overflow-scrolling: touch;
   padding-bottom: 16px;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  perspective: 1000;
-  -webkit-perspective: 1000;
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
 }
 
 .footer {
@@ -120,10 +85,6 @@
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
   margin-bottom: 25px;
   z-index: 1;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
 
 .noShadow .footer {
@@ -147,18 +108,6 @@
   border: none;
   cursor: pointer;
   z-index: 100;
-}
-
-/* Добавляем поддержку жестов для мобильных устройств */
-@media (hover: none) {
-  .sheet {
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    perspective: 1000;
-    -webkit-perspective: 1000;
-  }
 }
 
 /* Класс для body при открытом bottom sheet */

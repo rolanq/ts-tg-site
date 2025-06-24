@@ -78,7 +78,7 @@ export const CustomSelect = ({
     setIsKeyboardVisible(true);
     setTimeout(() => {
       scrollIntoViewWithContainer();
-    }, 300); // Подождем 300мс пока клавиатура откроется
+    }, 200); // Подождем 300мс пока клавиатура откроется
   };
 
   // Сбрасываем состояние клавиатуры при потере фокуса

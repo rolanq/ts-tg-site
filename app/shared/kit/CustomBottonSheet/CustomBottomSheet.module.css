@@ -1,0 +1,60 @@
+.closeButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: none;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.bottomSheet {
+  width: 100%;
+  height: 100%;
+}
+
+.footerWithoutBoxShadow > [data-rsbs-overlay] > [data-rsbs-footer] {
+  box-shadow: unset;
+}
+
+.disableScrollX > [data-rsbs-overlay] > [data-rsbs-scroll] {
+  overflow-x: hidden;
+}
+
+.footerFadeEnter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.footerFadeEnterActive {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 1000ms ease;
+}
+
+.footerFadeExit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.footerFadeExitActive {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 1000ms ease;
+}
+
+.contentWrapper {
+  transition: height 0.3s ease;
+}
+
+.contentWithKeyboard {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

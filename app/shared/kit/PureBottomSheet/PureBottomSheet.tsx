@@ -1,5 +1,12 @@
 "use client";
-import React, { FC, useEffect, useState, useCallback, useMemo } from "react";
+import React, {
+  FC,
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
 import styles from "./PureBottomSheet.module.css";
@@ -34,18 +41,16 @@ export const PureBottomSheet: FC<IProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [startY, setStartY] = useState(0);
   const [currentY, setCurrentY] = useState(0);
-  const [viewportHeight, setViewportHeight] = useState(0);
+  const viewPortRef = useRef(0);
   const [mounted, setMounted] = useState(false);
   const [isShowContent, setIsShowContent] = useState(false);
 
   useEffect(() => {
     setMounted(true);
     if (typeof window !== "undefined") {
-      setViewportHeight(
-        Math.max(
-          document.documentElement.clientHeight || 0,
-          window.innerHeight || 0
-        )
+      viewPortRef.current = Math.max(
+        document.documentElement.clientHeight || 0,
+        window.innerHeight || 0
       );
     }
     return () => setMounted(false);
@@ -174,7 +179,7 @@ export const PureBottomSheet: FC<IProps> = ({
     sheetStyle,
   ]);
 
-  if (!mounted || viewportHeight === 0) {
+  if (!mounted || viewPortRef.current === 0) {
     return null;
   }
 

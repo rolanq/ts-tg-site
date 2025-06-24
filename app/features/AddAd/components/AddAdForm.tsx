@@ -11,7 +11,7 @@ import { FourthStep } from "./steps/fouthStep/FourthStep";
 import CustomLoader from "@/app/shared/kit/CustomLoader/CustomLoader";
 import classNames from "classnames";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import { PureBottomSheet } from "@/app/shared/kit/PureBottomSheet/PureBottomSheet";
+import { CustomBottomSheet } from "@/app/shared/kit/CustomBottonSheet/CustomBottomSheet";
 
 export default function AddAdForm() {
   const {
@@ -62,7 +62,7 @@ export default function AddAdForm() {
   }, [isDraftLoading]);
 
   return (
-    <PureBottomSheet
+    <CustomBottomSheet
       snap={75}
       open={!!openedStep}
       onDismiss={onDismiss}
@@ -129,6 +129,6 @@ export default function AddAdForm() {
           )}
         </CSSTransition>
       </SwitchTransition>
-    </PureBottomSheet>
+    </CustomBottomSheet>
   );
 }
